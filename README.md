@@ -72,35 +72,52 @@ NEXT_PUBLIC_WS_URL=ws://localhost:8000/ws/updates
 
 ## Full-Stack Architecture
 
+### System overview
+
 ```mermaid
-flowchart TB
+flowchart LR
     subgraph FE["Frontend · Next.js :3001"]
-        Store((Zustand Store))
-        Pages["Pages & Components"] --> Store
-        SWR["SWR polling"] --> Store
-        WS["WebSocket client"] --> Store
+        direction TB
+        P["Pages & Components"]
+        C["Client layer\nSWR · Zustand · WebSocket"]
+        P <-->|"read / write"| C
     end
 
     subgraph BE["Backend · FastAPI :8000"]
-        REST["REST API"]
-        Broadcast["/ws/updates"]
-        Events["Event publisher"]
-
-        Pool["Charger pool"] --> VCP["Virtual charger"]
-        VCP <-->|"OCPP 2.0.1"| CSMS["CSMS handler"]
-        CSMS --> Track["Sessions + OCPP log"]
-
-        REST --> Pool
-        Pool --> Events
-        CSMS --> Events
-        Track --> Events
-        Events --> Broadcast
+        direction TB
+        R["REST API /api/*"]
+        O["OCPP Core\nCharger pool · CSMS · Virtual CP"]
+        E["/ws/updates"]
+        R --> O --> E
     end
 
-    SWR -->|GET| REST
-    Pages -->|POST| REST
-    WS <-->|live| Broadcast
+    C -->|"GET · POST"| R
+    C <-->|"live events"| E
 ```
+
+| Arrow | From | To | What flows |
+|-------|------|----|------------|
+| → | Pages | Client layer | User actions, rendered state |
+| → | Client layer | REST API | `GET` polls + `POST` commands |
+| ↔ | Client layer | `/ws/updates` | Real-time OCPP & charger events |
+| → | REST API | OCPP Core | Create/connect/control chargers |
+| → | OCPP Core | `/ws/updates` | Broadcast session & message updates |
+
+### Frontend client layer (detail)
+
+```mermaid
+flowchart TD
+  SWR["SWR polling\nGET every 10s"]
+  WS["WebSocket client\nlive push"]
+  Z["Zustand Store"]
+  UI["Pages & Components\nPOST on user actions"]
+
+  SWR -->|"hydrate"| Z
+  WS -->|"events"| Z
+  Z -->|"render"| UI
+```
+
+Four nodes in a straight top-to-bottom flow — no crossing arrows.
 
 ### Data flow
 
