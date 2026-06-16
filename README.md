@@ -74,38 +74,32 @@ NEXT_PUBLIC_WS_URL=ws://localhost:8000/ws/updates
 
 ```mermaid
 flowchart TB
-    subgraph Frontend["Frontend (Next.js :3001)"]
-        UI[Pages & Components]
-        Store[Zustand Store]
-        SWR[SWR Polling]
-        WSClient[WebSocket Client]
-        UI --> Store
-        SWR --> Store
-        WSClient --> Store
+    subgraph FE["Frontend · Next.js :3001"]
+        Store((Zustand Store))
+        Pages["Pages & Components"] --> Store
+        SWR["SWR polling"] --> Store
+        WS["WebSocket client"] --> Store
     end
 
-    subgraph Backend["Backend (FastAPI :8000)"]
-        REST[REST API]
-        WSBroadcast["/ws/updates"]
-        OCPPEndpoint["/ocpp/{charger_id}"]
-        CSMS[CSMS Handler]
-        Pool[Charger Pool]
-        Sessions[Session Manager]
-        Logger[OCPP Logger]
-        VCP[Virtual Charger Client]
+    subgraph BE["Backend · FastAPI :8000"]
+        REST["REST API"]
+        Broadcast["/ws/updates"]
+        Events["Event publisher"]
+
+        Pool["Charger pool"] --> VCP["Virtual charger"]
+        VCP <-->|"OCPP 2.0.1"| CSMS["CSMS handler"]
+        CSMS --> Track["Sessions + OCPP log"]
+
+        REST --> Pool
+        Pool --> Events
+        CSMS --> Events
+        Track --> Events
+        Events --> Broadcast
     end
 
-    SWR -->|GET /api/*| REST
-    UI -->|POST /api/*| REST
-    WSClient <-->|live events| WSBroadcast
-
-    Pool --> VCP
-    VCP <-->|OCPP 2.0.1 WebSocket| OCPPEndpoint
-    OCPPEndpoint --> CSMS
-    CSMS --> Sessions
-    CSMS --> Logger
-    Pool --> WSBroadcast
-    CSMS --> WSBroadcast
+    SWR -->|GET| REST
+    Pages -->|POST| REST
+    WS <-->|live| Broadcast
 ```
 
 ### Data flow
