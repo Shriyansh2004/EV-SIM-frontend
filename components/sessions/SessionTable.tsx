@@ -12,49 +12,45 @@ export function SessionTable({
 }) {
   if (sessions.length === 0) {
     return (
-      <div className="text-center py-12 text-muted border border-dashed border-border rounded-xl">
+      <div className="text-center py-12 text-muted simulink-canvas">
         No charging sessions yet
       </div>
     );
   }
 
   return (
-    <div className="overflow-x-auto border border-border rounded-xl">
-      <table className="w-full text-sm">
+    <div className="overflow-x-auto border border-border rounded-matlab shadow-card">
+      <table className="matlab-table">
         <thead>
-          <tr className="bg-surface text-muted text-left">
-            <th className="px-4 py-3 font-medium">Session ID</th>
-            <th className="px-4 py-3 font-medium">Charger</th>
-            <th className="px-4 py-3 font-medium">Start</th>
-            <th className="px-4 py-3 font-medium">End</th>
-            <th className="px-4 py-3 font-medium">Energy</th>
-            <th className="px-4 py-3 font-medium">Status</th>
+          <tr>
+            <th>Session ID</th>
+            <th>Charger</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Energy</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
           {sessions.map((s) => (
-            <tr
-              key={s.id}
-              onClick={() => onSelect?.(s)}
-              className="border-t border-border hover:bg-surface/50 cursor-pointer"
-            >
-              <td className="px-4 py-3 font-mono text-xs">{s.id.slice(0, 8)}…</td>
-              <td className="px-4 py-3 font-mono">{s.chargerId}</td>
-              <td className="px-4 py-3 text-muted">
+            <tr key={s.id} onClick={() => onSelect?.(s)}>
+              <td className="font-mono text-xs">{s.id.slice(0, 8)}…</td>
+              <td className="font-mono">{s.chargerId}</td>
+              <td className="text-muted">
                 {new Date(s.startTime).toLocaleString()}
               </td>
-              <td className="px-4 py-3 text-muted">
+              <td className="text-muted">
                 {s.endTime ? new Date(s.endTime).toLocaleString() : "—"}
               </td>
-              <td className="px-4 py-3">{s.energyKwh.toFixed(2)} kWh</td>
-              <td className="px-4 py-3">
+              <td className="font-mono tabular-nums">{s.energyKwh.toFixed(2)} kWh</td>
+              <td>
                 <span
-                  className={`text-xs px-2 py-0.5 rounded-full ${
+                  className={`text-[10px] px-2 py-0.5 rounded-matlab font-mono font-semibold uppercase border ${
                     s.status === "active"
-                      ? "bg-charging/20 text-charging"
+                      ? "bg-matlab-blue/15 text-matlab-blue border-matlab-blue/30"
                       : s.status === "completed"
-                        ? "bg-accent/20 text-accent"
-                        : "bg-error/20 text-error"
+                        ? "bg-matlab-green/15 text-matlab-green border-matlab-green/30"
+                        : "bg-matlab-red/15 text-matlab-red border-matlab-red/30"
                   }`}
                 >
                   {s.status}

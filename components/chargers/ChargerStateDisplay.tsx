@@ -12,41 +12,30 @@ const STATES: ChargerStatus[] = [
   "Faulted",
 ];
 
-const TRANSITIONS: [ChargerStatus, ChargerStatus][] = [
-  ["Available", "Preparing"],
-  ["Preparing", "Charging"],
-  ["Charging", "Finishing"],
-  ["Finishing", "Available"],
-  ["Available", "Reserved"],
-  ["Reserved", "Preparing"],
-  ["Available", "Unavailable"],
-  ["Available", "Faulted"],
-  ["Charging", "SuspendedEV"],
-  ["SuspendedEV", "Charging"],
-];
-
 export function ChargerStateDisplay({ current }: { current: ChargerStatus }) {
   return (
-    <div className="bg-surface border border-border rounded-xl p-6">
-      <h3 className="text-sm text-muted mb-4">OCPP State Machine</h3>
-      <div className="flex flex-wrap gap-2">
-        {STATES.map((state) => (
-          <div
-            key={state}
-            className={clsx(
-              "px-3 py-2 rounded-lg text-xs font-mono border transition-all",
-              state === current
-                ? "bg-accent/20 border-accent text-accent scale-105"
-                : "bg-background border-border text-muted"
-            )}
-          >
-            {state}
-          </div>
-        ))}
+    <div className="panel shadow-card">
+      <div className="panel-header py-2">
+        <h3 className="section-label">Simulink: OCPP State Machine</h3>
       </div>
-      <p className="text-xs text-muted mt-4">
-        Current state: <span className="text-accent font-mono">{current}</span>
-      </p>
+      <div className="panel-body simulink-canvas p-4">
+        <div className="flex flex-wrap gap-2">
+          {STATES.map((state) => (
+            <div
+              key={state}
+              className={clsx(
+                "simulink-block transition-all",
+                state === current && "simulink-block-active scale-105"
+              )}
+            >
+              {state}
+            </div>
+          ))}
+        </div>
+        <p className="text-xs text-muted mt-4 font-mono">
+          Current state: <span className="text-matlab-blue font-semibold">{current}</span>
+        </p>
+      </div>
     </div>
   );
 }

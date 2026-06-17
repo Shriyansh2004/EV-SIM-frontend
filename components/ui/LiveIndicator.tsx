@@ -10,18 +10,20 @@ export function LiveIndicator({
   return (
     <div
       className={clsx("flex items-center", compact ? "justify-center" : "gap-2")}
-      title={compact ? (connected ? "Live" : "Disconnected") : undefined}
+      title={compact ? (connected ? "Simulation running" : "Disconnected") : undefined}
     >
       <span
         className={clsx(
-          "rounded-full shrink-0",
+          "rounded-matlab shrink-0 border",
           compact ? "w-2.5 h-2.5" : "w-2 h-2",
-          connected ? "bg-accent" : "bg-error"
+          connected
+            ? "bg-matlab-green border-matlab-green/60"
+            : "bg-matlab-red border-matlab-red/60"
         )}
       />
       {!compact && (
-        <span className="text-xs text-muted">
-          {connected ? "Live connection" : "Disconnected"}
+        <span className="text-[11px] text-muted font-mono">
+          {connected ? "sim: running" : "sim: stopped"}
         </span>
       )}
     </div>
