@@ -65,38 +65,35 @@ export default function ChargersPage() {
         className="panel p-5 shadow-card grid grid-cols-1 sm:grid-cols-4 gap-4 items-end"
       >
         <div>
-          <label className="text-sm text-muted block mb-1">Charger ID</label>
+          <label className="scope-readout-label block mb-1">Charger ID</label>
           <input
             value={id}
             onChange={(e) => setId(e.target.value)}
             placeholder="CP-001"
-            className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-white font-mono focus:outline-none focus:border-accent/40"
+            className="matlab-input"
           />
         </div>
         <div>
-          <label className="text-sm text-muted block mb-1">Max Power (kW)</label>
+          <label className="scope-readout-label block mb-1">Max Power (kW)</label>
           <input
             type="number"
             value={power}
             onChange={(e) => setPower(Number(e.target.value))}
-            className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-accent/40"
+            className="matlab-input"
           />
         </div>
         <div>
-          <label className="text-sm text-muted block mb-1">Connectors</label>
+          <label className="scope-readout-label block mb-1">Connectors</label>
           <input
             type="number"
             min={1}
             max={4}
             value={connectors}
             onChange={(e) => setConnectors(Number(e.target.value))}
-            className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-accent/40"
+            className="matlab-input"
           />
         </div>
-        <button
-          type="submit"
-          className="flex items-center justify-center gap-2 px-4 py-2 bg-accent text-background font-medium rounded-md text-sm hover:bg-accent/90 transition-colors"
-        >
+        <button type="submit" className="matlab-btn-primary flex items-center justify-center gap-2">
           <Plus className="w-4 h-4" />
           Add Charger
         </button>
@@ -109,14 +106,14 @@ export default function ChargersPage() {
             className="panel p-4 shadow-card flex items-center justify-between"
           >
             <div className="flex items-center gap-4">
-              <Link href={`/chargers/${c.id}`} className="font-mono text-white hover:text-accent">
+              <Link href={`/chargers/${c.id}`} className="font-mono text-ink hover:text-matlab-blue font-semibold">
                 {c.id}
               </Link>
               <StatusBadge status={c.status} />
-              <span className="text-muted text-sm">{c.maxPowerKw} kW</span>
-              <span className="text-muted text-sm">
+              <span className="text-muted text-sm font-mono">{c.maxPowerKw} kW</span>
+              <span className="text-muted text-sm font-mono">
                 {c.isConnected ? (
-                  <span className="text-accent">● Connected</span>
+                  <span className="text-matlab-green">● Connected</span>
                 ) : (
                   "○ Offline"
                 )}
@@ -126,7 +123,7 @@ export default function ChargersPage() {
               <button
                 onClick={() => toggleConnect(c.id, c.isConnected)}
                 disabled={loading === c.id}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm border border-border rounded-lg hover:border-accent text-muted hover:text-accent disabled:opacity-50"
+                className="matlab-btn flex items-center gap-1.5 disabled:opacity-50"
               >
                 {c.isConnected ? (
                   <>
@@ -140,7 +137,7 @@ export default function ChargersPage() {
               </button>
               <button
                 onClick={() => deleteCharger(c.id)}
-                className="p-1.5 text-muted hover:text-error"
+                className="matlab-btn p-1.5 text-muted hover:text-matlab-red"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
@@ -148,7 +145,7 @@ export default function ChargersPage() {
           </div>
         ))}
         {chargers.length === 0 && (
-          <p className="text-center text-muted py-8">No chargers created yet</p>
+          <p className="text-center text-muted py-8 simulink-canvas">No chargers created yet</p>
         )}
       </div>
     </div>
