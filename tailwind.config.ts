@@ -9,22 +9,31 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#0D1117",
-        surface: "#161B22",
-        border: "#30363D",
-        accent: "#00D4AA",
-        warning: "#F59E0B",
-        error: "#EF4444",
-        muted: "#8B949E",
-        charging: "#3B82F6",
-        finishing: "#A855F7",
+        background: "#090b0f",
+        surface: "#111419",
+        "surface-raised": "#181c23",
+        border: "#262c36",
+        "border-subtle": "#1c2129",
+        accent: "#34d399",
+        warning: "#f59e0b",
+        error: "#f87171",
+        muted: "#7d8694",
+        charging: "#60a5fa",
+        finishing: "#c084fc",
       },
       fontFamily: {
         mono: ["JetBrains Mono", "monospace"],
-        sans: ["Inter", "system-ui", "sans-serif"],
+        sans: ["IBM Plex Sans", "system-ui", "sans-serif"],
+      },
+      boxShadow: {
+        card: "0 1px 2px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.03)",
+        "card-hover": "0 4px 12px rgba(0,0,0,0.4), 0 0 0 1px rgba(52,211,153,0.12)",
       },
       animation: {
         "pulse-charge": "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+      },
+      transitionDuration: {
+        sidebar: "220ms",
       },
     },
   },
