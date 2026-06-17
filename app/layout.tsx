@@ -7,6 +7,9 @@ export const metadata: Metadata = {
     default: "EV-SIM",
     template: "%s | EV-SIM",
   },
+  icons: {
+    icon: "/logo.png",
+  },
   description: "Interactive EV charging simulation with OCPP 2.0.1 protocol monitoring",
   openGraph: {
     title: "EV-SIM",

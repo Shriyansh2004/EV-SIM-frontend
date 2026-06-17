@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useAppStore } from "@/store";
-import { OcppMessageLog } from "@/components/ocpp/OcppMessageLog";
 import { OcppMessageInspector } from "@/components/ocpp/OcppMessageInspector";
 import { SequenceDiagram } from "@/components/ocpp/SequenceDiagram";
 import type { OcppMessage } from "@/types";
@@ -25,8 +24,8 @@ export default function OcppExplorerPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold text-white">OCPP Protocol Explorer</h1>
-        <p className="text-muted mt-1">
+        <h1 className="page-title">OCPP Protocol Explorer</h1>
+        <p className="page-desc">
           Inspect live OCPP 2.0.1 messages and understand the charging protocol
         </p>
       </div>
@@ -37,7 +36,7 @@ export default function OcppExplorerPage() {
         <select
           value={filter}
           onChange={(e) => setFilter(e.target.value as typeof filter)}
-          className="bg-surface border border-border rounded-lg px-3 py-2 text-sm text-white"
+          className="matlab-select"
         >
           <option value="all">All directions</option>
           <option value="CP_TO_CSMS">CP → CSMS</option>
@@ -46,7 +45,7 @@ export default function OcppExplorerPage() {
         <select
           value={actionFilter}
           onChange={(e) => setActionFilter(e.target.value)}
-          className="bg-surface border border-border rounded-lg px-3 py-2 text-sm text-white"
+          className="matlab-select"
         >
           <option value="">All message types</option>
           {actions.map((a) => (
@@ -59,9 +58,9 @@ export default function OcppExplorerPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div>
-          <h3 className="text-sm text-muted mb-3">Message Log</h3>
+          <h3 className="section-label mb-3">Command Window: Message Log</h3>
           <div
-            className="bg-background border border-border rounded-xl p-4 h-[500px] overflow-y-auto space-y-2"
+            className="matlab-cmd h-[500px] space-y-1.5"
             onClick={(e) => {
               const card = (e.target as HTMLElement).closest("[data-msg-id]");
               if (card) {
@@ -71,7 +70,7 @@ export default function OcppExplorerPage() {
             }}
           >
             {filtered.length === 0 ? (
-              <p className="text-muted text-sm text-center py-8">No messages match filters</p>
+              <p className="text-muted text-sm text-center py-8 font-sans">No messages match filters</p>
             ) : (
               filtered
                 .slice()
@@ -80,22 +79,30 @@ export default function OcppExplorerPage() {
                   <div
                     key={m.id}
                     data-msg-id={m.id}
-                    className={`cursor-pointer rounded ${
-                      selected?.id === m.id ? "ring-1 ring-accent" : ""
+                    className={`cursor-pointer rounded-matlab ${
+                      selected?.id === m.id ? "ring-2 ring-matlab-blue" : ""
                     }`}
                   >
-                    <div className="font-mono text-xs p-2 rounded border-l-2 border-l-green-500 bg-green-500/5">
+                    <div
+                      className={`font-mono text-[11px] px-2 py-1 rounded-matlab border-l-[3px] ${
+                        m.direction === "CP_TO_CSMS"
+                          ? "border-l-matlab-green bg-matlab-green/5"
+                          : "border-l-matlab-cyan bg-matlab-cyan/5"
+                      }`}
+                    >
                       <span className="text-muted">
                         {new Date(m.timestamp).toLocaleTimeString()}
                       </span>{" "}
                       <span
                         className={
-                          m.direction === "CP_TO_CSMS" ? "text-green-400" : "text-cyan-400"
+                          m.direction === "CP_TO_CSMS"
+                            ? "text-matlab-green font-semibold"
+                            : "text-matlab-cyan font-semibold"
                         }
                       >
                         {m.direction === "CP_TO_CSMS" ? "CP→CSMS" : "CSMS→CP"}
                       </span>{" "}
-                      <span className="text-white">{m.action}</span>
+                      <span className="text-ink font-semibold">{m.action}</span>
                     </div>
                   </div>
                 ))
@@ -103,7 +110,7 @@ export default function OcppExplorerPage() {
           </div>
         </div>
         <div>
-          <h3 className="text-sm text-muted mb-3">Message Inspector</h3>
+          <h3 className="section-label mb-3">Message Inspector</h3>
           <OcppMessageInspector message={selected} />
         </div>
       </div>

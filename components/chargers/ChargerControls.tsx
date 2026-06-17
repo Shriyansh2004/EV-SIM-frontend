@@ -36,7 +36,7 @@ export function ChargerControls({
             id_token: "DEMO-TOKEN",
           })
         }
-        className="px-4 py-2 bg-accent/20 text-accent border border-accent/40 rounded-lg text-sm hover:bg-accent/30 disabled:opacity-40"
+        className="matlab-btn-primary disabled:opacity-40"
       >
         Remote Start
       </button>
@@ -45,7 +45,7 @@ export function ChargerControls({
         onClick={() =>
           handle("sessions/stop", { charger_id: chargerId, session_id: sessionId })
         }
-        className="px-4 py-2 bg-error/20 text-error border border-error/40 rounded-lg text-sm hover:bg-error/30 disabled:opacity-40"
+        className="matlab-btn-danger disabled:opacity-40"
       >
         Remote Stop
       </button>
@@ -54,7 +54,7 @@ export function ChargerControls({
         onClick={() =>
           handle("commands/reset", { charger_id: chargerId, reset_type: "Immediate" })
         }
-        className="px-4 py-2 bg-surface text-muted border border-border rounded-lg text-sm hover:border-muted"
+        className="matlab-btn disabled:opacity-40"
       >
         Reset
       </button>
@@ -67,7 +67,7 @@ export function ChargerControls({
             operational_status: "Inoperative",
           })
         }
-        className="px-4 py-2 bg-surface text-muted border border-border rounded-lg text-sm hover:border-muted"
+        className="matlab-btn disabled:opacity-40"
       >
         Set Unavailable
       </button>
@@ -76,7 +76,7 @@ export function ChargerControls({
         onClick={() =>
           handle("commands/unlock", { charger_id: chargerId, connector_id: 1 })
         }
-        className="px-4 py-2 bg-surface text-muted border border-border rounded-lg text-sm hover:border-muted"
+        className="matlab-btn disabled:opacity-40"
       >
         Unlock Connector
       </button>
@@ -87,7 +87,7 @@ export function ChargerControls({
             method: "POST",
           })
         }
-        className="px-4 py-2 bg-warning/20 text-warning border border-warning/40 rounded-lg text-sm hover:bg-warning/30 disabled:opacity-40"
+        className="matlab-btn-warning disabled:opacity-40"
       >
         Inject Fault
       </button>

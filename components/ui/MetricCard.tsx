@@ -10,17 +10,19 @@ interface MetricCardProps {
 
 export function MetricCard({ label, value, icon: Icon, accent }: MetricCardProps) {
   return (
-    <div className="panel p-4 shadow-card">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="section-label">{label}</p>
-          <p className="text-2xl font-semibold text-white mt-2 tabular-nums">{value}</p>
-        </div>
+    <div className="panel shadow-card">
+      <div className="panel-header py-2">
+        <p className="section-label">{label}</p>
+      </div>
+      <div className="p-4 flex items-center justify-between gap-3">
+        <p className={clsx("text-2xl font-semibold tabular-nums font-mono", accent || "text-matlab-blue")}>
+          {value}
+        </p>
         {Icon && (
           <div
             className={clsx(
-              "w-9 h-9 rounded-md flex items-center justify-center bg-surface-raised border border-border-subtle shrink-0",
-              accent || "text-accent"
+              "w-8 h-8 rounded-matlab flex items-center justify-center bg-title-bar border border-border shrink-0",
+              accent || "text-matlab-blue"
             )}
           >
             <Icon className="w-4 h-4" />

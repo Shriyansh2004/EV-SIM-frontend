@@ -21,7 +21,7 @@ export default function ChargerDetailPage() {
     return (
       <div className="text-center py-12">
         <p className="text-muted">Charger not found</p>
-        <Link href="/chargers" className="text-accent text-sm mt-2 inline-block">
+        <Link href="/chargers" className="text-matlab-blue text-sm mt-2 inline-block font-mono">
           ← Back to chargers
         </Link>
       </div>
@@ -34,14 +34,14 @@ export default function ChargerDetailPage() {
   return (
     <div className="space-y-8">
       <div className="flex items-center gap-4">
-        <Link href="/chargers" className="text-muted hover:text-white">
+        <Link href="/chargers" className="text-muted hover:text-ink matlab-btn p-1.5">
           <ArrowLeft className="w-5 h-5" />
         </Link>
         <div>
-          <h1 className="text-2xl font-semibold text-white font-mono">{charger.id}</h1>
+          <h1 className="page-title font-mono">{charger.id}</h1>
           <div className="flex items-center gap-3 mt-1">
             <StatusBadge status={charger.status} />
-            <span className="text-muted text-sm">
+            <span className="text-muted text-sm font-mono">
               {charger.maxPowerKw} kW · {charger.connectorCount} connector(s)
             </span>
           </div>
@@ -51,37 +51,39 @@ export default function ChargerDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <ChargerStateDisplay current={charger.status} />
-          <div className="bg-surface border border-border rounded-xl p-6">
-            <h3 className="text-sm text-muted mb-4">Live Metrics</h3>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-              <div>
-                <p className="text-2xl font-semibold text-charging">
-                  {(session?.currentPowerKw ?? 0).toFixed(1)}
-                </p>
-                <p className="text-xs text-muted">kW</p>
-              </div>
-              <div>
-                <p className="text-2xl font-semibold text-accent">
-                  {(session?.energyKwh ?? 0).toFixed(2)}
-                </p>
-                <p className="text-xs text-muted">kWh</p>
-              </div>
-              <div>
-                <p className="text-2xl font-semibold text-white">400</p>
-                <p className="text-xs text-muted">Voltage (V)</p>
-              </div>
-              <div>
-                <p className="text-2xl font-semibold text-white">
-                  {session?.currentPowerKw
-                    ? ((session.currentPowerKw * 1000) / 400).toFixed(1)
-                    : "0"}
-                </p>
-                <p className="text-xs text-muted">Current (A)</p>
+          <div className="panel shadow-card">
+            <div className="panel-header py-2">
+              <h3 className="section-label">Scope: Live Metrics</h3>
+            </div>
+            <div className="panel-body">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center matlab-figure p-4">
+                <div>
+                  <p className="scope-readout">{(session?.currentPowerKw ?? 0).toFixed(1)}</p>
+                  <p className="scope-readout-label mt-1">kW</p>
+                </div>
+                <div>
+                  <p className="scope-readout text-matlab-orange">
+                    {(session?.energyKwh ?? 0).toFixed(2)}
+                  </p>
+                  <p className="scope-readout-label mt-1">kWh</p>
+                </div>
+                <div>
+                  <p className="scope-readout text-ink">400</p>
+                  <p className="scope-readout-label mt-1">Voltage (V)</p>
+                </div>
+                <div>
+                  <p className="scope-readout text-ink">
+                    {session?.currentPowerKw
+                      ? ((session.currentPowerKw * 1000) / 400).toFixed(1)
+                      : "0"}
+                  </p>
+                  <p className="scope-readout-label mt-1">Current (A)</p>
+                </div>
               </div>
             </div>
           </div>
           <div>
-            <h3 className="text-sm text-muted mb-3">Controls</h3>
+            <h3 className="section-label mb-3">Controls</h3>
             <ChargerControls
               chargerId={charger.id}
               isConnected={charger.isConnected}
@@ -89,7 +91,7 @@ export default function ChargerDetailPage() {
             />
           </div>
           <div>
-            <h3 className="text-sm text-muted mb-3">OCPP Message Log</h3>
+            <h3 className="section-label mb-3">Command Window: OCPP Log</h3>
             <OcppMessageLog messages={ocppMessages} chargerId={chargerId} limit={20} />
           </div>
         </div>
