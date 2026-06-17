@@ -10,6 +10,7 @@ import {
   CartesianGrid,
 } from "recharts";
 import type { VirtualCharger } from "@/types";
+import { MATLAB_COLORS, PLOT_THEME, axisProps } from "@/lib/chartTheme";
 
 export function PowerChart({
   chargers,
@@ -30,8 +31,8 @@ export function PowerChart({
       <div
         className={
           embedded
-            ? "h-64 flex items-center justify-center text-muted text-sm border border-dashed border-border rounded-md bg-surface/40"
-            : "panel p-6 h-64 flex items-center justify-center text-muted text-sm shadow-card"
+            ? "h-64 flex items-center justify-center text-muted text-sm matlab-figure"
+            : "panel p-4 h-64 flex items-center justify-center text-muted text-sm shadow-card"
         }
       >
         No active charging sessions
@@ -40,42 +41,51 @@ export function PowerChart({
   }
 
   const chart = (
-    <ResponsiveContainer width="100%" height={embedded ? 256 : "85%"}>
-      <LineChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#262c36" vertical={false} />
-        <XAxis
-          dataKey="name"
-          stroke="#7d8694"
-          fontSize={11}
-          tickLine={false}
-          axisLine={false}
-        />
-        <YAxis
-          stroke="#7d8694"
-          fontSize={11}
-          tickLine={false}
-          axisLine={false}
-          width={36}
-        />
-        <Tooltip
-          contentStyle={{
-            background: "#181c23",
-            border: "1px solid #262c36",
-            borderRadius: 6,
-            fontSize: 12,
-          }}
-          labelStyle={{ color: "#7d8694" }}
-        />
-        <Line
-          type="monotone"
-          dataKey="power"
-          stroke="#60a5fa"
-          strokeWidth={2}
-          dot={{ r: 3, fill: "#60a5fa", strokeWidth: 0 }}
-          activeDot={{ r: 4 }}
-        />
-      </LineChart>
-    </ResponsiveContainer>
+    <div className={embedded ? "matlab-figure p-2 h-64" : "matlab-figure p-2 h-[calc(100%-2rem)]"}>
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={data} margin={{ top: 8, right: 16, bottom: 4, left: 0 }}>
+          <CartesianGrid
+            stroke={PLOT_THEME.gridStroke}
+            strokeDasharray={PLOT_THEME.gridDash}
+            vertical
+            horizontal
+          />
+          <XAxis
+            dataKey="name"
+            {...axisProps}
+            label={{
+              value: "Charger ID",
+              position: "insideBottom",
+              offset: -2,
+              style: { fill: PLOT_THEME.tickFill, fontSize: 10 },
+            }}
+          />
+          <YAxis
+            {...axisProps}
+            width={44}
+            label={{
+              value: "kW",
+              angle: -90,
+              position: "insideLeft",
+              style: { fill: PLOT_THEME.tickFill, fontSize: 10 },
+            }}
+          />
+          <Tooltip
+            contentStyle={PLOT_THEME.tooltipStyle}
+            labelStyle={{ color: PLOT_THEME.tickFill, fontWeight: 600 }}
+            formatter={(value: number) => [`${value.toFixed(2)} kW`, "Power"]}
+          />
+          <Line
+            type="monotone"
+            dataKey="power"
+            stroke={MATLAB_COLORS.blue}
+            strokeWidth={1.5}
+            dot={{ r: 4, fill: MATLAB_COLORS.blue, stroke: "#fff", strokeWidth: 1 }}
+            activeDot={{ r: 5, stroke: MATLAB_COLORS.blue, strokeWidth: 2 }}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
   );
 
   if (embedded) {
@@ -83,9 +93,11 @@ export function PowerChart({
   }
 
   return (
-    <div className="panel p-6 h-64 shadow-card">
-      <h3 className="section-label mb-4">Live power draw (kW)</h3>
-      {chart}
+    <div className="panel shadow-card">
+      <div className="panel-header py-2">
+        <h3 className="section-label">Figure: Live Power Draw</h3>
+      </div>
+      <div className="panel-body pt-2 pb-3 h-64">{chart}</div>
     </div>
   );
 }

@@ -32,16 +32,16 @@ export default function DashboardPage() {
           label="Active Sessions"
           value={activeSessions}
           icon={Activity}
-          accent="text-charging"
+          accent="text-matlab-blue"
         />
         <MetricCard label="Total Energy" value={`${totalEnergy.toFixed(1)} kWh`} icon={Zap} />
-        <MetricCard label="Connected" value={connected} icon={Wifi} accent="text-accent" />
+        <MetricCard label="Connected" value={connected} icon={Wifi} accent="text-matlab-green" />
       </div>
 
       <section className="panel shadow-card">
         <div className="panel-header">
           <div>
-            <h2 className="text-sm font-medium text-white">Charger grid</h2>
+            <h2 className="text-sm font-semibold text-ink">Charger grid</h2>
             <p className="text-xs text-muted mt-0.5">
               {chargers.length === 0
                 ? "No chargers registered"
@@ -50,7 +50,7 @@ export default function DashboardPage() {
           </div>
           <Link
             href="/chargers"
-            className="inline-flex items-center gap-1 text-xs text-muted hover:text-accent transition-colors"
+            className="inline-flex items-center gap-1 text-xs text-muted hover:text-matlab-blue transition-colors font-mono"
           >
             Manage
             <ArrowRight className="w-3 h-3" />
@@ -65,12 +65,12 @@ export default function DashboardPage() {
         <section className="panel shadow-card flex flex-col min-h-[360px]">
           <div className="panel-header">
             <div>
-              <h2 className="text-sm font-medium text-white">Recent OCPP</h2>
+              <h2 className="text-sm font-semibold text-ink">Recent OCPP</h2>
               <p className="text-xs text-muted mt-0.5">Last 10 messages</p>
             </div>
             <Link
               href="/ocpp-explorer"
-              className="inline-flex items-center gap-1 text-xs text-muted hover:text-accent transition-colors"
+              className="inline-flex items-center gap-1 text-xs text-muted hover:text-matlab-blue transition-colors font-mono"
             >
               Explorer
               <ArrowRight className="w-3 h-3" />
@@ -84,7 +84,7 @@ export default function DashboardPage() {
         <section className="panel shadow-card">
           <div className="panel-header">
             <div>
-              <h2 className="text-sm font-medium text-white">Power draw</h2>
+              <h2 className="text-sm font-semibold text-ink">Power draw</h2>
               <p className="text-xs text-muted mt-0.5">Active sessions only</p>
             </div>
           </div>

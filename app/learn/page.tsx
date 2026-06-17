@@ -91,45 +91,50 @@ export default function LearnPage() {
   return (
     <div className="space-y-8 max-w-4xl">
       <div>
-        <h1 className="text-2xl font-semibold text-white">EV Industry Education</h1>
-        <p className="text-muted mt-1">Learn OCPP and EV charging infrastructure fundamentals</p>
+        <h1 className="page-title">EV Industry Education</h1>
+        <p className="page-desc">Learn OCPP and EV charging infrastructure fundamentals</p>
       </div>
 
       <div className="space-y-4">
         {SECTIONS.map((s) => (
-          <div key={s.title} className="bg-surface border border-border rounded-xl p-6">
-            <h2 className="text-white font-medium mb-2">{s.title}</h2>
-            <p className="text-muted text-sm leading-relaxed">{s.content}</p>
+          <div key={s.title} className="panel shadow-card">
+            <div className="panel-header py-2">
+              <h2 className="text-sm font-semibold text-ink">{s.title}</h2>
+            </div>
+            <div className="panel-body">
+              <p className="text-muted text-sm leading-relaxed">{s.content}</p>
+            </div>
           </div>
         ))}
       </div>
 
       <SequenceDiagram />
 
-      <div className="bg-surface border border-border rounded-xl p-6">
-        <h2 className="text-white font-medium mb-4">Interactive: BootNotification Wizard</h2>
-        <p className="text-muted text-sm mb-4">
-          Walk through the OCPP handshake step by step
-        </p>
-        <div className="bg-background rounded-lg p-4 mb-4 border border-border">
-          <p className="text-accent text-sm font-medium">
-            {WIZARD_STEPS[wizardStep].title}
-          </p>
-          <p className="text-muted text-sm mt-1">{WIZARD_STEPS[wizardStep].action}</p>
+      <div className="panel shadow-card">
+        <div className="panel-header py-2">
+          <h2 className="text-sm font-semibold text-ink">Interactive: BootNotification Wizard</h2>
         </div>
-        <button
-          onClick={runWizardAction}
-          className="px-4 py-2 bg-accent text-background rounded-lg text-sm font-medium hover:bg-accent/90"
-        >
-          {wizardStep < WIZARD_STEPS.length - 1 ? "Next Step" : "Complete"}
-        </button>
-        {wizardLog.length > 0 && (
-          <div className="mt-4 font-mono text-xs text-green-400 bg-background rounded-lg p-4 border border-border space-y-1">
-            {wizardLog.map((l, i) => (
-              <div key={i}>{l}</div>
-            ))}
+        <div className="panel-body">
+          <p className="text-muted text-sm mb-4">
+            Walk through the OCPP handshake step by step
+          </p>
+          <div className="simulink-canvas p-4 mb-4">
+            <p className="text-matlab-blue text-sm font-semibold font-mono">
+              {WIZARD_STEPS[wizardStep].title}
+            </p>
+            <p className="text-muted text-sm mt-1">{WIZARD_STEPS[wizardStep].action}</p>
           </div>
-        )}
+          <button onClick={runWizardAction} className="matlab-btn-primary">
+            {wizardStep < WIZARD_STEPS.length - 1 ? "Next Step" : "Complete"}
+          </button>
+          {wizardLog.length > 0 && (
+            <div className="mt-4 matlab-cmd space-y-1 text-matlab-green">
+              {wizardLog.map((l, i) => (
+                <div key={i}>{l}</div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

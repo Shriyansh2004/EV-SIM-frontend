@@ -11,6 +11,7 @@ import {
   Legend,
 } from "recharts";
 import type { MeterValue } from "@/types";
+import { MATLAB_COLORS, PLOT_THEME, axisProps } from "@/lib/chartTheme";
 
 export function MeterValueChart({ meterValues }: { meterValues: MeterValue[] }) {
   const data = meterValues.map((mv) => ({
@@ -22,28 +23,52 @@ export function MeterValueChart({ meterValues }: { meterValues: MeterValue[] }) 
 
   if (data.length === 0) {
     return (
-      <div className="text-muted text-sm text-center py-8">No meter values recorded</div>
+      <div className="text-muted text-sm text-center py-8 matlab-figure">
+        No meter values recorded
+      </div>
     );
   }
 
   return (
-    <ResponsiveContainer width="100%" height={300}>
-      <LineChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#30363D" />
-        <XAxis dataKey="time" stroke="#8B949E" fontSize={11} />
-        <YAxis stroke="#8B949E" fontSize={11} />
-        <Tooltip
-          contentStyle={{
-            background: "#161B22",
-            border: "1px solid #30363D",
-            borderRadius: 8,
-          }}
-        />
-        <Legend />
-        <Line type="monotone" dataKey="power" stroke="#3B82F6" name="Power (kW)" dot={false} />
-        <Line type="monotone" dataKey="energy" stroke="#00D4AA" name="Energy (kWh)" dot={false} />
-        <Line type="monotone" dataKey="soc" stroke="#F59E0B" name="SoC (%)" dot={false} />
-      </LineChart>
-    </ResponsiveContainer>
+    <div className="matlab-figure p-2">
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart data={data} margin={{ top: 8, right: 24, bottom: 4, left: 0 }}>
+          <CartesianGrid
+            stroke={PLOT_THEME.gridStroke}
+            strokeDasharray={PLOT_THEME.gridDash}
+            vertical
+            horizontal
+          />
+          <XAxis dataKey="time" {...axisProps} />
+          <YAxis {...axisProps} width={44} />
+          <Tooltip contentStyle={PLOT_THEME.tooltipStyle} />
+          <Legend wrapperStyle={PLOT_THEME.legendStyle} iconType="line" />
+          <Line
+            type="monotone"
+            dataKey="power"
+            stroke={MATLAB_COLORS.blue}
+            name="Power (kW)"
+            dot={false}
+            strokeWidth={1.5}
+          />
+          <Line
+            type="monotone"
+            dataKey="energy"
+            stroke={MATLAB_COLORS.orange}
+            name="Energy (kWh)"
+            dot={false}
+            strokeWidth={1.5}
+          />
+          <Line
+            type="monotone"
+            dataKey="soc"
+            stroke={MATLAB_COLORS.green}
+            name="SoC (%)"
+            dot={false}
+            strokeWidth={1.5}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
   );
 }
