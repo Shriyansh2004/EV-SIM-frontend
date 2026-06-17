@@ -1,6 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { ChargingWorkflowDiagram } from "@/components/learn/ChargingWorkflowDiagram";
+import { DataMonitoringDiagram } from "@/components/learn/DataMonitoringDiagram";
+import { OcppCommunicationDiagram } from "@/components/learn/OcppCommunicationDiagram";
+import { SystemArchitectureDiagram } from "@/components/learn/SystemArchitectureDiagram";
 import { SequenceDiagram } from "@/components/ocpp/SequenceDiagram";
 import { apiPost } from "@/hooks/useInitialData";
 import { useAppStore } from "@/store";
@@ -89,7 +93,7 @@ export default function LearnPage() {
   }
 
   return (
-    <div className="space-y-8 max-w-4xl">
+    <div className="space-y-8 max-w-5xl">
       <div>
         <h1 className="page-title">EV Industry Education</h1>
         <p className="page-desc">Learn OCPP and EV charging infrastructure fundamentals</p>
@@ -106,6 +110,20 @@ export default function LearnPage() {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="space-y-6">
+        <div>
+          <h2 className="text-base font-semibold text-ink">System Workflow Diagrams</h2>
+          <p className="text-sm text-muted mt-1">
+            Visual guides to how EV charging, OCPP, data storage, and monitoring work in EV-SIM
+          </p>
+        </div>
+
+        <SystemArchitectureDiagram />
+        <OcppCommunicationDiagram />
+        <ChargingWorkflowDiagram />
+        <DataMonitoringDiagram />
       </div>
 
       <SequenceDiagram />
