@@ -62,7 +62,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
                 <div className="min-w-0">
                   <h1 className="font-semibold text-ink text-sm leading-tight">EV-SIM</h1>
                   <p className="text-[10px] text-muted leading-tight mt-0.5 font-mono">
-                    OCPP 2.0.1 · Simulink
+                    OCPP 2.0.1 
                   </p>
                 </div>
               )}
