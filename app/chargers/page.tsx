@@ -55,14 +55,14 @@ export default function ChargersPage() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-semibold text-white">Charger Management</h1>
-        <p className="text-muted mt-1">Create and manage virtual EV chargers</p>
-      </div>
+      <header>
+        <h1 className="page-title">Charger Management</h1>
+        <p className="page-desc">Create and manage virtual EV chargers</p>
+      </header>
 
       <form
         onSubmit={createCharger}
-        className="bg-surface border border-border rounded-xl p-6 grid grid-cols-1 sm:grid-cols-4 gap-4 items-end"
+        className="panel p-5 shadow-card grid grid-cols-1 sm:grid-cols-4 gap-4 items-end"
       >
         <div>
           <label className="text-sm text-muted block mb-1">Charger ID</label>
@@ -70,7 +70,7 @@ export default function ChargersPage() {
             value={id}
             onChange={(e) => setId(e.target.value)}
             placeholder="CP-001"
-            className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-white font-mono"
+            className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-white font-mono focus:outline-none focus:border-accent/40"
           />
         </div>
         <div>
@@ -79,7 +79,7 @@ export default function ChargersPage() {
             type="number"
             value={power}
             onChange={(e) => setPower(Number(e.target.value))}
-            className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-white"
+            className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-accent/40"
           />
         </div>
         <div>
@@ -90,12 +90,12 @@ export default function ChargersPage() {
             max={4}
             value={connectors}
             onChange={(e) => setConnectors(Number(e.target.value))}
-            className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-white"
+            className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-accent/40"
           />
         </div>
         <button
           type="submit"
-          className="flex items-center justify-center gap-2 px-4 py-2 bg-accent text-background font-medium rounded-lg text-sm hover:bg-accent/90"
+          className="flex items-center justify-center gap-2 px-4 py-2 bg-accent text-background font-medium rounded-md text-sm hover:bg-accent/90 transition-colors"
         >
           <Plus className="w-4 h-4" />
           Add Charger
@@ -106,7 +106,7 @@ export default function ChargersPage() {
         {chargers.map((c) => (
           <div
             key={c.id}
-            className="bg-surface border border-border rounded-xl p-5 flex items-center justify-between"
+            className="panel p-4 shadow-card flex items-center justify-between"
           >
             <div className="flex items-center gap-4">
               <Link href={`/chargers/${c.id}`} className="font-mono text-white hover:text-accent">

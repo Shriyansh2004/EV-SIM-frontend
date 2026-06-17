@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -12,14 +12,43 @@ body {
   box-sizing: border-box;
 }
 
+@layer components {
+  .panel {
+    @apply bg-surface border border-border rounded-lg;
+  }
+
+  .panel-header {
+    @apply flex items-center justify-between px-5 py-4 border-b border-border-subtle;
+  }
+
+  .panel-body {
+    @apply p-5;
+  }
+
+  .page-title {
+    @apply text-[1.65rem] font-semibold tracking-tight text-white;
+  }
+
+  .page-desc {
+    @apply text-sm text-muted mt-1 leading-relaxed;
+  }
+
+  .section-label {
+    @apply text-[11px] font-medium uppercase tracking-wider text-muted;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0D1117;
+  background: #090b0f;
 }
 ::-webkit-scrollbar-thumb {
-  background: #30363D;
+  background: #2e3540;
   border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3d4654;
 }
