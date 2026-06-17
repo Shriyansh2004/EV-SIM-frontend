@@ -1,4 +1,5 @@
 import { LucideIcon } from "lucide-react";
+import clsx from "clsx";
 
 interface MetricCardProps {
   label: string;
@@ -9,12 +10,23 @@ interface MetricCardProps {
 
 export function MetricCard({ label, value, icon: Icon, accent }: MetricCardProps) {
   return (
-    <div className="bg-surface border border-border rounded-xl p-5">
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-muted text-sm">{label}</span>
-        {Icon && <Icon className={`w-5 h-5 ${accent || "text-accent"}`} />}
+    <div className="panel p-4 shadow-card">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="section-label">{label}</p>
+          <p className="text-2xl font-semibold text-white mt-2 tabular-nums">{value}</p>
+        </div>
+        {Icon && (
+          <div
+            className={clsx(
+              "w-9 h-9 rounded-md flex items-center justify-center bg-surface-raised border border-border-subtle shrink-0",
+              accent || "text-accent"
+            )}
+          >
+            <Icon className="w-4 h-4" />
+          </div>
+        )}
       </div>
-      <div className="text-2xl font-semibold text-white">{value}</div>
     </div>
   );
 }

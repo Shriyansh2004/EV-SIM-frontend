@@ -1,15 +1,29 @@
 import clsx from "clsx";
 
-export function LiveIndicator({ connected }: { connected: boolean }) {
+export function LiveIndicator({
+  connected,
+  compact = false,
+}: {
+  connected: boolean;
+  compact?: boolean;
+}) {
   return (
-    <div className="flex items-center gap-2 text-sm">
+    <div
+      className={clsx("flex items-center", compact ? "justify-center" : "gap-2")}
+      title={compact ? (connected ? "Live" : "Disconnected") : undefined}
+    >
       <span
         className={clsx(
-          "w-2 h-2 rounded-full",
-          connected ? "bg-accent animate-pulse" : "bg-error"
+          "rounded-full shrink-0",
+          compact ? "w-2.5 h-2.5" : "w-2 h-2",
+          connected ? "bg-accent" : "bg-error"
         )}
       />
-      <span className="text-muted">{connected ? "Live" : "Disconnected"}</span>
+      {!compact && (
+        <span className="text-xs text-muted">
+          {connected ? "Live connection" : "Disconnected"}
+        </span>
+      )}
     </div>
   );
 }
