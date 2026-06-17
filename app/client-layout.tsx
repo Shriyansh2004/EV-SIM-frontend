@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import {
-  Zap,
   LayoutDashboard,
   Plug,
   Activity,
@@ -55,9 +55,14 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
                 collapsed ? "justify-center" : "gap-2.5"
               )}
             >
-              <div className="w-8 h-8 rounded-matlab bg-matlab-blue border border-matlab-blue flex items-center justify-center shrink-0 shadow-matlab-btn">
-                <Zap className="w-4 h-4 text-white" />
-              </div>
+              <Image
+                src="/logo.png"
+                alt="EV-SIM"
+                width={32}
+                height={32}
+                className="w-8 h-8 shrink-0 object-contain"
+                priority
+              />
               {!collapsed && (
                 <div className="min-w-0">
                   <h1 className="font-semibold text-ink text-sm leading-tight">EV-SIM</h1>
