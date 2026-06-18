@@ -39,13 +39,13 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       <div className="relative shrink-0">
         <aside
           className={clsx(
-            "h-full bg-title-bar border-r border-border flex flex-col transition-[width] duration-sidebar ease-out shadow-card",
+            "h-full bg-sidebar border-r border-sidebar-border flex flex-col transition-[width] duration-sidebar ease-out shadow-card",
             collapsed ? "w-[68px]" : "w-60"
           )}
         >
           <div
             className={clsx(
-              "border-b border-border bg-surface flex items-center",
+              "border-b border-sidebar-border bg-sidebar-light flex items-center",
               collapsed ? "px-3 py-3 justify-center" : "px-4 py-3"
             )}
           >
