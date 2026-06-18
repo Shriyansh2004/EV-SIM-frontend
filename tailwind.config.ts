@@ -36,6 +36,12 @@ const config: Config = {
           axis: "#212121",
         },
         ink: "#212121",
+        sidebar: {
+          DEFAULT: "#ea580c",
+          dark: "#c2410c",
+          border: "rgba(255,255,255,0.14)",
+          muted: "rgba(255,255,255,0.72)",
+        },
       },
       fontFamily: {
         mono: ["Consolas", "Monaco", "Courier New", "monospace"],
@@ -46,10 +52,14 @@ const config: Config = {
         "card-hover": "inset 0 1px 0 rgba(255,255,255,0.8), 0 2px 6px rgba(0,0,0,0.12)",
         inset: "inset 1px 1px 2px rgba(0,0,0,0.08)",
         "matlab-btn": "inset 0 1px 0 rgba(255,255,255,0.9), 0 1px 0 #9e9e9e",
+        sidebar: "4px 0 28px rgba(194, 65, 12, 0.22)",
+        "nav-active": "0 4px 14px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08)",
       },
       backgroundImage: {
         "simulink-grid":
           "radial-gradient(circle, #c8c8c8 1px, transparent 1px)",
+        "sidebar-gradient":
+          "linear-gradient(175deg, #fb923c 0%, #f97316 38%, #ea580c 72%, #c2410c 100%)",
       },
       backgroundSize: {
         "simulink-grid": "16px 16px",
@@ -62,6 +72,8 @@ const config: Config = {
       },
       borderRadius: {
         matlab: "2px",
+        lg: "8px",
+        xl: "12px",
       },
     },
   },
