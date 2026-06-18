@@ -36,45 +36,53 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
   return (
     <div className="flex min-h-screen bg-background">
-      <div className="relative shrink-0">
+      <div className="relative shrink-0 sticky top-0 h-screen">
         <aside
           className={clsx(
-            "h-full bg-sidebar border-r border-sidebar-border flex flex-col transition-[width] duration-sidebar ease-out shadow-card",
+            "app-sidebar h-full flex flex-col transition-[width] duration-sidebar ease-out",
             collapsed ? "w-[68px]" : "w-60"
           )}
         >
           <div
             className={clsx(
-              "border-b border-sidebar-border bg-sidebar-light flex items-center",
-              collapsed ? "px-3 py-3 justify-center" : "px-4 py-3"
+              "app-sidebar-header flex items-center shrink-0",
+              collapsed ? "px-2.5 py-3.5 justify-center" : "px-4 py-3.5"
             )}
           >
             <div
               className={clsx(
                 "flex items-center min-w-0",
-                collapsed ? "justify-center" : "gap-2.5"
+                collapsed ? "justify-center" : "gap-3"
               )}
             >
-              <Image
-                src="/logo.png"
-                alt="EV-SIM"
-                width={32}
-                height={32}
-                className="w-8 h-8 shrink-0 object-contain"
-                priority
-              />
+              <div className="w-9 h-9 shrink-0 rounded-matlab bg-white border border-border shadow-matlab-btn flex items-center justify-center">
+                <Image
+                  src="/logo.png"
+                  alt="EV-SIM"
+                  width={28}
+                  height={28}
+                  className="w-7 h-7 object-contain"
+                  priority
+                />
+              </div>
               {!collapsed && (
                 <div className="min-w-0">
-                  <h1 className="font-semibold text-ink text-sm leading-tight">EV-SIM</h1>
-                  <p className="text-[10px] text-muted leading-tight mt-0.5 font-mono">
-                    OCPP 2.0.1 
-                  </p>
+                  <h1 className="app-sidebar-brand">EV-SIM</h1>
+                  <p className="app-sidebar-version">OCPP 2.0.1</p>
                 </div>
               )}
             </div>
           </div>
 
-          <nav className={clsx("flex-1 py-2", collapsed ? "px-2 space-y-0.5" : "px-2 space-y-0.5")}>
+          <nav
+            className={clsx(
+              "flex-1 overflow-y-auto py-3",
+              collapsed ? "px-2 space-y-0.5" : "px-2.5 space-y-0.5"
+            )}
+          >
+            {!collapsed && (
+              <p className="app-sidebar-section-label">Navigation</p>
+            )}
             {NAV.map(({ href, label, icon: Icon }) => {
               const active = pathname === href;
               return (
@@ -83,21 +91,21 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
                   href={href}
                   title={collapsed ? label : undefined}
                   className={clsx(
-                    "flex items-center rounded-matlab text-sm transition-colors border",
+                    "app-sidebar-nav-link group",
                     collapsed ? "justify-center p-2.5" : "gap-2.5 px-3 py-2",
                     active
-                      ? "bg-white text-ink border-border shadow-matlab-btn border-l-[3px] border-l-matlab-blue"
-                      : "text-muted hover:text-ink hover:bg-white/70 border-transparent"
+                      ? "app-sidebar-nav-link-active"
+                      : "app-sidebar-nav-link-inactive"
                   )}
                 >
                   <Icon
                     className={clsx(
                       "shrink-0",
                       collapsed ? "w-[18px] h-[18px]" : "w-4 h-4",
-                      active && "text-matlab-blue"
+                      active ? "text-matlab-blue" : "text-white"
                     )}
                   />
-                  {!collapsed && <span className="text-[13px]">{label}</span>}
+                  {!collapsed && <span>{label}</span>}
                 </Link>
               );
             })}
@@ -105,11 +113,11 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
           <div
             className={clsx(
-              "border-t border-border bg-surface",
-              collapsed ? "p-3 flex justify-center" : "p-3"
+              "app-sidebar-footer shrink-0",
+              collapsed ? "p-3 flex justify-center" : "px-3 py-3"
             )}
           >
-            <LiveIndicator connected={wsConnected} compact={collapsed} />
+            <LiveIndicator connected={wsConnected} compact={collapsed} variant="sidebar" />
           </div>
         </aside>
 
@@ -117,7 +125,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
           type="button"
           onClick={() => setCollapsed((c) => !c)}
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          className="absolute top-[18px] left-full -translate-x-1/2 z-20 flex items-center justify-center w-7 h-7 rounded-matlab bg-white border border-border text-muted hover:text-ink hover:border-matlab-blue shadow-matlab-btn transition-colors"
+          className="absolute top-[20px] left-full -translate-x-1/2 z-20 flex items-center justify-center w-7 h-7 rounded-matlab bg-white border border-border text-matlab-orange shadow-matlab-btn hover:bg-surface-raised active:shadow-inset transition-colors"
         >
           {collapsed ? (
             <PanelLeft className="w-3.5 h-3.5" />
@@ -127,7 +135,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         </button>
       </div>
 
-      <main className="flex-1 overflow-auto bg-background">
+      <main className="flex-1 min-w-0 overflow-auto bg-background">
         <div className="p-6 lg:p-8 max-w-[1400px]">{children}</div>
       </main>
     </div>
