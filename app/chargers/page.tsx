@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { useAppStore } from "@/store";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { StatCard } from "@/components/ui/StatCard";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { apiPost, apiDelete } from "@/hooks/useInitialData";
 import { mapCharger } from "@/types";
@@ -59,24 +62,15 @@ export default function ChargersPage() {
 
   return (
     <div className="space-y-6">
-      <header>
-        <h1 className="page-title">Charger Management</h1>
-        <p className="page-desc">Create and manage virtual EV chargers</p>
-      </header>
+      <PageHeader
+        title="Charger Management"
+        description="Create and manage virtual EV chargers"
+      />
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <div className="panel p-4 shadow-card text-center">
-          <p className="scope-readout">{chargers.length}</p>
-          <p className="scope-readout-label mt-1">Total Chargers</p>
-        </div>
-        <div className="panel p-4 shadow-card text-center">
-          <p className="scope-readout text-matlab-green">{connectedCount}</p>
-          <p className="scope-readout-label mt-1">CSMS Connected</p>
-        </div>
-        <div className="panel p-4 shadow-card text-center">
-          <p className="scope-readout text-matlab-blue">{chargingCount}</p>
-          <p className="scope-readout-label mt-1">Charging</p>
-        </div>
+        <StatCard label="Total Chargers" value={chargers.length} />
+        <StatCard label="CSMS Connected" value={connectedCount} accent="text-matlab-green" />
+        <StatCard label="Charging" value={chargingCount} accent="text-matlab-blue" />
       </div>
 
       <section className="panel shadow-card">
@@ -123,18 +117,18 @@ export default function ChargersPage() {
       <section>
         <h2 className="section-label mb-4">Fleet</h2>
         {chargers.length === 0 ? (
-          <div className="panel shadow-card p-12 text-center">
-            <Plug className="w-8 h-8 text-muted mx-auto mb-3" />
-            <p className="text-sm text-muted font-mono">No chargers created yet</p>
-            <p className="text-xs text-muted mt-1">Add your first virtual charger above</p>
-          </div>
+          <EmptyState
+            icon={Plug}
+            title="No chargers created yet"
+            description="Add your first virtual charger using the form above."
+          />
         ) : (
           <div className="grid grid-cols-1 gap-3">
             {chargers.map((c) => (
               <article
                 key={c.id}
                 className={clsx(
-                  "panel shadow-card border-l-[3px]",
+                  "panel shadow-card border-l-[3px] transition-all duration-200 hover:shadow-card-hover",
                   c.isConnected ? "border-l-matlab-green" : "border-l-muted"
                 )}
               >
@@ -142,7 +136,7 @@ export default function ChargersPage() {
                   <div className="flex flex-wrap items-center gap-x-4 gap-y-2 min-w-0">
                     <Link
                       href={`/chargers/${c.id}`}
-                      className="font-mono text-ink hover:text-matlab-blue font-semibold"
+                      className="font-mono text-ink hover:text-matlab-blue font-semibold transition-colors"
                     >
                       {c.id}
                     </Link>

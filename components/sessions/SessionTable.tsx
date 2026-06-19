@@ -1,6 +1,8 @@
 "use client";
 
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { Activity } from "lucide-react";
 import type { Session } from "@/types";
 
 export function SessionTable({
@@ -12,9 +14,12 @@ export function SessionTable({
 }) {
   if (sessions.length === 0) {
     return (
-      <div className="text-center py-12 text-muted simulink-canvas">
-        No charging sessions yet
-      </div>
+      <EmptyState
+        icon={Activity}
+        title="No charging sessions yet"
+        description="Sessions appear here when an EV starts charging on a connected charger."
+        className="simulink-canvas"
+      />
     );
   }
 

@@ -9,6 +9,17 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        lp: {
+          primary: "var(--bg-primary)",
+          surface: "var(--bg-surface)",
+          dark: "var(--bg-dark)",
+          orange: "var(--accent-orange)",
+          "orange-soft": "var(--accent-orange-soft)",
+          "grey-900": "var(--grey-900)",
+          "grey-600": "var(--grey-600)",
+          "grey-300": "color-mix(in srgb, var(--grey-300) calc(<alpha-value> * 100%), transparent)",
+          "grey-100": "color-mix(in srgb, var(--grey-100) calc(<alpha-value> * 100%), transparent)",
+        },
         background: "#f0f0f0",
         surface: "#ffffff",
         "surface-raised": "#fafafa",
@@ -46,8 +57,13 @@ const config: Config = {
       fontFamily: {
         mono: ["Consolas", "Monaco", "Courier New", "monospace"],
         sans: ["Helvetica Neue", "Arial", "Segoe UI", "system-ui", "sans-serif"],
+        "lp-display": ["var(--font-inter-tight)", "system-ui", "sans-serif"],
+        "lp-body": ["var(--font-inter)", "system-ui", "sans-serif"],
+        "lp-mono": ["var(--font-jetbrains-mono)", "monospace"],
       },
       boxShadow: {
+        "lp-card": "0 4px 24px rgba(0, 0, 0, 0.06)",
+        "lp-card-hover": "0 8px 32px rgba(0, 0, 0, 0.1)",
         card: "inset 0 1px 0 rgba(255,255,255,0.8), 0 1px 2px rgba(0,0,0,0.08)",
         "card-hover": "inset 0 1px 0 rgba(255,255,255,0.8), 0 2px 6px rgba(0,0,0,0.12)",
         inset: "inset 1px 1px 2px rgba(0,0,0,0.08)",
@@ -66,14 +82,29 @@ const config: Config = {
       },
       animation: {
         "pulse-charge": "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "pulse-dot": "pulse-dot 2s ease-in-out infinite",
+        "fade-in": "fade-in 0.35s ease-out",
+      },
+      keyframes: {
+        "pulse-dot": {
+          "0%, 100%": { opacity: "1", transform: "scale(1)" },
+          "50%": { opacity: "0.55", transform: "scale(0.92)" },
+        },
+        "fade-in": {
+          from: { opacity: "0", transform: "translateY(4px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
       },
       transitionDuration: {
         sidebar: "220ms",
       },
       borderRadius: {
-        matlab: "2px",
-        lg: "8px",
-        xl: "12px",
+        "lp-lg": "16px",
+        "lp-xl": "24px",
+        matlab: "6px",
+        sm: "4px",
+        lg: "10px",
+        xl: "14px",
       },
     },
   },
