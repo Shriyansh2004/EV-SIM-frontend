@@ -3,7 +3,7 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { MATLAB_COLORS } from "@/lib/chartTheme";
 
-export function SocGauge({ soc }: { soc: number }) {
+export function SocGauge({ soc, targetSoc }: { soc: number; targetSoc?: number }) {
   const data = [
     { name: "SoC", value: soc },
     { name: "Remaining", value: 100 - soc },
@@ -39,7 +39,9 @@ export function SocGauge({ soc }: { soc: number }) {
           </ResponsiveContainer>
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
             <span className="scope-readout text-3xl">{soc.toFixed(0)}</span>
-            <span className="scope-readout-label mt-0.5">%</span>
+            <span className="scope-readout-label mt-0.5">
+              %{targetSoc !== undefined ? ` / ${targetSoc}%` : ""}
+            </span>
           </div>
         </div>
       </div>
