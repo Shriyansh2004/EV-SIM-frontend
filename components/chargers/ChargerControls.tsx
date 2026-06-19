@@ -7,6 +7,7 @@ interface ChargerControlsProps {
   chargerId: string;
   isConnected: boolean;
   sessionId?: string;
+  connectorId?: number;
   onAction?: () => void;
 }
 
@@ -14,6 +15,7 @@ export function ChargerControls({
   chargerId,
   isConnected,
   sessionId,
+  connectorId = 1,
   onAction,
 }: ChargerControlsProps) {
   async function handle(action: string, body?: Record<string, unknown>) {
@@ -32,7 +34,7 @@ export function ChargerControls({
         onClick={() =>
           handle("sessions/start", {
             charger_id: chargerId,
-            connector_id: 1,
+            connector_id: connectorId,
             id_token: "DEMO-TOKEN",
           })
         }
@@ -74,7 +76,7 @@ export function ChargerControls({
       <button
         disabled={!isConnected}
         onClick={() =>
-          handle("commands/unlock", { charger_id: chargerId, connector_id: 1 })
+          handle("commands/unlock", { charger_id: chargerId, connector_id: connectorId })
         }
         className="matlab-btn disabled:opacity-40"
       >

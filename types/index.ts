@@ -18,11 +18,50 @@ export interface VirtualCharger {
   currentSession?: Session;
   lastHeartbeat?: string;
   connectorStatuses?: ChargerStatus[];
+  pluggedEvs?: Record<string, string | null>;
+}
+
+export type EvStatus = "idle" | "plugged" | "charging" | "full" | "fault";
+export type EvType = "BEV" | "PHEV" | "HEV";
+
+export interface VirtualEv {
+  id: string;
+  name: string;
+  vendor: string;
+  model: string;
+  evType: EvType;
+  batteryCapacityKwh: number;
+  maxChargePowerKw: number;
+  maxAcChargePowerKw: number;
+  maxDcChargePowerKw: number;
+  socPercent: number;
+  targetSocPercent: number;
+  status: EvStatus;
+  chargerId?: string;
+  connectorId?: number;
+  sessionId?: string;
+  energyChargedKwh: number;
+  currentPowerKw: number;
+  voltageV: number;
+  currentA: number;
+  createdAt: string;
+}
+
+export interface EvPreset {
+  id: string;
+  name: string;
+  vendor: string;
+  model: string;
+  evType: EvType;
+  batteryCapacityKwh: number;
+  maxAcChargePowerKw: number;
+  maxDcChargePowerKw: number;
 }
 
 export interface Session {
   id: string;
   chargerId: string;
+  evId?: string;
   connectorId: number;
   startTime: string;
   endTime?: string;
@@ -69,10 +108,12 @@ export function mapCharger(raw: Record<string, unknown>): VirtualCharger {
     isConnected: raw.is_connected as boolean,
     lastHeartbeat: raw.last_heartbeat as string | undefined,
     connectorStatuses: raw.connector_statuses as ChargerStatus[] | undefined,
+    pluggedEvs: raw.plugged_evs as Record<string, string | null> | undefined,
     currentSession: session
       ? {
           id: session.id as string,
           chargerId: session.charger_id as string,
+          evId: session.ev_id as string | undefined,
           connectorId: session.connector_id as number,
           startTime: session.start_time as string,
           endTime: session.end_time as string | undefined,
@@ -92,6 +133,7 @@ export function mapSession(raw: Record<string, unknown>): Session {
   return {
     id: raw.id as string,
     chargerId: raw.charger_id as string,
+    evId: raw.ev_id as string | undefined,
     connectorId: raw.connector_id as number,
     startTime: raw.start_time as string,
     endTime: raw.end_time as string | undefined,
@@ -124,6 +166,44 @@ export function mapOcppMessage(raw: Record<string, unknown>): OcppMessage {
     action: raw.action as string,
     payload: raw.payload as Record<string, unknown>,
     correlationId: raw.correlation_id as string | undefined,
+  };
+}
+
+export function mapEv(raw: Record<string, unknown>): VirtualEv {
+  return {
+    id: raw.id as string,
+    name: raw.name as string,
+    vendor: raw.vendor as string,
+    model: raw.model as string,
+    evType: raw.ev_type as EvType,
+    batteryCapacityKwh: raw.battery_capacity_kwh as number,
+    maxChargePowerKw: raw.max_charge_power_kw as number,
+    maxAcChargePowerKw: raw.max_ac_charge_power_kw as number,
+    maxDcChargePowerKw: raw.max_dc_charge_power_kw as number,
+    socPercent: raw.soc_percent as number,
+    targetSocPercent: raw.target_soc_percent as number,
+    status: raw.status as EvStatus,
+    chargerId: raw.charger_id as string | undefined,
+    connectorId: raw.connector_id as number | undefined,
+    sessionId: raw.session_id as string | undefined,
+    energyChargedKwh: raw.energy_charged_kwh as number,
+    currentPowerKw: raw.current_power_kw as number,
+    voltageV: raw.voltage_v as number,
+    currentA: raw.current_a as number,
+    createdAt: raw.created_at as string,
+  };
+}
+
+export function mapEvPreset(raw: Record<string, unknown>): EvPreset {
+  return {
+    id: raw.id as string,
+    name: raw.name as string,
+    vendor: raw.vendor as string,
+    model: raw.model as string,
+    evType: raw.ev_type as EvType,
+    batteryCapacityKwh: raw.battery_capacity_kwh as number,
+    maxAcChargePowerKw: raw.max_ac_charge_power_kw as number,
+    maxDcChargePowerKw: raw.max_dc_charge_power_kw as number,
   };
 }
 

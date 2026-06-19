@@ -1,15 +1,19 @@
 import { create } from "zustand";
-import type { OcppMessage, Session, VirtualCharger } from "@/types";
-import { mapCharger, mapOcppMessage, mapSession } from "@/types";
+import type { OcppMessage, Session, VirtualCharger, VirtualEv } from "@/types";
+import { mapCharger, mapEv, mapOcppMessage, mapSession } from "@/types";
 
 interface AppState {
   chargers: VirtualCharger[];
+  evs: VirtualEv[];
   sessions: Session[];
   ocppMessages: OcppMessage[];
   wsConnected: boolean;
   setChargers: (chargers: VirtualCharger[]) => void;
   upsertCharger: (charger: VirtualCharger) => void;
   removeCharger: (id: string) => void;
+  setEvs: (evs: VirtualEv[]) => void;
+  upsertEv: (ev: VirtualEv) => void;
+  removeEv: (id: string) => void;
   setSessions: (sessions: Session[]) => void;
   upsertSession: (session: Session) => void;
   addOcppMessage: (msg: OcppMessage) => void;
@@ -20,6 +24,7 @@ interface AppState {
 
 export const useAppStore = create<AppState>((set, get) => ({
   chargers: [],
+  evs: [],
   sessions: [],
   ocppMessages: [],
   wsConnected: false,
@@ -37,6 +42,19 @@ export const useAppStore = create<AppState>((set, get) => ({
     }),
   removeCharger: (id) =>
     set((s) => ({ chargers: s.chargers.filter((c) => c.id !== id) })),
+
+  setEvs: (evs) => set({ evs }),
+  upsertEv: (ev) =>
+    set((s) => {
+      const idx = s.evs.findIndex((e) => e.id === ev.id);
+      if (idx >= 0) {
+        const next = [...s.evs];
+        next[idx] = { ...next[idx], ...ev };
+        return { evs: next };
+      }
+      return { evs: [...s.evs, ev] };
+    }),
+  removeEv: (id) => set((s) => ({ evs: s.evs.filter((e) => e.id !== id) })),
 
   setSessions: (sessions) => set({ sessions }),
   upsertSession: (session) =>
@@ -79,8 +97,6 @@ export const useAppStore = create<AppState>((set, get) => ({
                     existing.currentSession.currentPowerKw,
                   energyKwh:
                     (data.energy_kwh as number) ?? existing.currentSession.energyKwh,
-                  socPercent:
-                    (data.soc_percent as number) ?? existing.currentSession.socPercent,
                 }
               : existing.currentSession,
           });
@@ -107,6 +123,17 @@ export const useAppStore = create<AppState>((set, get) => ({
         break;
       case "session_ended":
         store.upsertSession(mapSession(data));
+        break;
+      case "ev_created":
+      case "ev_plugged":
+      case "ev_unplugged":
+      case "ev_charging_started":
+      case "ev_charging_stopped":
+      case "ev_update":
+        store.upsertEv(mapEv(data));
+        break;
+      case "ev_deleted":
+        store.removeEv(data.ev_id as string);
         break;
     }
   },

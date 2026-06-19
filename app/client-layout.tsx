@@ -8,6 +8,7 @@ import clsx from "clsx";
 import {
   LayoutDashboard,
   Plug,
+  Car,
   Activity,
   Radio,
   BookOpen,
@@ -22,6 +23,7 @@ import { useAppStore } from "@/store";
 const NAV = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
   { href: "/chargers", label: "Chargers", icon: Plug },
+  { href: "/evs", label: "Electric Vehicles", icon: Car },
   { href: "/sessions", label: "Sessions", icon: Activity },
   { href: "/ocpp-explorer", label: "OCPP Explorer", icon: Radio },
   { href: "/learn", label: "Learn", icon: BookOpen },
@@ -84,7 +86,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
               <p className="app-sidebar-section-label">Navigation</p>
             )}
             {NAV.map(({ href, label, icon: Icon }) => {
-              const active = pathname === href;
+              const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
               return (
                 <Link
                   key={href}

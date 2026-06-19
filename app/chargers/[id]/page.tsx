@@ -3,103 +3,74 @@
 import { useParams } from "next/navigation";
 import { useAppStore } from "@/store";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { ChargerStateDisplay } from "@/components/chargers/ChargerStateDisplay";
-import { ChargerControls } from "@/components/chargers/ChargerControls";
-import { OcppMessageLog } from "@/components/ocpp/OcppMessageLog";
-import { SocGauge } from "@/components/charts/SocGauge";
-import { PowerChart } from "@/components/charts/PowerChart";
+import { ConnectorPanel } from "@/components/chargers/ConnectorPanel";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import clsx from "clsx";
 
 export default function ChargerDetailPage() {
   const params = useParams();
   const chargerId = params.id as string;
   const charger = useAppStore((s) => s.chargers.find((c) => c.id === chargerId));
-  const ocppMessages = useAppStore((s) => s.ocppMessages);
 
   if (!charger) {
     return (
-      <div className="text-center py-12">
+      <div className="panel shadow-card p-12 text-center">
         <p className="text-muted">Charger not found</p>
-        <Link href="/chargers" className="text-matlab-blue text-sm mt-2 inline-block font-mono">
-          ← Back to chargers
+        <Link
+          href="/chargers"
+          className="inline-flex items-center gap-1 text-matlab-blue text-sm mt-3 font-mono hover:underline"
+        >
+          <ArrowLeft className="w-3.5 h-3.5" />
+          Back to chargers
         </Link>
       </div>
     );
   }
 
-  const session = charger.currentSession;
-  const soc = session?.socPercent ?? 20;
+  const pluggedCount = Object.values(charger.pluggedEvs ?? {}).filter(Boolean).length;
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center gap-4">
-        <Link href="/chargers" className="text-muted hover:text-ink matlab-btn p-1.5">
+    <div className="space-y-6">
+      <div className="flex items-start gap-4">
+        <Link
+          href="/chargers"
+          className="text-muted hover:text-ink matlab-btn p-1.5 shrink-0 mt-0.5"
+        >
           <ArrowLeft className="w-5 h-5" />
         </Link>
-        <div>
+        <div className="min-w-0 flex-1">
           <h1 className="page-title font-mono">{charger.id}</h1>
-          <div className="flex items-center gap-3 mt-1">
-            <StatusBadge status={charger.status} />
-            <span className="text-muted text-sm font-mono">
-              {charger.maxPowerKw} kW · {charger.connectorCount} connector(s)
+          <p className="page-desc">Select a connector below to monitor and control</p>
+        </div>
+      </div>
+
+      <section className="panel shadow-card">
+        <div className="panel-header py-2">
+          <h2 className="text-sm font-semibold font-mono text-ink">{charger.id}</h2>
+          <StatusBadge status={charger.status} />
+        </div>
+        <div className="panel-body py-3">
+          <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm font-mono text-muted">
+            <span>{charger.maxPowerKw} kW max</span>
+            <span>
+              {charger.connectorCount} connector{charger.connectorCount !== 1 ? "s" : ""}
+            </span>
+            <span>
+              {pluggedCount}/{charger.connectorCount} plugged in
+            </span>
+            <span
+              className={clsx(
+                charger.isConnected ? "text-matlab-green" : "text-muted"
+              )}
+            >
+              {charger.isConnected ? "● CSMS online" : "○ CSMS offline"}
             </span>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-6">
-          <ChargerStateDisplay current={charger.status} />
-          <div className="panel shadow-card">
-            <div className="panel-header py-2">
-              <h3 className="section-label">Scope: Live Metrics</h3>
-            </div>
-            <div className="panel-body">
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center matlab-figure p-4">
-                <div>
-                  <p className="scope-readout">{(session?.currentPowerKw ?? 0).toFixed(1)}</p>
-                  <p className="scope-readout-label mt-1">kW</p>
-                </div>
-                <div>
-                  <p className="scope-readout text-matlab-orange">
-                    {(session?.energyKwh ?? 0).toFixed(2)}
-                  </p>
-                  <p className="scope-readout-label mt-1">kWh</p>
-                </div>
-                <div>
-                  <p className="scope-readout text-ink">400</p>
-                  <p className="scope-readout-label mt-1">Voltage (V)</p>
-                </div>
-                <div>
-                  <p className="scope-readout text-ink">
-                    {session?.currentPowerKw
-                      ? ((session.currentPowerKw * 1000) / 400).toFixed(1)
-                      : "0"}
-                  </p>
-                  <p className="scope-readout-label mt-1">Current (A)</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div>
-            <h3 className="section-label mb-3">Controls</h3>
-            <ChargerControls
-              chargerId={charger.id}
-              isConnected={charger.isConnected}
-              sessionId={session?.id}
-            />
-          </div>
-          <div>
-            <h3 className="section-label mb-3">Command Window: OCPP Log</h3>
-            <OcppMessageLog messages={ocppMessages} chargerId={chargerId} limit={20} />
-          </div>
-        </div>
-        <div className="space-y-6">
-          <SocGauge soc={soc} />
-          <PowerChart chargers={[charger]} />
-        </div>
-      </div>
+      <ConnectorPanel charger={charger} />
     </div>
   );
 }
