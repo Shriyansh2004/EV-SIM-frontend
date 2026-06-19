@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bg-primary: #fafaf8;
+  --bg-surface: #ffffff;
+  --bg-dark: #1f1d1b;
+  --accent-orange: #ff6b1a;
+  --accent-orange-soft: #ffe8d9;
+  --grey-900: #2b2a28;
+  --grey-600: #6b6862;
+  --grey-300: #d8d5d0;
+  --grey-100: #f0eeeb;
+}
+
 body {
   @apply bg-background text-ink font-sans antialiased;
 }
@@ -297,4 +309,88 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #9e9e9e;
+}
+
+/* ── Landing page ── */
+
+.landing-page {
+  @apply bg-lp-primary text-lp-grey-600 font-lp-body antialiased;
+  scroll-behavior: smooth;
+}
+
+.landing-page *:focus-visible {
+  @apply outline-none ring-2 ring-lp-orange ring-offset-2 ring-offset-lp-primary;
+}
+
+.landing-btn-primary {
+  @apply inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full
+    bg-lp-orange text-white text-sm font-medium
+    shadow-lp-card transition-all duration-150
+    hover:scale-[1.02] hover:shadow-lp-card-hover
+    active:scale-[0.99];
+}
+
+.landing-btn-secondary {
+  @apply inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full
+    bg-lp-surface text-lp-grey-900 text-sm font-medium
+    border border-lp-grey-300
+    transition-all duration-150
+    hover:scale-[1.02] hover:shadow-lp-card
+    active:scale-[0.99];
+}
+
+.landing-card {
+  @apply bg-lp-surface border border-lp-grey-300 rounded-2xl shadow-lp-card
+    transition-all duration-200
+    hover:-translate-y-0.5 hover:shadow-lp-card-hover hover:scale-[1.01];
+}
+
+.landing-tag {
+  @apply inline-block px-2 py-0.5 rounded-md bg-lp-grey-100
+    text-[11px] font-lp-mono text-lp-grey-600 border border-lp-grey-300;
+}
+
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 400ms ease-out, transform 400ms ease-out;
+}
+
+.scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes hero-label-fade {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  15%,
+  85% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-ocpp-label {
+  animation: hero-label-fade 4.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-page {
+    scroll-behavior: auto;
+  }
+
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+    transition: opacity 300ms ease-out;
+  }
+
+  .hero-ocpp-label {
+    animation: none;
+    opacity: 1;
+  }
 }

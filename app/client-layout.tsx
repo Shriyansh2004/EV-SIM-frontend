@@ -21,7 +21,7 @@ import { LiveIndicator } from "@/components/ui/LiveIndicator";
 import { useAppStore } from "@/store";
 
 const NAV = [
-  { href: "/", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/chargers", label: "Chargers", icon: Plug },
   { href: "/evs", label: "Electric Vehicles", icon: Car },
   { href: "/sessions", label: "Sessions", icon: Activity },
@@ -30,6 +30,17 @@ const NAV = [
 ];
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isLanding = pathname === "/";
+
+  if (isLanding) {
+    return <>{children}</>;
+  }
+
+  return <AppShell>{children}</AppShell>;
+}
+
+function AppShell({ children }: { children: React.ReactNode }) {
   useOcppWebSocket();
   useInitialData();
   const pathname = usePathname();
@@ -86,7 +97,10 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
               <p className="app-sidebar-section-label">Navigation</p>
             )}
             {NAV.map(({ href, label, icon: Icon }) => {
-              const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
+              const active =
+                href === "/dashboard"
+                  ? pathname === "/dashboard"
+                  : pathname.startsWith(href);
               return (
                 <Link
                   key={href}
