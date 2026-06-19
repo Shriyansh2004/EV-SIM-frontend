@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { HeroBlockDiagram } from "./HeroBlockDiagram";
+import { Hero3DVisual } from "./hero3d/Hero3DVisual";
 import { GITHUB_FRONTEND_URL } from "@/lib/github";
 
 export function HeroSection() {
@@ -34,7 +34,7 @@ export function HeroSection() {
             </div>
           </div>
 
-          <HeroBlockDiagram />
+          <Hero3DVisual />
         </div>
       </div>
     </section>
