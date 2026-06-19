@@ -66,14 +66,27 @@ const config: Config = {
       },
       animation: {
         "pulse-charge": "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "pulse-dot": "pulse-dot 2s ease-in-out infinite",
+        "fade-in": "fade-in 0.35s ease-out",
+      },
+      keyframes: {
+        "pulse-dot": {
+          "0%, 100%": { opacity: "1", transform: "scale(1)" },
+          "50%": { opacity: "0.55", transform: "scale(0.92)" },
+        },
+        "fade-in": {
+          from: { opacity: "0", transform: "translateY(4px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
       },
       transitionDuration: {
         sidebar: "220ms",
       },
       borderRadius: {
-        matlab: "2px",
-        lg: "8px",
-        xl: "12px",
+        matlab: "6px",
+        sm: "4px",
+        lg: "10px",
+        xl: "14px",
       },
     },
   },

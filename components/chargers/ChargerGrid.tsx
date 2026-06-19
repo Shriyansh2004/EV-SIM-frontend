@@ -1,23 +1,26 @@
 import Link from "next/link";
-import { Plus } from "lucide-react";
+import { Plus, Plug } from "lucide-react";
 import { ChargerCard } from "./ChargerCard";
+import { EmptyState } from "@/components/ui/EmptyState";
 import type { VirtualCharger } from "@/types";
 
 export function ChargerGrid({ chargers }: { chargers: VirtualCharger[] }) {
   if (chargers.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 px-6 text-center simulink-canvas">
-        <p className="text-sm text-muted max-w-xs leading-relaxed">
-          No virtual chargers yet. Add one from the Chargers page to start simulating.
-        </p>
+      <EmptyState
+        icon={Plug}
+        title="No virtual chargers yet"
+        description="Add one from the Chargers page to start simulating."
+        className="simulink-canvas py-14"
+      >
         <Link
           href="/chargers"
-          className="mt-4 inline-flex items-center gap-1.5 text-sm text-matlab-blue hover:text-[#005a94] transition-colors font-mono"
+          className="matlab-btn-primary inline-flex items-center gap-1.5 text-sm"
         >
           <Plus className="w-3.5 h-3.5" />
           Add charger
         </Link>
-      </div>
+      </EmptyState>
     );
   }
 

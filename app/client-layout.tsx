@@ -37,8 +37,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-background">
-      <div className="relative shrink-0 sticky top-0 h-screen">
+    <div className="app-shell">
+      <div className="relative shrink-0 sticky top-3 h-[calc(100dvh-1.5rem)] self-start">
         <aside
           className={clsx(
             "app-sidebar h-full flex flex-col transition-[width] duration-sidebar ease-out",
@@ -57,7 +57,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
                 collapsed ? "justify-center" : "gap-3"
               )}
             >
-              <div className="w-9 h-9 shrink-0 rounded-matlab bg-white border border-border shadow-matlab-btn flex items-center justify-center">
+              <div className="w-9 h-9 shrink-0 rounded-matlab bg-white border border-border shadow-matlab-btn flex items-center justify-center transition-transform duration-200 hover:scale-[1.03]">
                 <Image
                   src="/logo.png"
                   alt="EV-SIM"
@@ -68,7 +68,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
                 />
               </div>
               {!collapsed && (
-                <div className="min-w-0">
+                <div className="min-w-0 animate-fade-in">
                   <h1 className="app-sidebar-brand">EV-SIM</h1>
                   <p className="app-sidebar-version">OCPP 2.0.1</p>
                 </div>
@@ -102,9 +102,9 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
                 >
                   <Icon
                     className={clsx(
-                      "shrink-0",
+                      "shrink-0 transition-colors",
                       collapsed ? "w-[18px] h-[18px]" : "w-4 h-4",
-                      active ? "text-matlab-blue" : "text-white"
+                      active ? "text-matlab-blue" : "text-white group-hover:text-white"
                     )}
                   />
                   {!collapsed && <span>{label}</span>}
@@ -127,7 +127,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
           type="button"
           onClick={() => setCollapsed((c) => !c)}
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          className="absolute top-[20px] left-full -translate-x-1/2 z-20 flex items-center justify-center w-7 h-7 rounded-matlab bg-white border border-border text-matlab-orange shadow-matlab-btn hover:bg-surface-raised active:shadow-inset transition-colors"
+          className="absolute top-[20px] left-full -translate-x-1/2 z-20 flex items-center justify-center w-7 h-7 rounded-matlab bg-white border border-border text-matlab-orange shadow-matlab-btn hover:bg-surface-raised hover:shadow-card-hover active:shadow-inset transition-all duration-150"
         >
           {collapsed ? (
             <PanelLeft className="w-3.5 h-3.5" />
@@ -137,8 +137,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         </button>
       </div>
 
-      <main className="flex-1 min-w-0 overflow-auto bg-background">
-        <div className="p-6 lg:p-8 max-w-[1400px]">{children}</div>
+      <main className="flex-1 min-w-0 overflow-auto app-main">
+        <div className="p-6 lg:p-8 max-w-[1400px] mx-auto animate-fade-in">{children}</div>
       </main>
     </div>
   );

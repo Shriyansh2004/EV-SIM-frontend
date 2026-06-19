@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { ChargingWorkflowDiagram } from "@/components/learn/ChargingWorkflowDiagram";
 import { DataMonitoringDiagram } from "@/components/learn/DataMonitoringDiagram";
 import { OcppCommunicationDiagram } from "@/components/learn/OcppCommunicationDiagram";
@@ -94,10 +95,10 @@ export default function LearnPage() {
 
   return (
     <div className="space-y-8 max-w-5xl">
-      <div>
-        <h1 className="page-title">EV Industry Education</h1>
-        <p className="page-desc">Learn OCPP and EV charging infrastructure fundamentals</p>
-      </div>
+      <PageHeader
+        title="EV Industry Education"
+        description="Learn OCPP and EV charging infrastructure fundamentals"
+      />
 
       <div className="space-y-4">
         {SECTIONS.map((s) => (

@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useAppStore } from "@/store";
 import { MetricCard } from "@/components/ui/MetricCard";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { PanelLink } from "@/components/ui/PanelLink";
 import { ChargerGrid } from "@/components/chargers/ChargerGrid";
 import { OcppMessageLog } from "@/components/ocpp/OcppMessageLog";
 import { PowerChart } from "@/components/charts/PowerChart";
-import { Plug, Activity, Zap, Wifi, Car, ArrowRight } from "lucide-react";
+import { Plug, Activity, Zap, Wifi, Car, BatteryCharging } from "lucide-react";
 
 export default function DashboardPage() {
   const chargers = useAppStore((s) => s.chargers);
@@ -21,12 +23,10 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-7">
-      <header>
-        <h1 className="page-title">Dashboard</h1>
-        <p className="page-desc">
-          Live overview of virtual chargers and OCPP traffic
-        </p>
-      </header>
+      <PageHeader
+        title="Dashboard"
+        description="Live overview of virtual chargers and OCPP traffic"
+      />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
         <MetricCard label="Total Chargers" value={chargers.length} icon={Plug} />
@@ -42,11 +42,12 @@ export default function DashboardPage() {
       </div>
 
       {chargingEvs > 0 && (
-        <div className="panel p-3 shadow-card border-l-4 border-matlab-blue">
-          <p className="text-sm font-mono text-ink">
+        <div className="alert-banner-info">
+          <BatteryCharging className="w-4 h-4 text-matlab-blue shrink-0 mt-0.5" />
+          <p className="text-sm font-mono text-ink leading-relaxed">
             <span className="text-matlab-blue font-semibold">{chargingEvs}</span> EV
             {chargingEvs !== 1 ? "s" : ""} currently charging —{" "}
-            <Link href="/evs" className="text-matlab-blue hover:underline">
+            <Link href="/evs" className="text-matlab-blue hover:underline underline-offset-2">
               monitor SoC in EV section
             </Link>
           </p>
@@ -63,13 +64,7 @@ export default function DashboardPage() {
                 : `${chargers.length} charger${chargers.length !== 1 ? "s" : ""} · ${connected} online`}
             </p>
           </div>
-          <Link
-            href="/chargers"
-            className="inline-flex items-center gap-1 text-xs text-muted hover:text-matlab-blue transition-colors font-mono"
-          >
-            Manage
-            <ArrowRight className="w-3 h-3" />
-          </Link>
+          <PanelLink href="/chargers" label="Manage" />
         </div>
         <div className="panel-body">
           <ChargerGrid chargers={chargers} />
@@ -83,13 +78,7 @@ export default function DashboardPage() {
               <h2 className="text-sm font-semibold text-ink">Recent OCPP</h2>
               <p className="text-xs text-muted mt-0.5">Last 10 messages</p>
             </div>
-            <Link
-              href="/ocpp-explorer"
-              className="inline-flex items-center gap-1 text-xs text-muted hover:text-matlab-blue transition-colors font-mono"
-            >
-              Explorer
-              <ArrowRight className="w-3 h-3" />
-            </Link>
+            <PanelLink href="/ocpp-explorer" label="Explorer" />
           </div>
           <div className="panel-body pt-0 flex-1">
             <OcppMessageLog messages={ocppMessages} limit={10} />

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useAppStore } from "@/store";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { SessionTable } from "@/components/sessions/SessionTable";
 import { SessionDetailModal } from "@/components/sessions/SessionDetailModal";
 import { EnergyBarChart } from "@/components/charts/EnergyBarChart";
@@ -13,10 +14,10 @@ export default function SessionsPage() {
 
   return (
     <div className="space-y-8">
-      <header>
-        <h1 className="page-title">Session Monitor</h1>
-        <p className="page-desc">Track all charging sessions and meter value history</p>
-      </header>
+      <PageHeader
+        title="Session Monitor"
+        description="Track all charging sessions and meter value history"
+      />
 
       <EnergyBarChart sessions={sessions} />
       <SessionTable sessions={sessions} onSelect={setSelected} />
