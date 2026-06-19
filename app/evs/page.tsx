@@ -1,10 +1,13 @@
 "use client";
 
 import { useAppStore } from "@/store";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { StatCard } from "@/components/ui/StatCard";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { EvCreateForm } from "@/components/evs/EvCreateForm";
 import { EvCard } from "@/components/evs/EvCard";
 import { apiDelete } from "@/hooks/useInitialData";
-import { Trash2 } from "lucide-react";
+import { Car, Trash2 } from "lucide-react";
 
 export default function EvsPage() {
   const evs = useAppStore((s) => s.evs);
@@ -25,26 +28,15 @@ export default function EvsPage() {
 
   return (
     <div className="space-y-8">
-      <header>
-        <h1 className="page-title">Electric Vehicles</h1>
-        <p className="page-desc">
-          Create and simulate EVs — plug into chargers, charge, and monitor battery SoC
-        </p>
-      </header>
+      <PageHeader
+        title="Electric Vehicles"
+        description="Create and simulate EVs — plug into chargers, charge, and monitor battery SoC"
+      />
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <div className="panel p-4 shadow-card text-center">
-          <p className="scope-readout">{evs.length}</p>
-          <p className="scope-readout-label mt-1">Total EVs</p>
-        </div>
-        <div className="panel p-4 shadow-card text-center">
-          <p className="scope-readout text-matlab-yellow">{pluggedCount}</p>
-          <p className="scope-readout-label mt-1">Plugged In</p>
-        </div>
-        <div className="panel p-4 shadow-card text-center">
-          <p className="scope-readout text-matlab-blue">{chargingCount}</p>
-          <p className="scope-readout-label mt-1">Charging</p>
-        </div>
+        <StatCard label="Total EVs" value={evs.length} />
+        <StatCard label="Plugged In" value={pluggedCount} accent="text-matlab-yellow" />
+        <StatCard label="Charging" value={chargingCount} accent="text-matlab-blue" />
       </div>
 
       <EvCreateForm />
@@ -52,9 +44,11 @@ export default function EvsPage() {
       <section>
         <h2 className="section-label mb-4">Fleet</h2>
         {evs.length === 0 ? (
-          <p className="text-center text-muted py-12 simulink-canvas">
-            No electric vehicles yet. Create one above.
-          </p>
+          <EmptyState
+            icon={Car}
+            title="No electric vehicles yet"
+            description="Create a virtual EV using the form above to start simulating."
+          />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {evs.map((ev) => (
@@ -66,7 +60,7 @@ export default function EvsPage() {
                       e.preventDefault();
                       deleteEv(ev.id);
                     }}
-                    className="absolute top-3 right-3 p-1.5 rounded-matlab bg-white border border-border text-muted hover:text-matlab-red opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-3 right-3 p-1.5 rounded-matlab bg-white border border-border text-muted hover:text-matlab-red hover:border-matlab-red/40 opacity-0 group-hover:opacity-100 transition-all shadow-matlab-btn z-10"
                     title="Delete EV"
                   >
                     <Trash2 className="w-3.5 h-3.5" />

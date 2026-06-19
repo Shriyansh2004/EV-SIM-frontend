@@ -69,8 +69,11 @@ export function EvCreateForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="panel p-5 shadow-card space-y-4">
-      <h3 className="section-label">Create Virtual EV</h3>
+    <section className="panel shadow-card">
+      <div className="panel-header py-2">
+        <h3 className="section-label">Create Virtual EV</h3>
+      </div>
+      <form onSubmit={handleSubmit} className="panel-body space-y-4">
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div>
@@ -207,6 +210,7 @@ export function EvCreateForm() {
         <Plus className="w-4 h-4" />
         Add Electric Vehicle
       </button>
-    </form>
+      </form>
+    </section>
   );
 }

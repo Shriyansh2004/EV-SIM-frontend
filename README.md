@@ -2,7 +2,7 @@
 
 Next.js dashboard for **EV-SIM** — an interactive platform that simulates **virtual electric vehicles (EVs)** and **virtual chargers** connected to a CitrineOS-inspired CSMS over **OCPP 2.0.1**. The frontend provides EV fleet management (create, plug, charge, monitor SoC), live charger monitoring, session tracking, OCPP message inspection, and educational content.
 
-**Backend repo:** [EV-SIM backend](https://github.com/Shriyansh2004/EV-SIM-backend) (or run from `../backend` in the monorepo)
+**Backend repo:** [EV-SIM backend](https://github.com/Shriyansh2004/EV-SIM-backend) (or run from `../backend` in a local checkout)
 
 ---
 
@@ -555,6 +555,7 @@ Fonts: **Inter** (sans-serif) for UI, **JetBrains Mono** for charger IDs and OCP
 
 ## Related Projects
 
-- [EV-SIM](https://github.com/Shriyansh2004/EV-SIM) — Full monorepo (backend + frontend)
+- [EV-SIM Frontend](https://github.com/Shriyansh2004/EV-SIM-frontend) — Next.js dashboard
+- [EV-SIM Backend](https://github.com/Shriyansh2004/EV-SIM-backend) — FastAPI + OCPP CSMS
 - [ocpp-virtual-charge-point](https://github.com/mobilityhouse/ocpp) — OCPP virtual charger patterns
 - [CitrineOS](https://github.com/citrineos/citrineos-core) — CSMS handler reference

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useAppStore } from "@/store";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { OcppMessageInspector } from "@/components/ocpp/OcppMessageInspector";
 import { SequenceDiagram } from "@/components/ocpp/SequenceDiagram";
 import type { OcppMessage } from "@/types";
@@ -23,12 +24,10 @@ export default function OcppExplorerPage() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="page-title">OCPP Protocol Explorer</h1>
-        <p className="page-desc">
-          Inspect live OCPP 2.0.1 messages and understand the charging protocol
-        </p>
-      </div>
+      <PageHeader
+        title="OCPP Protocol Explorer"
+        description="Inspect live OCPP 2.0.1 messages and understand the charging protocol"
+      />
 
       <SequenceDiagram />
 
@@ -79,8 +78,8 @@ export default function OcppExplorerPage() {
                   <div
                     key={m.id}
                     data-msg-id={m.id}
-                    className={`cursor-pointer rounded-matlab ${
-                      selected?.id === m.id ? "ring-2 ring-matlab-blue" : ""
+                    className={`cursor-pointer rounded-matlab transition-shadow ${
+                      selected?.id === m.id ? "ring-2 ring-matlab-blue shadow-card" : "hover:ring-1 hover:ring-border"
                     }`}
                   >
                     <div

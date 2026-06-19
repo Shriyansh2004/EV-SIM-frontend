@@ -13,15 +13,34 @@ const STATUS_COLORS: Record<ChargerStatus, string> = {
   Faulted: "bg-matlab-red/15 text-matlab-red border-matlab-red/40",
 };
 
+const STATUS_DOT: Record<ChargerStatus, string> = {
+  Available: "bg-matlab-green",
+  Preparing: "bg-matlab-yellow",
+  Charging: "bg-matlab-blue",
+  SuspendedEV: "bg-matlab-yellow",
+  SuspendedEVSE: "bg-matlab-yellow",
+  Finishing: "bg-matlab-purple",
+  Reserved: "bg-muted",
+  Unavailable: "bg-muted",
+  Faulted: "bg-matlab-red",
+};
+
 export function StatusBadge({ status }: { status: ChargerStatus }) {
   return (
     <span
       className={clsx(
-        "inline-flex items-center px-2 py-0.5 rounded-matlab text-[10px] font-semibold border shrink-0 font-mono uppercase tracking-wide",
+        "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-matlab text-[10px] font-semibold border shrink-0 font-mono uppercase tracking-wide",
         STATUS_COLORS[status] || STATUS_COLORS.Unavailable,
         status === "Charging" && "animate-pulse-charge"
       )}
     >
+      <span
+        className={clsx(
+          "w-1.5 h-1.5 rounded-full shrink-0",
+          STATUS_DOT[status] || STATUS_DOT.Unavailable,
+          status === "Charging" && "animate-pulse-dot"
+        )}
+      />
       {status}
     </span>
   );

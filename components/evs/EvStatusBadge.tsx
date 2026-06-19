@@ -9,6 +9,14 @@ const STATUS_COLORS: Record<EvStatus, string> = {
   fault: "bg-matlab-red/15 text-matlab-red border-matlab-red/40",
 };
 
+const STATUS_DOT: Record<EvStatus, string> = {
+  idle: "bg-muted",
+  plugged: "bg-matlab-yellow",
+  charging: "bg-matlab-blue",
+  full: "bg-matlab-green",
+  fault: "bg-matlab-red",
+};
+
 const STATUS_LABELS: Record<EvStatus, string> = {
   idle: "Idle",
   plugged: "Plugged",
@@ -21,11 +29,18 @@ export function EvStatusBadge({ status }: { status: EvStatus }) {
   return (
     <span
       className={clsx(
-        "inline-flex items-center px-2 py-0.5 rounded-matlab text-[10px] font-semibold border shrink-0 font-mono uppercase tracking-wide",
+        "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-matlab text-[10px] font-semibold border shrink-0 font-mono uppercase tracking-wide",
         STATUS_COLORS[status],
         status === "charging" && "animate-pulse-charge"
       )}
     >
+      <span
+        className={clsx(
+          "w-1.5 h-1.5 rounded-full shrink-0",
+          STATUS_DOT[status],
+          status === "charging" && "animate-pulse-dot"
+        )}
+      />
       {STATUS_LABELS[status]}
     </span>
   );
