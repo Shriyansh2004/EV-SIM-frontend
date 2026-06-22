@@ -55,7 +55,7 @@ export function useDeviceCapabilities() {
     tier,
     reducedMotion,
     isTouch,
-    enableParallax: tier === "full" && !reducedMotion && !isTouch,
+    enableOrbitControls: tier !== "static",
     enableReflections: tier === "full",
     enableContactShadows: tier !== "static",
     particleCount: tier === "full" ? 24 : tier === "reduced" ? 10 : 0,

@@ -45,8 +45,13 @@ function applyChargerMaterials(group: THREE.Group) {
     const materials = Array.isArray(child.material) ? child.material : [child.material];
     materials.forEach((material) => {
       if (!(material instanceof THREE.MeshStandardMaterial)) return;
-      material.metalness = 0.2;
-      material.roughness = 0.6;
+      material.metalness = 0.25;
+      material.roughness = 0.55;
+      const hex = material.color.getHex();
+      if (hex === 0xff6600 || hex === 0xff0000 || material.name.toLowerCase().includes("mat15")) {
+        material.emissive.set("#FF6B1A");
+        material.emissiveIntensity = 0.12;
+      }
     });
   });
 }
@@ -75,8 +80,24 @@ export function SceneModels() {
   }, []);
 
   useFrame(() => {
-    if (!serverRef.current) return;
     const pulse = heroAnimationState.serverPulse;
+    const glow = heroAnimationState.connectorGlow;
+
+    if (chargerRef.current) {
+      chargerRef.current.traverse((child) => {
+        if (!(child instanceof THREE.Mesh) || !child.material) return;
+        const materials = Array.isArray(child.material) ? child.material : [child.material];
+        materials.forEach((material) => {
+          if (!(material instanceof THREE.MeshStandardMaterial)) return;
+          if (material.emissive.r > 0 || material.name.toLowerCase().includes("mat15")) {
+            material.emissive.set("#FF6B1A");
+            material.emissiveIntensity = 0.12 + glow * 0.55;
+          }
+        });
+      });
+    }
+
+    if (!serverRef.current) return;
     serverRef.current.traverse((child) => {
       if (!(child instanceof THREE.Mesh) || !child.material) return;
       const materials = Array.isArray(child.material) ? child.material : [child.material];
