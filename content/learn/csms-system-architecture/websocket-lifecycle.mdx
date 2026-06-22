@@ -1,0 +1,55 @@
+---
+title: WebSocket Connection Lifecycle
+description: How charge points establish, maintain, and recover WebSocket connections to the CSMS.
+category: csms-system-architecture
+order: 3
+---
+
+## Connection URL
+
+Charge points connect to the CSMS via WebSocket using a URL pattern:
+
+```
+ws://{host}:{port}/ocpp/{chargePointId}
+```
+
+In EV-SIM, connecting a virtual charger opens this WebSocket automatically.
+
+## Lifecycle stages
+
+### 1. Connect
+
+The charge point initiates a WebSocket handshake. On success, it immediately sends `BootNotification`.
+
+### 2. Register
+
+The CSMS validates the charge point and responds with `Accepted`. The CP begins sending heartbeats at the configured interval.
+
+### 3. Operate
+
+Normal OCPP message exchange — sessions, meter values, status updates, and remote commands.
+
+### 4. Disconnect
+
+When the WebSocket closes (network issue, manual disconnect, or reset), the CSMS marks the charger offline. On reconnect, the CP sends `BootNotification` with reason `PowerUp` or `Reconnect`.
+
+<InlineOcppDiagram variant="websocket" />
+
+## Reconnection
+
+OCPP expects charge points to automatically reconnect after network failures. The boot reason changes to indicate why:
+
+| Reason | Meaning |
+| --- | --- |
+| `PowerUp` | First connection after power on |
+| `Reset` | Connection after a reset command |
+| `Scheduled` | Periodic reconnection |
+| `Remote` | Triggered by CSMS |
+
+<Callout variant="warning" title="Connection state">
+In EV-SIM, the charger's connection badge shows real-time WebSocket status. A disconnected charger cannot send or receive OCPP messages.
+</Callout>
+
+## Data path
+
+<DataMonitoringDiagram />

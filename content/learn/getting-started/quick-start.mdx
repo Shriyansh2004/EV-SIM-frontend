@@ -1,0 +1,50 @@
+---
+title: Quick Start
+description: Get your first virtual charger connected and charging in under five minutes.
+category: getting-started
+order: 2
+---
+
+## Prerequisites
+
+- EV-SIM backend running (default: `http://localhost:8000`)
+- EV-SIM frontend running (default: `http://localhost:3001`)
+
+## Step 1 — Create a charger
+
+Navigate to **Chargers** in the app sidebar and click **Add Charger**. Use any ID (e.g. `CP-DEMO`) with a power rating like 22 kW.
+
+```json
+{
+  "id": "CP-DEMO",
+  "max_power_kw": 22,
+  "connector_count": 1
+}
+```
+
+## Step 2 — Connect to CSMS
+
+On the charger detail page, click **Connect**. The virtual charger opens a WebSocket to the CSMS and sends a `BootNotification` request.
+
+<InlineOcppDiagram variant="boot" />
+
+## Step 3 — Verify in OCPP Explorer
+
+Open **OCPP Explorer** to see the live message log. You should see:
+
+1. `BootNotification` request from the charge point
+2. `BootNotification` response with status `Accepted`
+
+## Step 4 — Start a session
+
+Use **Remote Start** on the charger detail page. Watch `TransactionEvent (Started)` appear in the OCPP Explorer, followed by periodic `MeterValues` updates.
+
+## Interactive wizard
+
+Try the guided walkthrough below to automate steps 1–2:
+
+<LearnWizard />
+
+<Callout variant="tip" title="Pro tip">
+Keep the OCPP Explorer open in a second tab while working through the quick start — it makes the protocol flow much easier to follow.
+</Callout>

@@ -1,0 +1,37 @@
+---
+title: What is EV-SIM
+description: A full-stack EV charging simulation platform with real OCPP 2.0.1 protocol support.
+category: getting-started
+order: 1
+---
+
+## Overview
+
+EV-SIM is a developer-focused simulation platform for EV charging infrastructure. It lets you create virtual charge points, connect them to a real CSMS backend over WebSocket, and observe the full OCPP 2.0.1 message lifecycle — without physical hardware.
+
+<Callout variant="tip" title="Built for developers">
+EV-SIM is designed for engineers learning OCPP, prototyping CSMS integrations, and debugging charging session flows in a controlled environment.
+</Callout>
+
+## What you can do
+
+- **Create virtual chargers** with configurable power ratings and connector counts
+- **Simulate OCPP 2.0.1** — BootNotification, Heartbeat, TransactionEvent, MeterValues, and more
+- **Monitor live traffic** in the OCPP Explorer with real-time WebSocket message logs
+- **Control sessions** — remote start/stop, observe energy delivery and SoC changes
+- **Visualize data** — live charts for power, energy, and state of charge
+
+## How it fits together
+
+EV-SIM mirrors real-world EV charging deployments: virtual chargers speak OCPP to a CSMS, which persists session data and exposes it through a REST API to the web frontend.
+
+<SystemArchitectureDiagram />
+
+## Who is it for?
+
+EV-SIM is ideal for:
+
+- **Software engineers** integrating with OCPP-based CSMS platforms
+- **Students and researchers** studying EV charging protocols
+- **QA teams** testing charging workflows without hardware
+- **Product teams** prototyping operator portal features

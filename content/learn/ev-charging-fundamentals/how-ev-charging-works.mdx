@@ -1,0 +1,39 @@
+---
+title: How EV Charging Works
+description: From plug-in to full battery — the physical and logical flow of EV charging.
+category: ev-charging-fundamentals
+order: 1
+---
+
+## The charging process
+
+When an EV plugs into a charger, several things happen in sequence — both physically (power flow) and logically (protocol messages).
+
+## Physical layer
+
+1. **Connection** — The EV connects to the charger via a cable and connector (Type 1, Type 2, CCS, CHAdeMO, etc.)
+2. **Handshake** — The charger and EV negotiate power limits through the charging protocol (ISO 15118 or basic PWM signaling)
+3. **Power delivery** — AC or DC current flows from the grid through the charger to the EV battery
+4. **Termination** — Charging stops when the battery reaches target SoC, the user unplugs, or an error occurs
+
+## Logical layer (OCPP)
+
+While power flows, the charge point communicates with the CSMS:
+
+<InlineOcppDiagram variant="charging" />
+
+## AC vs DC charging
+
+| Type | Typical power | Use case |
+| --- | --- | --- |
+| AC Level 1 | 1.4–1.9 kW | Home outlets (overnight) |
+| AC Level 2 | 3.7–22 kW | Home/workplace/public |
+| DC Fast (Level 3) | 50–350+ kW | Highway corridors |
+
+EV-SIM simulates AC charging by default (up to 22 kW) but the OCPP message flow is identical regardless of power level.
+
+## Energy accounting
+
+Chargers measure delivered energy in **kWh** (kilowatt-hours). The CSMS uses meter values to track consumption for billing, load management, and reporting.
+
+<ChargingWorkflowDiagram />

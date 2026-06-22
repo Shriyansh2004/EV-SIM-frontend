@@ -1,0 +1,43 @@
+---
+title: Interpreting Live Charts
+description: Understanding the real-time power, energy, and SoC charts on charger detail pages.
+category: using-ev-sim
+order: 5
+---
+
+## Live charts
+
+During an active charging session, the charger detail page displays real-time charts updated as `MeterValues` arrive from the charge point.
+
+## Chart types
+
+### Power (kW)
+
+Shows instantaneous power delivery. Should stabilize near the charger's max power rating during active charging, then drop during the taper phase near full SoC.
+
+### Energy (kWh)
+
+Cumulative energy delivered since session start. Increases monotonically — it never decreases during a session.
+
+### State of Charge (%)
+
+Battery fill level of the connected EV. Starts at the session's initial SoC and increases as energy is delivered.
+
+## Reading the charts
+
+| Pattern | Meaning |
+| --- | --- |
+| Flat power line at max kW | Normal charging at full rate |
+| Declining power, rising SoC | Taper phase (80%+) |
+| Power drops to zero | Session ended or paused |
+| Gaps in data | Missed MeterValues intervals |
+
+<DataMonitoringDiagram />
+
+<Callout variant="info" title="Update frequency">
+Charts update each time the charge point sends MeterValues — typically every few seconds during an active session.
+</Callout>
+
+## Historical data
+
+After a session ends, the session detail page retains the chart data for review. Use the **Sessions** page to browse historical sessions and their energy profiles.

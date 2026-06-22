@@ -1,0 +1,36 @@
+---
+title: Using the AI Assistant
+description: Get help understanding OCPP messages and charging concepts with EV-SIM's built-in assistant.
+category: using-ev-sim
+order: 4
+---
+
+## AI Assistant
+
+EV-SIM includes an AI-powered assistant that can help you understand OCPP concepts, interpret message logs, and troubleshoot charging workflows.
+
+## What it can help with
+
+- **Explain OCPP messages** — paste a message JSON and get a plain-language breakdown
+- **Debug sessions** — describe unexpected behavior and get diagnostic suggestions
+- **Learn concepts** — ask about protocol details, charging levels, or CSMS architecture
+- **Navigate EV-SIM** — get guidance on which features to use for your task
+
+## How to use it
+
+The AI assistant is accessible from the app interface. Open it and type your question in natural language.
+
+<Callout variant="tip" title="Best results">
+For message interpretation, paste the full JSON from the OCPP Explorer. Include the charger ID and timestamp for session-related questions.
+</Callout>
+
+## Example questions
+
+- "What does this BootNotification response mean?"
+- "Why isn't my charger connecting to the CSMS?"
+- "Explain the difference between TransactionEvent Started and Updated"
+- "How do I simulate a 50 kW DC fast charging session?"
+
+## Limitations
+
+The assistant provides guidance based on OCPP 2.0.1 and EV-SIM's capabilities. For production deployment questions (billing, payment integration, grid management), consult your CSMS vendor's documentation.
