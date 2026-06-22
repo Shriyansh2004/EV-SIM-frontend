@@ -5,9 +5,10 @@ import { Canvas } from "@react-three/fiber";
 import { Preload } from "@react-three/drei";
 import { SceneContent } from "./SceneContent";
 import { Hero3DPlaceholder } from "./Hero3DPlaceholder";
+import { SCENE_CAMERA } from "./constants";
 
 type Hero3DCanvasProps = {
-  enableParallax: boolean;
+  enableOrbitControls: boolean;
   enableReflections: boolean;
   enableContactShadows: boolean;
   particleCount: number;
@@ -16,7 +17,7 @@ type Hero3DCanvasProps = {
 };
 
 export default function Hero3DCanvas({
-  enableParallax,
+  enableOrbitControls,
   enableReflections,
   enableContactShadows,
   particleCount,
@@ -37,7 +38,12 @@ export default function Hero3DCanvas({
     <Canvas
       shadows
       dpr={[1, 2]}
-      camera={{ fov: 38, near: 0.1, far: 40, position: [6.2, 4.4, 6.8] }}
+      camera={{
+        fov: SCENE_CAMERA.fov,
+        near: 0.1,
+        far: 40,
+        position: SCENE_CAMERA.position,
+      }}
       gl={{
         alpha: true,
         antialias: true,
@@ -50,7 +56,7 @@ export default function Hero3DCanvas({
     >
       <Suspense fallback={null}>
         <SceneContent
-          enableParallax={enableParallax}
+          enableOrbitControls={enableOrbitControls}
           enableReflections={enableReflections}
           enableContactShadows={enableContactShadows}
           particleCount={particleCount}

@@ -1,0 +1,59 @@
+---
+title: Roles — Charge Point vs Central System
+description: The responsibilities and capabilities of each side in the OCPP architecture.
+category: csms-system-architecture
+order: 4
+---
+
+## Two roles
+
+OCPP defines exactly two roles in the charging architecture:
+
+| Role | Also known as | Location |
+| --- | --- | --- |
+| **Charge Point** | Charging Station, EVSE | At the charging site |
+| **Central System** | CSMS, Central Management System | Cloud / data center |
+
+## Charge Point responsibilities
+
+The charge point is the **edge device** at the physical location:
+
+- Manages connectors and power delivery
+- Sends boot, heartbeat, and status messages
+- Reports meter values and transaction events
+- Executes remote commands from the CSMS
+- Handles local authorization (RFID, etc.)
+
+In EV-SIM, each virtual charger you create acts as a charge point.
+
+## Central System responsibilities
+
+The CSMS is the **control plane**:
+
+- Accepts and manages charge point connections
+- Authorizes charging sessions
+- Issues remote start/stop commands
+- Stores session and metering data
+- Provides APIs for operator tools
+- Manages configuration and firmware
+
+## Asymmetric capabilities
+
+Not every OCPP action can be initiated by both sides:
+
+| Initiated by CP | Initiated by CSMS |
+| --- | --- |
+| BootNotification | RequestStartTransaction |
+| Heartbeat | RequestStopTransaction |
+| StatusNotification | Reset |
+| TransactionEvent | ChangeAvailability |
+| MeterValues | GetVariables / SetVariables |
+| NotifyReport | TriggerMessage |
+
+<Callout variant="info" title="Think of it this way">
+The Charge Point is the "client" at the edge — it reports what happens. The CSMS is the "server" in the cloud — it decides what should happen.
+</Callout>
+
+## Multiple charge points
+
+A single CSMS manages many charge points simultaneously. Each maintains its own WebSocket connection identified by its charge point ID.

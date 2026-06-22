@@ -7,18 +7,24 @@ export const OCPP_MESSAGES = [
   "MeterValues →",
 ] as const;
 
+export const SCENE_CAMERA = {
+  position: [4.6, 3.2, 5.4] as [number, number, number],
+  target: [-0.35, 0.58, 0.28] as [number, number, number],
+  fov: 36,
+} as const;
+
 export const SCENE_ANCHORS = {
-  car: { position: [-2.6, 0, 0.35] as [number, number, number], rotation: [0, 0.55, 0] as [number, number, number], scale: 1.15 },
-  charger: { position: [0, 0, 0] as [number, number, number], rotation: [0, -0.35, 0] as [number, number, number], scale: 0.011 },
-  server: { position: [2.55, 0, -0.1] as [number, number, number], rotation: [0, -0.45, 0] as [number, number, number], scale: 0.55 },
+  car: { position: [-1.65, 0, 0.18] as [number, number, number], rotation: [0, 0.68, 0] as [number, number, number], scale: 1.12 },
+  charger: { position: [0.12, 0, 0] as [number, number, number], rotation: [0, -0.52, 0] as [number, number, number], scale: 0.0125 },
+  server: { position: [2.3, 0, -0.05] as [number, number, number], rotation: [0, -0.45, 0] as [number, number, number], scale: 0.55 },
   cable: {
-    carPort: [-1.85, 0.42, 0.55] as [number, number, number],
-    chargerPort: [0.18, 0.95, 0.42] as [number, number, number],
+    carPort: [-0.92, 0.4, 0.4] as [number, number, number],
+    chargerPort: [0.22, 0.9, 0.34] as [number, number, number],
   },
   stream: {
-    start: [0.22, 1.05, 0.38] as [number, number, number],
-    mid: [1.35, 2.15, 0.05] as [number, number, number],
-    end: [2.35, 1.35, -0.05] as [number, number, number],
+    start: [0.3, 1.02, 0.3] as [number, number, number],
+    mid: [1.25, 1.95, 0.04] as [number, number, number],
+    end: [2.15, 1.28, -0.04] as [number, number, number],
   },
 } as const;
 

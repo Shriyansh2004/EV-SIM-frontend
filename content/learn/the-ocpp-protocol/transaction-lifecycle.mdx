@@ -1,0 +1,74 @@
+---
+title: Transaction Lifecycle
+description: From session start through meter values to session end — the OCPP 2.0.1 transaction flow.
+category: the-ocpp-protocol
+order: 5
+---
+
+## OCPP 2.0.1 transactions
+
+In OCPP 2.0.1, the entire charging session is represented by **TransactionEvent** messages with three event types:
+
+| Event type | When sent |
+| --- | --- |
+| `Started` | Session begins (plug-in or remote start) |
+| `Updated` | Meter values or status changes during session |
+| `Ended` | Session completes (unplug, remote stop, or fault) |
+
+## Full lifecycle
+
+<InlineOcppDiagram variant="transaction" />
+
+### 1. Session start
+
+Triggered by remote start (CSMS) or local authorization (RFID, plug-and-charge):
+
+```json
+{
+  "eventType": "Started",
+  "triggerReason": "RemoteStart",
+  "seqNo": 0,
+  "transactionInfo": { "transactionId": "txn-001" }
+}
+```
+
+### 2. Meter values
+
+During the session, the CP sends `MeterValues` (or `TransactionEvent` with `Updated`) at regular intervals:
+
+```json
+{
+  "eventType": "Updated",
+  "triggerReason": "MeterValuePeriodic",
+  "seqNo": 1,
+  "meterValue": [
+    {
+      "timestamp": "2024-01-15T10:35:00Z",
+      "sampledValue": [
+        { "value": "5.2", "measurand": "Energy.Active.Import.Register", "unit": "kWh" }
+      ]
+    }
+  ]
+}
+```
+
+### 3. Session end
+
+When charging stops:
+
+```json
+{
+  "eventType": "Ended",
+  "triggerReason": "RemoteStop",
+  "seqNo": 5,
+  "transactionInfo": { "transactionId": "txn-001", "stoppedReason": "Remote" }
+}
+```
+
+## Sequence reference
+
+<SequenceDiagram />
+
+<Callout variant="info" title="seqNo field">
+The `seqNo` field increments with each TransactionEvent for a given transaction, allowing the CSMS to detect missed events.
+</Callout>

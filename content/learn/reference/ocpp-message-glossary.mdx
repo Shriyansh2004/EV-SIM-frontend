@@ -1,0 +1,48 @@
+---
+title: OCPP Message Glossary
+description: Quick reference for common OCPP 2.0.1 message actions used in EV-SIM.
+category: reference
+order: 1
+---
+
+## Charge Point → CSMS
+
+| Action | Description |
+| --- | --- |
+| `BootNotification` | Register charge point identity on connect |
+| `Heartbeat` | Periodic keep-alive signal |
+| `StatusNotification` | Report connector availability changes |
+| `TransactionEvent` | Session lifecycle (Started/Updated/Ended) |
+| `MeterValues` | Energy and power measurements |
+| `NotifyReport` | Device model variable reports |
+| `SecurityEventNotification` | Security-related events |
+| `FirmwareStatusNotification` | Firmware update progress |
+
+## CSMS → Charge Point
+
+| Action | Description |
+| --- | --- |
+| `RequestStartTransaction` | Remotely initiate a charging session |
+| `RequestStopTransaction` | Remotely terminate a charging session |
+| `Reset` | Soft or hard reset the charge point |
+| `ChangeAvailability` | Set connector in/out of service |
+| `GetVariables` | Read device model variables |
+| `SetVariables` | Write device model variables |
+| `TriggerMessage` | Request the CP to send a specific message |
+| `GetBaseReport` | Request device model inventory report |
+
+## Response statuses
+
+Common status values in CallResult payloads:
+
+| Status | Meaning |
+| --- | --- |
+| `Accepted` | Request processed successfully |
+| `Rejected` | Request denied |
+| `Pending` | Accepted but awaiting further action |
+| `NotSupported` | Action not implemented |
+| `Unknown` | Unrecognized request |
+
+<Callout variant="info" title="Full specification">
+This glossary covers messages commonly seen in EV-SIM. The complete OCPP 2.0.1 specification defines 60+ actions.
+</Callout>

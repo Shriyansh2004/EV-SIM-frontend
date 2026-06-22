@@ -8,11 +8,11 @@ import { SceneModels } from "./SceneModels";
 import { ChargingCable } from "./ChargingCable";
 import { DataStream } from "./DataStream";
 import { OcppLabels } from "./OcppLabels";
-import { ParallaxCamera } from "./ParallaxCamera";
+import { SceneControls } from "./SceneControls";
 import { useHeroAnimation } from "./useHeroAnimation";
 
 type SceneContentProps = {
-  enableParallax: boolean;
+  enableOrbitControls: boolean;
   enableReflections: boolean;
   enableContactShadows: boolean;
   particleCount: number;
@@ -37,7 +37,7 @@ function SceneReady({ onReady }: { onReady?: () => void }) {
 }
 
 export function SceneContent({
-  enableParallax,
+  enableOrbitControls,
   enableReflections,
   enableContactShadows,
   particleCount,
@@ -48,7 +48,7 @@ export function SceneContent({
 
   return (
     <>
-      <ParallaxCamera enabled={enableParallax} />
+      <SceneControls enabled={enableOrbitControls} />
       <SceneLighting />
       <Suspense fallback={<SceneLoader />}>
         <SceneModels />

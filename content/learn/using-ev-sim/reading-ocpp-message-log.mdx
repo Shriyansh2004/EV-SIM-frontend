@@ -1,0 +1,56 @@
+---
+title: Reading the OCPP Message Log
+description: How to use the OCPP Explorer to inspect live and historical protocol traffic.
+category: using-ev-sim
+order: 2
+---
+
+## OCPP Explorer
+
+The **OCPP Explorer** (`/ocpp-explorer`) shows real-time OCPP message traffic between your virtual chargers and the CSMS.
+
+## Message display
+
+Each entry in the log shows:
+
+| Column | Content |
+| --- | --- |
+| Timestamp | When the message was sent/received |
+| Direction | CP → CSMS or CSMS → CP |
+| Action | OCPP action name (e.g. `BootNotification`) |
+| Payload | Full JSON message body |
+
+## Reading message format
+
+Click any message to expand its full JSON payload:
+
+```json
+[
+  2,
+  "msg-abc123",
+  "TransactionEvent",
+  {
+    "eventType": "Started",
+    "timestamp": "2024-01-15T10:30:00Z",
+    "triggerReason": "RemoteStart",
+    "seqNo": 0
+  }
+]
+```
+
+- **`2`** = Call (request)
+- **`msg-abc123`** = unique message ID
+- **`TransactionEvent`** = action name
+- The object = action-specific payload
+
+## Filtering
+
+Use the charger filter to show messages from a specific charge point. This is essential when running multiple virtual chargers.
+
+<Callout variant="tip" title="EV-SIM tip">
+Keep the OCPP Explorer open in a side tab while testing. It's the fastest way to verify that your actions (connect, remote start, stop) produce the expected OCPP messages.
+</Callout>
+
+## Correlating requests and responses
+
+Match Call messages (type `2`) with their CallResult (type `3`) by comparing the **UniqueId** field. EV-SIM displays these in chronological order.

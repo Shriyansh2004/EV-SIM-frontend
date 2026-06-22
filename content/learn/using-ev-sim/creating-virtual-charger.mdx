@@ -1,0 +1,57 @@
+---
+title: Creating a Virtual Charger
+description: How to add, configure, and connect virtual charge points in EV-SIM.
+category: using-ev-sim
+order: 1
+---
+
+## Creating a charger
+
+Navigate to **Chargers** in the app sidebar and click **Add Charger**.
+
+### Configuration options
+
+| Field | Description | Example |
+| --- | --- | --- |
+| ID | Unique charge point identifier | `CP-DEMO` |
+| Max power (kW) | Maximum delivery rate | `22` |
+| Connector count | Number of charging ports | `1` |
+
+### API alternative
+
+You can also create chargers via the REST API:
+
+```json
+POST /api/chargers
+{
+  "id": "CP-DEMO",
+  "max_power_kw": 22,
+  "connector_count": 1
+}
+```
+
+## Connecting to CSMS
+
+After creation, open the charger detail page and click **Connect**. This:
+
+1. Opens a WebSocket to the CSMS
+2. Sends `BootNotification`
+3. Begins the heartbeat cycle
+4. Reports connector status via `StatusNotification`
+
+## Charger states
+
+| State | Meaning |
+| --- | --- |
+| Disconnected | No WebSocket connection |
+| Connected | Registered with CSMS, idle |
+| Charging | Active session in progress |
+| Faulted | Error state |
+
+<Callout variant="tip" title="Naming convention">
+Use descriptive IDs like `CP-OFFICE-01` or `CP-LAB-A` when running multiple virtual chargers — it makes the OCPP Explorer much easier to read.
+</Callout>
+
+## Multiple chargers
+
+EV-SIM supports multiple simultaneous virtual chargers. Each maintains its own WebSocket connection and can run independent charging sessions.

@@ -1,0 +1,43 @@
+---
+title: Charging Levels & Connector Types
+description: AC and DC charging levels, connector standards, and what they mean for OCPP.
+category: ev-charging-fundamentals
+order: 2
+---
+
+## Charging levels
+
+### Level 1 — AC (120V)
+
+Uses a standard household outlet. Delivers 1.4–1.9 kW. Suitable for overnight charging with 8–12 hour sessions.
+
+### Level 2 — AC (208–240V)
+
+The most common public and workplace charging. Delivers 3.7–22 kW depending on circuit capacity. EV-SIM's default virtual chargers operate at Level 2 power levels.
+
+### Level 3 — DC Fast Charging
+
+Bypasses the EV's onboard AC-DC converter. Delivers 50–350+ kW for rapid highway charging. Requires CCS or CHAdeMO connectors.
+
+## Connector types
+
+| Connector | Region | Charging type | Max power |
+| --- | --- | --- | --- |
+| Type 1 (J1772) | North America | AC | 7.4 kW |
+| Type 2 (Mennekes) | Europe | AC | 22 kW |
+| CCS Combo | Global | AC + DC | 350+ kW |
+| CHAdeMO | Japan/legacy | DC | 100 kW |
+| NACS (Tesla) | North America | AC + DC | 250+ kW |
+
+<Callout variant="info" title="OCPP abstraction">
+OCPP operates above the physical connector layer. The protocol doesn't specify connector types — it manages authorization, sessions, and metering regardless of the plug standard.
+</Callout>
+
+## What EV-SIM models
+
+EV-SIM abstracts connector details and focuses on the OCPP protocol layer. When you create a virtual charger, you specify:
+
+- **Max power (kW)** — determines simulated energy delivery rate
+- **Connector count** — number of simultaneous charging ports
+
+The OCPP messages (`TransactionEvent`, `MeterValues`, etc.) are identical whether the underlying connector is Type 2 or CCS.
