@@ -1,0 +1,58 @@
+---
+title: OCPP 2.0.1 vs Legacy Versions
+description: How OCPP 2.0.1 differs from 1.6 and why EV-SIM targets the latest version.
+category: the-ocpp-protocol
+order: 2
+---
+
+## Version history
+
+| Version | Year | Key change |
+| --- | --- | --- |
+| OCPP 1.5 | 2012 | SOAP/XML transport |
+| OCPP 1.6 | 2015 | JSON over WebSocket |
+| OCPP 2.0 | 2018 | Major redesign |
+| OCPP 2.0.1 | 2020 | Bug fixes, security profiles |
+
+## OCPP 1.6 → 2.0.1 major changes
+
+### Transaction model
+
+OCPP 1.6 used separate `StartTransaction` and `StopTransaction` messages. OCPP 2.0.1 unifies these into **`TransactionEvent`** with event types: `Started`, `Updated`, and `Ended`.
+
+```json
+[
+  2,
+  "msg-001",
+  "TransactionEvent",
+  {
+    "eventType": "Started",
+    "timestamp": "2024-01-15T10:30:00Z",
+    "triggerReason": "RemoteStart",
+    "seqNo": 0,
+    "transactionInfo": {
+      "transactionId": "txn-abc123"
+    }
+  }
+]
+```
+
+### Device model
+
+OCPP 2.0.1 introduces a structured **device model** for configuration, replacing the flat key-value `ChangeConfiguration` approach from 1.6.
+
+### Security
+
+Enhanced security profiles including certificate-based authentication and encrypted communication channels.
+
+### Status reporting
+
+Richer `StatusNotification` with detailed connector states and component-level status.
+
+<Callout variant="info" title="EV-SIM scope">
+EV-SIM simulates the full OCPP 2.0.1 message flow. Legacy 1.6 messages are not supported.
+</Callout>
+
+## Why 2.0.1?
+
+OCPP 2.0.1 is the direction the industry is moving. Major CSMS platforms (CitrineOS, SteVe, etc.) are adding 2.0.1 support. Learning 2.0.1 prepares you for current and future deployments.

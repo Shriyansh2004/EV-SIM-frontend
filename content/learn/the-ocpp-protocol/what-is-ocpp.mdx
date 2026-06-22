@@ -1,0 +1,35 @@
+---
+title: What is OCPP
+description: The Open Charge Point Protocol — the global standard for charger-to-backend communication.
+category: the-ocpp-protocol
+order: 1
+---
+
+## Definition
+
+The **Open Charge Point Protocol (OCPP)** is the global standard for communication between EV charging stations (Charge Points) and central management systems (CSMS). It enables interoperability — any OCPP-compliant charger can connect to any OCPP-compliant backend.
+
+## Why OCPP exists
+
+Before OCPP, each charger manufacturer had proprietary protocols. Operators managing mixed fleets needed separate software for each brand. OCPP solves this by defining a single, open message vocabulary.
+
+## Key characteristics
+
+- **Transport:** WebSocket (OCPP 1.6 JSON, OCPP 2.0.1)
+- **Format:** JSON-RPC style message arrays
+- **Direction:** Bidirectional — both CP and CSMS can initiate messages
+- **Scope:** Authorization, session management, configuration, diagnostics, firmware updates
+
+## CSMS vs Charge Point
+
+The **Charge Point (CP)** is the physical or virtual EV charger at the location. The **CSMS** (Charging Station Management System) is the cloud backend that manages, monitors, and controls chargers remotely. OCPP defines the messages exchanged between them over WebSocket.
+
+<OcppCommunicationDiagram />
+
+## OCPP in EV-SIM
+
+EV-SIM implements OCPP 2.0.1, the latest major version. Every virtual charger you create speaks real OCPP over WebSocket to the bundled CSMS — not a mock or stub.
+
+<Callout variant="tip" title="EV-SIM tip">
+Open the OCPP Explorer while reading this section — you can see real OCPP messages flowing as you interact with virtual chargers.
+</Callout>

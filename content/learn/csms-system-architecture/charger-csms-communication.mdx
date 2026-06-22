@@ -1,0 +1,51 @@
+---
+title: Charger ↔ CSMS Communication Flow
+description: The bidirectional message flow between charge points and the central system.
+category: csms-system-architecture
+order: 2
+---
+
+## Communication model
+
+OCPP communication is **bidirectional** over a persistent WebSocket connection. Either the charge point or the CSMS can initiate messages at any time.
+
+<OcppCommunicationDiagram />
+
+## Charge Point → CSMS messages
+
+These are sent proactively by the charger:
+
+| Message | Purpose |
+| --- | --- |
+| BootNotification | Register on connect |
+| Heartbeat | Keep-alive signal |
+| StatusNotification | Connector state changes |
+| TransactionEvent | Session lifecycle events |
+| MeterValues | Energy consumption data |
+| NotifyReport | Device model reports |
+
+## CSMS → Charge Point messages
+
+These are commands from the backend:
+
+| Message | Purpose |
+| --- | --- |
+| RequestStartTransaction | Remotely start a session |
+| RequestStopTransaction | Remotely stop a session |
+| Reset | Soft or hard reset the charger |
+| ChangeAvailability | Mark connector in/out of service |
+| GetVariables / SetVariables | Read/write device model |
+
+## Message flow example
+
+A typical remote-start session:
+
+1. **CSMS → CP:** `RequestStartTransaction`
+2. **CP → CSMS:** `TransactionEvent (Started)`
+3. **CP → CSMS:** `MeterValues` (periodic)
+4. **CSMS → CP:** `RequestStopTransaction`
+5. **CP → CSMS:** `TransactionEvent (Ended)`
+
+<Callout variant="info" title="Async by design">
+OCPP messages are asynchronous — the CSMS doesn't block waiting for a session to complete. It sends a start command and receives events as they happen.
+</Callout>

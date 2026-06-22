@@ -1,0 +1,76 @@
+---
+title: Message Types & Structure
+description: The four OCPP message types and the JSON array format used on the wire.
+category: the-ocpp-protocol
+order: 3
+---
+
+## Message types
+
+OCPP defines four message types, identified by a numeric prefix:
+
+| Type | Name | Direction | Purpose |
+| --- | --- | --- | --- |
+| 2 | Call | Either | Request an action |
+| 3 | CallResult | Response | Success response to a Call |
+| 4 | CallError | Response | Error response to a Call |
+| 5 | Call | Either | Same as type 2 (OCPP 2.0.1) |
+
+## Message structure
+
+Every OCPP message is a JSON array:
+
+```json
+[MessageTypeId, UniqueId, Action, Payload]
+```
+
+- **MessageTypeId** — `2` for Call, `3` for CallResult, `4` for CallError
+- **UniqueId** — correlates requests with responses
+- **Action** — the OCPP action name (e.g. `BootNotification`)
+- **Payload** — action-specific JSON object
+
+### Call example
+
+```json
+[
+  2,
+  "abc-123",
+  "Heartbeat",
+  {}
+]
+```
+
+### CallResult example
+
+```json
+[
+  3,
+  "abc-123",
+  {
+    "currentTime": "2024-01-15T10:30:00Z"
+  }
+]
+```
+
+### CallError example
+
+```json
+[
+  4,
+  "abc-123",
+  "NotSupported",
+  "Action not recognized",
+  {}
+]
+```
+
+## Who initiates?
+
+| Initiator | Common messages |
+| --- | --- |
+| Charge Point → CSMS | BootNotification, Heartbeat, StatusNotification, TransactionEvent, MeterValues |
+| CSMS → Charge Point | RequestStartTransaction, RequestStopTransaction, Reset, ChangeAvailability |
+
+<Callout variant="warning" title="Message ordering">
+OCPP requires that CallResult/CallError responses match the UniqueId of the originating Call. EV-SIM's OCPP Explorer shows this correlation with matching IDs.
+</Callout>

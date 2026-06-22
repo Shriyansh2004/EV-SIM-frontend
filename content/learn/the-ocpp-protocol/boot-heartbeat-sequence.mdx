@@ -1,0 +1,72 @@
+---
+title: The Boot & Heartbeat Sequence
+description: How charge points register with the CSMS and maintain their connection.
+category: the-ocpp-protocol
+order: 4
+---
+
+## Boot sequence
+
+When a charge point connects to the CSMS, it must register before handling charging sessions. This is the **boot sequence**.
+
+<InlineOcppDiagram variant="boot" />
+
+### Step 1 — WebSocket connection
+
+The charge point opens a WebSocket to the CSMS URL (e.g. `ws://localhost:8080/ocpp/CP-DEMO`).
+
+### Step 2 — BootNotification
+
+The CP sends `BootNotification` with its identity:
+
+```json
+[
+  2,
+  "boot-001",
+  "BootNotification",
+  {
+    "reason": "PowerUp",
+    "chargingStation": {
+      "model": "EV-SIM Virtual",
+      "vendorName": "EV-SIM",
+      "serialNumber": "CP-DEMO"
+    }
+  }
+]
+```
+
+### Step 3 — Accepted response
+
+The CSMS responds with status `Accepted`, `Pending`, or `Rejected`:
+
+```json
+[
+  3,
+  "boot-001",
+  {
+    "status": "Accepted",
+    "currentTime": "2024-01-15T10:30:00Z",
+    "interval": 300
+  }
+]
+```
+
+The `interval` field sets the heartbeat period in seconds.
+
+## Heartbeat
+
+After boot, the charge point sends periodic **Heartbeat** messages to confirm it's still online:
+
+```json
+[2, "hb-001", "Heartbeat", {}]
+```
+
+The CSMS responds with the current server time. If heartbeats stop, the CSMS marks the charger as offline.
+
+<Callout variant="tip" title="Try it in EV-SIM">
+Click **Connect** on any charger to trigger the boot sequence. Watch BootNotification and Heartbeat messages appear in the OCPP Explorer.
+</Callout>
+
+## StatusNotification
+
+After boot, the CP sends `StatusNotification` for each connector, reporting availability state (`Available`, `Occupied`, `Faulted`, etc.).

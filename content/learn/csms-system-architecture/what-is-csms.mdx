@@ -1,0 +1,41 @@
+---
+title: What is a CSMS
+description: The Charging Station Management System — the central brain of EV charging operations.
+category: csms-system-architecture
+order: 1
+---
+
+## Definition
+
+A **CSMS (Charging Station Management System)** is the backend platform that manages a network of EV chargers. It receives OCPP messages from charge points, stores session data, and provides APIs for operator portals and third-party integrations.
+
+## Core responsibilities
+
+- **Fleet management** — register, monitor, and configure charge points
+- **Session control** — authorize, start, stop, and track charging sessions
+- **Metering** — collect and store energy consumption data
+- **Availability** — track connector status across the network
+- **Remote operations** — firmware updates, resets, configuration changes
+
+## CSMS in the ecosystem
+
+<SystemArchitectureDiagram />
+
+## EV-SIM's CSMS
+
+EV-SIM includes a built-in CSMS that:
+
+- Accepts WebSocket connections from virtual charge points
+- Processes OCPP 2.0.1 messages
+- Persists sessions and meter values to SQLite
+- Exposes data via REST API to the frontend
+
+<Callout variant="tip" title="Real CSMS parallel">
+Production CSMS platforms like CitrineOS, SteVe, and commercial solutions perform the same role at scale — managing thousands of physical chargers across regions.
+</Callout>
+
+## Operator portal
+
+The CSMS typically feeds an **operator portal** — the web dashboard where charging network operators monitor their fleet, view sessions, manage pricing, and handle customer support.
+
+In EV-SIM, the web frontend serves this role.

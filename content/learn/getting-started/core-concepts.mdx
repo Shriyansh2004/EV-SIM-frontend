@@ -1,0 +1,61 @@
+---
+title: Core Concepts
+description: The key entities and relationships that power EV-SIM's charging simulation.
+category: getting-started
+order: 3
+---
+
+## The charging stack
+
+EV charging software is organized in layers. Understanding these layers helps you navigate EV-SIM and real deployments alike.
+
+| Layer | Role in EV-SIM |
+| --- | --- |
+| Charge Point (CP) | Virtual charger you create and control |
+| CSMS | Central system managing chargers via OCPP |
+| Backend API | REST layer persisting sessions and telemetry |
+| Frontend | Web UI for monitoring and control |
+
+## Charge Point
+
+A **Charge Point** is the entity at the charging location — physical in the real world, virtual in EV-SIM. Each charge point has:
+
+- A unique **ID** (e.g. `CP-DEMO`)
+- One or more **connectors**
+- A **max power** rating in kW
+- A **connection state** (connected/disconnected to CSMS)
+
+## Session
+
+A **charging session** represents energy delivered to an EV over a period of time. In OCPP 2.0.1, sessions are tracked through `TransactionEvent` messages rather than separate start/stop calls.
+
+## State of Charge (SoC)
+
+**SoC** is the battery fill level (0–100%). EV-SIM simulates SoC changes during active sessions based on delivered energy.
+
+## OCPP messages
+
+All communication between charge points and the CSMS happens through **OCPP messages** sent over WebSocket. Messages follow a strict JSON structure with action names, unique IDs, and typed payloads.
+
+```json
+[
+  2,
+  "unique-msg-id",
+  "BootNotification",
+  {
+    "reason": "PowerUp",
+    "chargingStation": {
+      "model": "EV-SIM Virtual",
+      "vendorName": "EV-SIM"
+    }
+  }
+]
+```
+
+<Callout variant="info" title="Message format">
+OCPP uses a JSON array format: `[MessageType, MessageId, Action, Payload]`. Type `2` indicates a Call (request), type `3` is a CallResult (response).
+</Callout>
+
+## Real-world parallel
+
+A typical EV charging deployment includes: EV chargers (AC/DC), a CSMS (like CitrineOS), an operator portal, payment systems, and grid management. OCPP is the glue connecting chargers to the CSMS layer.

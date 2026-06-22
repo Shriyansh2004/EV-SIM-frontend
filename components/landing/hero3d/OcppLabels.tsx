@@ -21,11 +21,11 @@ export function OcppLabels() {
   });
 
   return (
-    <Html position={[labelPos[0], labelPos[1] + 0.25, labelPos[2]]} center distanceFactor={8}>
+    <Html position={[labelPos[0], labelPos[1] + 0.2, labelPos[2]]} center distanceFactor={7.5}>
       <div ref={wrapperRef} style={{ pointerEvents: "none", opacity: 0 }}>
         <div
           ref={labelRef}
-          className="font-lp-mono text-[10px] sm:text-[11px] px-2.5 py-1 rounded-md border whitespace-nowrap"
+          className="font-lp-mono text-[10px] sm:text-[11px] px-2.5 py-1 rounded-md border whitespace-nowrap shadow-sm"
           style={{
             color: "var(--accent-orange)",
             background: "var(--accent-orange-soft)",

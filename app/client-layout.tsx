@@ -44,6 +44,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
   useOcppWebSocket();
   useInitialData();
   const pathname = usePathname();
+  const isLearn = pathname === "/learn" || pathname.startsWith("/learn/");
   const wsConnected = useAppStore((s) => s.wsConnected);
   const [collapsed, setCollapsed] = useState(false);
 
@@ -152,7 +153,11 @@ function AppShell({ children }: { children: React.ReactNode }) {
       </div>
 
       <main className="flex-1 min-w-0 overflow-auto app-main">
-        <div className="p-6 lg:p-8 max-w-[1400px] mx-auto animate-fade-in">{children}</div>
+        {isLearn ? (
+          <div className="h-full min-h-0 animate-fade-in">{children}</div>
+        ) : (
+          <div className="p-6 lg:p-8 max-w-[1400px] mx-auto animate-fade-in">{children}</div>
+        )}
       </main>
     </div>
   );

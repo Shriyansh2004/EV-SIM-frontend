@@ -393,4 +393,139 @@ body {
     animation: none;
     opacity: 1;
   }
+
+  .docs-fade-in {
+    animation: none;
+  }
 }
+
+/* ─── Documentation site ─── */
+.docs-layout {
+  scroll-behavior: smooth;
+}
+
+.docs-kbd {
+  @apply inline-flex items-center px-1.5 py-0.5 rounded-md text-[10px] font-lp-mono
+    text-lp-grey-600 bg-lp-grey-100 border border-lp-grey-300;
+}
+
+.docs-sidebar-icon {
+  @apply flex items-center justify-center w-7 h-7 rounded-lg bg-lp-orange-soft shrink-0;
+}
+
+.docs-search-trigger:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-orange) 30%, transparent);
+}
+
+.docs-code-block {
+  @apply rounded-xl bg-lp-dark text-white/90 font-lp-mono overflow-hidden;
+}
+
+.docs-callout {
+  @apply rounded-xl border px-4 py-3.5;
+}
+
+.docs-callout-info {
+  @apply border-blue-200 bg-blue-50/80 border-l-4 border-l-blue-500;
+}
+
+.docs-callout-tip {
+  border-color: color-mix(in srgb, var(--accent-orange) 20%, var(--grey-300));
+  background: color-mix(in srgb, var(--accent-orange-soft) 40%, white);
+  border-left: 4px solid var(--accent-orange);
+}
+
+.docs-callout-warning {
+  @apply border-amber-200 bg-amber-50/80 border-l-4 border-l-amber-500;
+}
+
+.docs-h2 {
+  @apply font-lp-display text-xl font-bold text-lp-grey-900 mt-10 mb-4 tracking-tight scroll-mt-20;
+}
+
+.docs-h3 {
+  @apply font-lp-display text-base font-semibold text-lp-grey-900 mt-8 mb-3 scroll-mt-20;
+}
+
+.docs-h4 {
+  @apply font-lp-display text-sm font-semibold text-lp-grey-900 mt-6 mb-2 scroll-mt-20;
+}
+
+.docs-p {
+  @apply text-[15px] text-lp-grey-600 leading-[1.7] mb-4;
+}
+
+.docs-ul {
+  @apply list-disc pl-5 mb-4 space-y-2 text-[15px] text-lp-grey-600 leading-[1.7];
+}
+
+.docs-ol {
+  @apply list-decimal pl-5 mb-4 space-y-2 text-[15px] text-lp-grey-600 leading-[1.7];
+}
+
+.docs-li {
+  @apply leading-[1.7];
+}
+
+.docs-link {
+  @apply text-lp-orange hover:underline underline-offset-2 font-medium;
+}
+
+.docs-thead {
+  @apply bg-lp-grey-100;
+}
+
+.docs-th {
+  @apply px-4 py-2.5 text-left text-xs font-lp-display font-semibold text-lp-grey-900 border-b border-lp-grey-300;
+}
+
+.docs-td {
+  @apply px-4 py-2.5 text-sm text-lp-grey-600 border-b border-lp-grey-300/60;
+}
+
+.docs-tr:nth-child(even) .docs-td {
+  @apply bg-lp-grey-100/50;
+}
+
+.docs-tr:last-child .docs-td {
+  @apply border-b-0;
+}
+
+.docs-nav-card {
+  @apply block rounded-xl border border-lp-grey-300 bg-lp-surface p-4 hover:shadow-lp-card transition-all duration-150 max-w-sm;
+  border-color: var(--grey-300);
+}
+
+.docs-nav-card:hover {
+  border-color: color-mix(in srgb, var(--accent-orange) 40%, var(--grey-300));
+}
+
+.docs-btn-primary {
+  @apply inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium
+    bg-lp-orange text-white hover:opacity-90 transition-opacity;
+}
+
+@keyframes docs-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.docs-fade-in {
+  animation: docs-fade-in 180ms ease-out;
+}
+
+.docs-mobile-drawer {
+  animation: docs-fade-in 200ms ease-out;
+}
+
+.docs-search-palette [cmdk-item][data-selected="true"] {
+  background: color-mix(in srgb, var(--accent-orange-soft) 50%, white);
+}
+

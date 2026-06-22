@@ -1,0 +1,43 @@
+---
+title: State of Charge (SoC) Explained
+description: What SoC means, how it's measured, and how EV-SIM simulates battery levels during charging.
+category: ev-charging-fundamentals
+order: 3
+---
+
+## What is SoC?
+
+**State of Charge (SoC)** represents how full an EV battery is, expressed as a percentage from 0% (empty) to 100% (full). It's the EV equivalent of a fuel gauge.
+
+## How SoC is determined
+
+In real vehicles, SoC is estimated by the Battery Management System (BMS) using:
+
+- **Voltage measurement** — battery voltage correlates with charge level
+- **Coulomb counting** — tracking current in/out over time
+- **Temperature compensation** — adjusting for thermal effects
+
+## SoC during charging
+
+As energy flows into the battery, SoC increases. The relationship isn't perfectly linear — charging slows near 80–100% (the "taper") to protect battery health. EV-SIM uses a simplified linear model for simulation.
+
+| SoC range | Charging behavior |
+| --- | --- |
+| 0–80% | Full power delivery |
+| 80–95% | Reduced power (taper begins) |
+| 95–100% | Trickle charge |
+
+## SoC in OCPP
+
+OCPP doesn't define a standard SoC field in core messages. However, `MeterValues` can include custom measurands, and `TransactionEvent` payloads may carry EV-specific data. EV-SIM tracks SoC internally and displays it in the live charts.
+
+<Callout variant="tip" title="EV-SIM tip">
+Watch the SoC chart on the charger detail page during an active session — it updates in real time as MeterValues are reported.
+</Callout>
+
+## Why SoC matters for operators
+
+- **Session planning** — estimate remaining charge time
+- **Load management** — prioritize sessions nearing completion
+- **Grid integration** — coordinate charging with renewable availability
+- **User experience** — display progress in mobile apps

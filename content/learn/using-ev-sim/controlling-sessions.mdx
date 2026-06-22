@@ -1,0 +1,43 @@
+---
+title: Controlling Sessions
+description: Start, stop, and monitor charging sessions through the EV-SIM interface.
+category: using-ev-sim
+order: 3
+---
+
+## Starting a session
+
+### Remote start
+
+From the charger detail page, click **Remote Start**. This sends a `RequestStartTransaction` from the CSMS to the charge point, which responds with `TransactionEvent (Started)`.
+
+### What happens next
+
+1. Connector status changes to `Occupied`
+2. Energy delivery begins at the configured max power
+3. `MeterValues` are reported at regular intervals
+4. SoC increases on the live chart
+
+## Stopping a session
+
+Click **Remote Stop** to end the session. The charge point sends `TransactionEvent (Ended)` with the final meter reading.
+
+## Session data
+
+During and after a session, you can view:
+
+- **Energy delivered** (kWh)
+- **Duration**
+- **Average power** (kW)
+- **SoC change** (start → end)
+- **Transaction ID** (from OCPP)
+
+## Sessions page
+
+The **Sessions** page (`/sessions`) lists all historical sessions across your fleet with filtering and sorting.
+
+<InlineOcppDiagram variant="session" />
+
+<Callout variant="warning" title="Connection required">
+Remote start/stop only works when the charger is connected to the CSMS. Check the connection badge before attempting session control.
+</Callout>

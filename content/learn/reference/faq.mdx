@@ -1,0 +1,59 @@
+---
+title: FAQ
+description: Frequently asked questions about EV-SIM, OCPP, and EV charging simulation.
+category: reference
+order: 3
+---
+
+## General
+
+### What is EV-SIM?
+
+EV-SIM is a full-stack EV charging simulation platform. It lets you create virtual charge points that communicate with a real CSMS using OCPP 2.0.1 over WebSocket.
+
+### Do I need physical hardware?
+
+No. EV-SIM runs entirely in software. Virtual chargers simulate the OCPP protocol without any physical EVSE hardware.
+
+### Which OCPP version does EV-SIM support?
+
+OCPP 2.0.1 only. Legacy OCPP 1.6 is not supported.
+
+## Technical
+
+### How do I connect a virtual charger?
+
+Create a charger on the Chargers page, then click **Connect** on its detail page. This opens a WebSocket and sends `BootNotification`.
+
+### Why isn't my charger connecting?
+
+Check that:
+1. The backend server is running
+2. No other process is using the WebSocket port
+3. The charger ID is unique
+
+### Can I run multiple chargers simultaneously?
+
+Yes. Each virtual charger maintains its own WebSocket connection and can run independent sessions.
+
+### Where is data stored?
+
+Session data, meter values, and charger state are persisted in SQLite via the backend API.
+
+## OCPP
+
+### What's the difference between TransactionEvent and MeterValues?
+
+In OCPP 2.0.1, `TransactionEvent` with `eventType: Updated` can carry meter data. Standalone `MeterValues` messages are also supported. EV-SIM uses both patterns.
+
+### What happens if the WebSocket disconnects?
+
+The CSMS marks the charger offline. Reconnecting triggers a new `BootNotification`. Active sessions may be terminated depending on configuration.
+
+### Can I inspect raw OCPP messages?
+
+Yes. The OCPP Explorer shows all messages in real time with full JSON payloads.
+
+<Callout variant="tip" title="Still stuck?">
+Use the AI Assistant in the app for help with specific error messages or unexpected behavior.
+</Callout>

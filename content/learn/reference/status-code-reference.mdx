@@ -1,0 +1,61 @@
+---
+title: Status Code Reference
+description: Connector statuses, registration results, and error codes in OCPP 2.0.1.
+category: reference
+order: 2
+---
+
+## Connector status
+
+Reported via `StatusNotification`:
+
+| Status | Description |
+| --- | --- |
+| `Available` | Connector ready for use |
+| `Occupied` | Vehicle connected, may or may not be charging |
+| `Reserved` | Reserved for a specific user |
+| `Unavailable` | Out of service (maintenance, etc.) |
+| `Faulted` | Error condition present |
+
+## Registration status
+
+Returned in `BootNotification` CallResult:
+
+| Status | Description |
+| --- | --- |
+| `Accepted` | Charge point registered successfully |
+| `Pending` | Awaiting administrator approval |
+| `Rejected` | Registration denied |
+
+## Authorization status
+
+For transaction authorization:
+
+| Status | Description |
+| --- | --- |
+| `Accepted` | Authorized to charge |
+| `Blocked` | ID blocked from charging |
+| `Expired` | Authorization expired |
+| `Invalid` | Unknown or invalid ID |
+| `ConcurrentTx` | Already in an active transaction |
+
+## CallError codes
+
+When a Call fails, the CallError response includes:
+
+| Code | Description |
+| --- | --- |
+| `NotImplemented` | Action not supported by recipient |
+| `NotSupported` | Action recognized but not supported |
+| `InternalError` | Internal processing error |
+| `ProtocolError` | Payload failed validation |
+| `SecurityError` | Security check failed |
+| `FormationViolation` | Message not valid JSON/array |
+| `PropertyConstraintViolation` | Field value out of range |
+| `OccurrenceConstraintViolation` | Required field missing |
+| `TypeConstraintViolation` | Field has wrong type |
+| `GenericError` | Unspecified error |
+
+<Callout variant="warning" title="Debugging errors">
+When you see a CallError in the OCPP Explorer, check the error code and description. `FormationViolation` usually means malformed JSON; `PropertyConstraintViolation` means a field value is invalid.
+</Callout>
