@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { VirtualCharger, VirtualEv } from "@/types";
-import { apiPost } from "@/hooks/useInitialData";
+import { apiPost } from "@/lib/api";
 import { useAppStore } from "@/store";
 import { mapEv } from "@/types";
 import { Plug, Unplug } from "lucide-react";

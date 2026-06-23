@@ -1,4 +1,11 @@
 import rawContent from "@/content/site-content.json";
+import {
+  ASSET_BASE_URL,
+  GITHUB_BACKEND_URL,
+  GITHUB_FRONTEND_LABEL,
+  GITHUB_FRONTEND_URL,
+  REFERENCE_LINKS,
+} from "@/lib/env";
 import type { EvPreset } from "@/types";
 
 export type SiteContent = typeof rawContent;
@@ -11,9 +18,8 @@ export function resolveAssetUrl(path: string): string {
     return path;
   }
 
-  const envBase = process.env.NEXT_PUBLIC_ASSET_BASE_URL?.replace(/\/$/, "");
   const jsonBase = content.assets.baseUrl?.replace(/\/$/, "");
-  const base = envBase || jsonBase;
+  const base = ASSET_BASE_URL || jsonBase;
 
   if (!base) {
     return path;
@@ -46,8 +52,8 @@ export function interpolate(template: string, extra: Record<string, string | num
     "site.name": content.site.name,
     "site.license": content.site.license,
     "site.tagline": content.site.tagline,
-    "external.github.frontend": content.external.github.frontend,
-    "external.github.backend": content.external.github.backend,
+    "external.github.frontend": GITHUB_FRONTEND_URL,
+    "external.github.backend": GITHUB_BACKEND_URL,
     ...extra,
   };
 
@@ -63,7 +69,4 @@ export function resolveLinkHref(href: string): string {
 
 export const EV_PRESETS = content.evPresets as EvPreset[];
 
-// Re-export external URLs for backward compatibility
-export const GITHUB_FRONTEND_URL = content.external.github.frontend;
-export const GITHUB_BACKEND_URL = content.external.github.backend;
-export const GITHUB_FRONTEND_LABEL = content.external.github.frontendLabel;
+export { GITHUB_FRONTEND_URL, GITHUB_BACKEND_URL, GITHUB_FRONTEND_LABEL, REFERENCE_LINKS };

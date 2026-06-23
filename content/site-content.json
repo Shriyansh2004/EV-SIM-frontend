@@ -1,5 +1,5 @@
 {
-  "_comment": "Edit this file to change site copy and assets. For images/models, set full S3 URLs in assets.*.url OR set assets.baseUrl to your bucket prefix (e.g. https://my-bucket.s3.us-east-1.amazonaws.com).",
+  "_comment": "Edit this file to change site copy. URLs (API, WebSocket, GitHub, CDN) are configured in .env.local — see frontend/lib/env.ts.",
 
   "site": {
     "name": "EV-SIM",
@@ -46,27 +46,7 @@
     }
   },
 
-  "external": {
-    "github": {
-      "frontend": "https://github.com/Shriyansh2004/EV-SIM-frontend",
-      "backend": "https://github.com/Shriyansh2004/EV-SIM-backend",
-      "frontendLabel": "github.com/Shriyansh2004/EV-SIM-frontend"
-    },
-    "references": [
-      {
-        "label": "citrineos-core",
-        "href": "https://github.com/citrineos/citrineos-core"
-      },
-      {
-        "label": "vcp of solidstudio",
-        "href": "https://github.com/solidstudiosh/ocpp-virtual-charge-point"
-      },
-      {
-        "label": "everestev",
-        "href": "https://github.com/EVerest/everest"
-      }
-    ]
-  },
+  "external": {},
 
   "navigation": {
     "sectionLabel": "Navigation",

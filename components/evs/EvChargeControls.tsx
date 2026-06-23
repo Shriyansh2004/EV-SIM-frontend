@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { VirtualEv } from "@/types";
-import { apiPost } from "@/hooks/useInitialData";
+import { apiPost } from "@/lib/api";
 import { Play, Square } from "lucide-react";
 
 interface EvChargeControlsProps {

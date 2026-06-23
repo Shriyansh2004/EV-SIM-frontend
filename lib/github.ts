@@ -1,5 +1,0 @@
-export {
-  GITHUB_FRONTEND_URL,
-  GITHUB_BACKEND_URL,
-  GITHUB_FRONTEND_LABEL,
-} from "@/lib/content";

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { apiPost, useInitialData } from "@/hooks/useInitialData";
+import { apiPost } from "@/lib/api";
+import { useInitialData } from "@/hooks/useInitialData";
 import { useAppStore } from "@/store";
 
 const WIZARD_STEPS = [

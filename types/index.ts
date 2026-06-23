@@ -207,9 +207,6 @@ export function mapEvPreset(raw: Record<string, unknown>): EvPreset {
   };
 }
 
-export const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-export const WS_URL = process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:8000/ws/updates";
-
 export const OCPP_FIELD_DESCRIPTIONS: Record<string, string> = {
   BootNotification:
     "Sent by the charge point on startup to register with the CSMS and negotiate heartbeat interval.",

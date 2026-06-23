@@ -6,7 +6,7 @@ import { StatCard } from "@/components/ui/StatCard";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { EvCreateForm } from "@/components/evs/EvCreateForm";
 import { EvCard } from "@/components/evs/EvCard";
-import { apiDelete } from "@/hooks/useInitialData";
+import { apiDelete } from "@/lib/api";
 import { Car, Trash2 } from "lucide-react";
 import { content } from "@/lib/content";
 
