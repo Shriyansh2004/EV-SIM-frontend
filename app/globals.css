@@ -441,7 +441,7 @@ body {
 }
 
 .docs-h2 {
-  @apply font-lp-display text-xl font-bold text-lp-grey-900 mt-10 mb-4 tracking-tight scroll-mt-20;
+  @apply font-lp-display text-2xl font-bold text-lp-grey-900 mt-12 mb-4 tracking-tight scroll-mt-20;
 }
 
 .docs-h3 {
@@ -452,16 +452,24 @@ body {
   @apply font-lp-display text-sm font-semibold text-lp-grey-900 mt-6 mb-2 scroll-mt-20;
 }
 
+.docs-article-header {
+  @apply pb-8 border-b border-lp-grey-300/70;
+}
+
+.docs-prose > *:first-child {
+  margin-top: 0;
+}
+
 .docs-p {
-  @apply text-[15px] text-lp-grey-600 leading-[1.7] mb-4;
+  @apply text-base text-lp-grey-600 leading-[1.75] mb-5;
 }
 
 .docs-ul {
-  @apply list-disc pl-5 mb-4 space-y-2 text-[15px] text-lp-grey-600 leading-[1.7];
+  @apply list-disc pl-5 mb-5 space-y-2.5 text-base text-lp-grey-600 leading-[1.75];
 }
 
 .docs-ol {
-  @apply list-decimal pl-5 mb-4 space-y-2 text-[15px] text-lp-grey-600 leading-[1.7];
+  @apply list-decimal pl-5 mb-5 space-y-2.5 text-base text-lp-grey-600 leading-[1.75];
 }
 
 .docs-li {
@@ -493,7 +501,7 @@ body {
 }
 
 .docs-nav-card {
-  @apply block rounded-xl border border-lp-grey-300 bg-lp-surface p-4 hover:shadow-lp-card transition-all duration-150 max-w-sm;
+  @apply block rounded-xl border border-lp-grey-300 bg-lp-surface p-4 hover:shadow-lp-card transition-all duration-150;
   border-color: var(--grey-300);
 }
 
