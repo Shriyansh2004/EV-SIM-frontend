@@ -1,7 +1,7 @@
 "use client";
 
-import { apiPost } from "@/hooks/useInitialData";
-import { API_BASE } from "@/types";
+import { apiPost } from "@/lib/api";
+import { API_BASE, DEMO_ID_TOKEN } from "@/lib/env";
 
 interface ChargerControlsProps {
   chargerId: string;
@@ -35,7 +35,7 @@ export function ChargerControls({
           handle("sessions/start", {
             charger_id: chargerId,
             connector_id: connectorId,
-            id_token: "DEMO-TOKEN",
+            id_token: DEMO_ID_TOKEN,
           })
         }
         className="matlab-btn-primary disabled:opacity-40"

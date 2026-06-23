@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { SiteImage } from "@/components/ui/SiteImage";
-import { content, interpolate, resolveLinkHref } from "@/lib/content";
+import { content, interpolate, REFERENCE_LINKS, resolveLinkHref } from "@/lib/content";
 
 export function LandingFooter() {
   const { site } = content;
@@ -75,7 +75,7 @@ export function LandingFooter() {
                   {footerNav.referenceHeading}
                 </p>
                 <ul className="space-y-2.5">
-                  {content.external.references.map((link) => (
+                  {REFERENCE_LINKS.map((link) => (
                     <li key={link.href}>
                       <a
                         href={link.href}

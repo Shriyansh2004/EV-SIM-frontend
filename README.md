@@ -1,6 +1,6 @@
 # EV-SIM Frontend
 
-Next.js dashboard for **EV-SIM** — an interactive platform that simulates **virtual electric vehicles (EVs)** and **virtual chargers** connected to a CitrineOS-inspired CSMS over **OCPP 2.0.1**. The frontend provides EV fleet management (create, plug, charge, monitor SoC), live charger monitoring, session tracking, OCPP message inspection, and educational content.
+Next.js dashboard for **EV-SIM** — a full-stack platform that simulates **virtual electric vehicles (EVs)** and **virtual chargers** connected to a CitrineOS-inspired CSMS over **OCPP 2.0.1**. The frontend includes a marketing landing page, a live simulator dashboard, EV fleet management (create, plug, charge, monitor SoC), charger monitoring, session tracking, OCPP message inspection, and an MDX-powered documentation hub.
 
 **Backend repo:** [EV-SIM backend](https://github.com/Shriyansh2004/EV-SIM-backend) (or run from `../backend` in a local checkout)
 
@@ -17,6 +17,10 @@ Next.js dashboard for **EV-SIM** — an interactive platform that simulates **vi
 | State | Zustand | `^5.0.3` |
 | Data fetching | SWR | `^2.3.0` |
 | Charts | Recharts | `^2.15.0` |
+| 3D (landing hero) | Three.js + React Three Fiber | `^0.169.0` / `^8.18.0` |
+| Documentation | next-mdx-remote + gray-matter | `^6.0.0` |
+| Search (docs) | Fuse.js + cmdk | `^7.4.2` / `^1.1.1` |
+| Animation | GSAP | `^3.15.0` |
 | Icons | Lucide React | `^0.469.0` |
 | Utilities | clsx | `^2.1.1` |
 | Linting | ESLint + eslint-config-next | `^8` / `14.2.35` |
@@ -47,10 +51,16 @@ Next.js dashboard for **EV-SIM** — an interactive platform that simulates **vi
 
 ```bash
 npm install
+cp .env.local.example .env.local   # if present; otherwise create from template below
 npm run dev
 ```
 
-Open [http://localhost:3001](http://localhost:3001)
+| URL | Page |
+|-----|------|
+| [http://localhost:3001](http://localhost:3001) | Landing page (3D hero, product overview) |
+| [http://localhost:3001/dashboard](http://localhost:3001/dashboard) | Simulator dashboard |
+| [http://localhost:3001/evs](http://localhost:3001/evs) | Electric Vehicles (EV simulator) |
+| [http://localhost:3001/learn](http://localhost:3001/learn) | Documentation hub |
 
 ### Scripts
 
@@ -60,15 +70,164 @@ Open [http://localhost:3001](http://localhost:3001)
 | `npm run build` | Production build |
 | `npm run start` | Serve production build on port 3001 |
 | `npm run lint` | Run ESLint |
+| `npm run typecheck` | TypeScript check without emit |
 
 ### Environment variables
 
-Create `.env.local` (optional — defaults work for local dev):
+Create `.env.local` (required — the app reads config from `lib/env.ts`):
 
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:8000
 NEXT_PUBLIC_WS_URL=ws://localhost:8000/ws/updates
+
+# GitHub links (landing footer, docs)
+NEXT_PUBLIC_GITHUB_FRONTEND_URL=https://github.com/Shriyansh2004/EV-SIM-frontend
+NEXT_PUBLIC_GITHUB_BACKEND_URL=https://github.com/Shriyansh2004/EV-SIM-backend
+
+# Demo / reference links
+NEXT_PUBLIC_DEMO_ID_TOKEN=demo-token
+NEXT_PUBLIC_REF_CITRINEOS_URL=https://github.com/citrineos/citrineos-core
+NEXT_PUBLIC_REF_VCP_URL=https://github.com/mobilityhouse/ocpp
+NEXT_PUBLIC_REF_EVEREST_URL=https://github.com/EVerest/everest
+
+# Optional
+NEXT_PUBLIC_ASSET_BASE_URL=
+NEXT_PUBLIC_GITHUB_FRONTEND_LABEL=
 ```
+
+Site copy, navigation labels, EV presets, and page text are driven by `content/site-content.json` (not env vars).
+
+---
+
+## Platform Overview
+
+### Routes
+
+| Route | Description |
+|-------|-------------|
+| `/` | Public landing page with interactive 3D EV + charger scene |
+| `/dashboard` | Live simulator overview — chargers, EVs, sessions, OCPP, power chart |
+| `/chargers` | Create, connect, and manage virtual charge points |
+| `/chargers/[id]` | Charger detail — connectors, state machine, remote controls, OCPP log |
+| `/evs` | **EV simulator** — fleet list, create EV, fleet stats |
+| `/evs/[id]` | **EV detail** — SoC chart, battery panel, plug/unplug, charge controls |
+| `/sessions` | Session history, energy charts, meter value detail |
+| `/ocpp-explorer` | Filterable OCPP 2.0.1 message log and JSON inspector |
+| `/learn/[[...slug]]` | MDX documentation (getting started, OCPP, CSMS, using EV-SIM, reference) |
+
+### Navigation
+
+The app shell sidebar (Dashboard → Chargers → Electric Vehicles → Sessions → OCPP Explorer → Learn) is defined in `content/site-content.json` under `navigation.app`. The landing page at `/` renders without the sidebar; all simulator routes use `components/layout/ClientLayout.tsx`.
+
+---
+
+## Virtual EV Simulator
+
+EV-SIM models **software-defined electric vehicles** with realistic battery behaviour. Virtual EVs are first-class entities — not just passive session metadata. You create them, plug them into charger connectors, start OCPP charging sessions, and watch live SoC, power, voltage, and current update in real time.
+
+### What the simulator does
+
+| Capability | Description |
+|------------|-------------|
+| **Fleet management** | Create multiple virtual EVs, each with its own battery profile and state |
+| **Vehicle presets** | Built-in profiles (Tesla Model 3, BMW i4, Nissan Leaf, etc.) or fully custom parameters |
+| **Plug / unplug** | Attach an EV to a specific charger connector; one EV per connector |
+| **Charging sessions** | EV-centric start/stop triggers real OCPP `RequestStartTransaction` / `RequestStopTransaction` |
+| **Live telemetry** | SoC, power (kW), voltage (V), current (A), and energy delivered update every second |
+| **Realistic taper** | Charge power reduces above 70% SoC to mimic real battery behaviour |
+| **Auto-stop** | Charging stops automatically when `targetSocPercent` is reached |
+| **OCPP integration** | EV telemetry flows into charger meter values and `TransactionEvent` payloads |
+
+### EV lifecycle states
+
+```mermaid
+stateDiagram-v2
+    [*] --> idle: Create EV
+    idle --> plugged: Plug into connector
+    plugged --> charging: Start charging
+    charging --> plugged: Stop charging
+    charging --> full: Reach target SoC
+    full --> plugged: Manual stop / unplug prep
+    plugged --> idle: Unplug
+    charging --> fault: Fault injection (charger)
+```
+
+| Status | Meaning | UI badge |
+|--------|---------|----------|
+| `idle` | Created, not connected to any charger | Idle |
+| `plugged` | Connected to a charger connector, not charging | Plugged |
+| `charging` | Active OCPP session, battery SoC increasing | Charging |
+| `full` | Target SoC reached, session complete | Full |
+| `fault` | Charger/connector fault while plugged | Fault |
+
+### Battery model (backend)
+
+The backend `VirtualEvClient` (`backend/app/virtual_ev/ev.py`) advances each charging EV every **1 second**:
+
+1. **Power calculation** — `min(ev_max_kw, charger_max_kw)` with a taper curve:
+   - 100% power below 70% SoC
+   - 80% at 70–79%, 55% at 80–89%, 30% at 90–94%, 15% at 95%+
+   - 0 kW at or above `target_soc_percent`
+2. **SoC update** — `soc_delta = (energy_kwh / battery_capacity_kwh) × 100`
+3. **Electrical telemetry** — 400 V bus; `current_a = (power_kw × 1000) / 400`
+4. **Broadcast** — `ev_update` WebSocket event pushed to the frontend each tick
+
+### Vehicle presets
+
+Presets are served by `GET /api/evs/presets` with a client-side fallback from `content/site-content.json` (`evPresets` array) and `lib/content.ts`.
+
+| Preset | Type | Battery | AC max | DC max |
+|--------|------|---------|--------|--------|
+| Tesla Model 3 Long Range | BEV | 82 kWh | 11.5 kW | 250 kW |
+| Nissan Leaf e+ | BEV | 62 kWh | 6.6 kW | 100 kW |
+| BMW i4 eDrive40 | BEV | 83.9 kWh | 11 kW | 205 kW |
+| Hyundai IONIQ 5 | BEV | 77.4 kWh | 11 kW | 233 kW |
+| Chevrolet Bolt EV | BEV | 65 kWh | 7.7 kW | 55 kW |
+| Volkswagen ID.4 Pro | BEV | 82 kWh | 11 kW | 135 kW |
+| Toyota Prius Prime | PHEV | 13.6 kWh | 3.3 kW | — |
+| Generic BEV | BEV | 75 kWh | 11 kW | 150 kW |
+
+Custom EVs accept: ID, vendor, model, `ev_type` (BEV/PHEV/HEV), battery capacity, AC/DC charge limits, initial SoC, and target SoC.
+
+### Frontend EV UI
+
+| Page / component | Role |
+|------------------|------|
+| `app/evs/page.tsx` | Fleet summary (total / plugged / charging), `EvCreateForm`, `EvCard` grid |
+| `app/evs/[id]/page.tsx` | EV detail — SoC chart, charge controls, plug panel, battery panel |
+| `EvCreateForm.tsx` | Preset picker or custom battery fields → `POST /api/evs` |
+| `EvPlugPanel.tsx` | Select charger + connector → `POST /api/evs/{id}/plug` or `/unplug` |
+| `EvChargeControls.tsx` | Start/stop charging → `POST /api/evs/{id}/start-charging` or `/stop-charging` |
+| `EvSocChart.tsx` | Live Recharts line chart driven by `ev_update` WebSocket events |
+| `EvBatteryPanel.tsx` | Capacity, target SoC, power, voltage, current, energy delivered |
+| `EvBatteryMonitor.tsx` | Compact battery widget (usable on dashboard) |
+| `EvStatusBadge.tsx` | Color-coded status badge |
+| `ConnectorPanel.tsx` / `ConnectorDetail.tsx` | Charger-side view of which EV is on each connector |
+
+### EV REST API
+
+| Method | Path | Used by | Description |
+|--------|------|---------|-------------|
+| `GET` | `/api/evs` | `useInitialData` (5s poll) | List all virtual EVs |
+| `GET` | `/api/evs/presets` | `useEvPresets`, `EvCreateForm` | Built-in vehicle presets |
+| `POST` | `/api/evs` | `EvCreateForm` | Create a new EV |
+| `DELETE` | `/api/evs/{id}` | EVs page | Remove an idle/plugged EV |
+| `POST` | `/api/evs/{id}/plug` | `EvPlugPanel` | Plug EV into charger connector |
+| `POST` | `/api/evs/{id}/unplug` | `EvPlugPanel` | Unplug EV from charger |
+| `POST` | `/api/evs/{id}/start-charging` | `EvChargeControls` | Start OCPP session (must be plugged) |
+| `POST` | `/api/evs/{id}/stop-charging` | `EvChargeControls` | Stop active charging session |
+
+### EV WebSocket events
+
+| Event type | When fired | Store action |
+|------------|------------|--------------|
+| `ev_created` | New EV registered | `upsertEv` |
+| `ev_plugged` | EV attached to connector | `upsertEv` |
+| `ev_unplugged` | EV detached from connector | `upsertEv` |
+| `ev_charging_started` | OCPP session started | `upsertEv` |
+| `ev_charging_stopped` | Session ended (manual or auto-stop) | `upsertEv` |
+| `ev_update` | 1s telemetry tick during charging | `upsertEv` |
+| `ev_deleted` | EV removed | `removeEv` |
 
 ---
 
@@ -80,9 +239,13 @@ NEXT_PUBLIC_WS_URL=ws://localhost:8000/ws/updates
 flowchart LR
     subgraph FE["Frontend · Next.js :3001"]
         direction TB
-        P["Pages & Components<br/>Chargers · EVs · Sessions · OCPP"]
+        LP["Landing /"]
+        P["Simulator pages<br/>Dashboard · Chargers · EVs · Sessions · OCPP"]
+        D["MDX Docs /learn"]
         C["Client layer<br/>SWR · Zustand · WebSocket"]
+        LP --> P
         P <-->|"read / write"| C
+        D -.->|"static content"| P
     end
 
     subgraph BE["Backend · FastAPI :8000"]
@@ -103,18 +266,18 @@ flowchart LR
 
 | Arrow | From | To | What flows |
 |-------|------|----|------------|
-| → | Pages | Client layer | User actions, rendered state |
+| → | Simulator pages | Client layer | User actions, rendered state |
 | → | Client layer | REST API | `GET` polls + `POST` commands |
 | ↔ | Client layer | `/ws/updates` | Real-time OCPP, charger, session, and EV events |
 | → | REST API | OCPP Core + EV Pool | Create/connect/control chargers and EVs |
 | → | EV Pool | OCPP Core | Plugged EV drives charge power and meter values |
 | → | OCPP Core | `/ws/updates` | Broadcast session, charger, and message updates |
 
-### Frontend client layer (detail)
+### Frontend client layer
 
 ```mermaid
 flowchart TD
-  SWR["SWR polling\nGET every 10s"]
+  SWR["SWR polling\nchargers/sessions 10s · EVs 5s"]
   WS["WebSocket client\nlive push"]
   Z["Zustand Store"]
   UI["Pages & Components\nPOST on user actions"]
@@ -124,13 +287,11 @@ flowchart TD
   Z -->|"render"| UI
 ```
 
-Four nodes in a straight top-to-bottom flow — no crossing arrows.
-
 ### Data flow
 
-1. **Initial load** — `useInitialData` polls REST endpoints every 5–15s (EVs polled every 5s) and hydrates the Zustand store.
+1. **Initial load** — `useInitialData` polls REST endpoints (EVs every 5s, chargers/sessions every 10s, OCPP messages every 15s) and hydrates the Zustand store.
 2. **Live updates** — `useOcppWebSocket` connects to `/ws/updates` and applies real-time events (`ocpp_message`, `charger_update`, `session_started`, `ev_update`, etc.).
-3. **User actions** — Pages call `apiPost` / `apiDelete` to trigger backend commands (create charger/EV, plug, start/stop charging, fault injection).
+3. **User actions** — Pages call `apiPost` / `apiDelete` from `lib/api.ts` to trigger backend commands.
 4. **EV simulation** — Backend simulator ticks EV batteries every 1s; charge power follows a realistic taper curve; OCPP meter values reflect EV telemetry.
 5. **OCPP layer** — Virtual chargers speak OCPP 2.0.1 to the CSMS handler; every message is logged and broadcast to the frontend.
 
@@ -212,48 +373,72 @@ sequenceDiagram
 
 ```
 frontend/
-├── app/                        # Next.js App Router pages
-│   ├── layout.tsx              # Root layout (metadata, global CSS)
-│   ├── client-layout.tsx       # Sidebar nav, WebSocket + data hooks
-│   ├── globals.css             # Tailwind base styles & theme tokens
-│   ├── page.tsx                # Dashboard (/)
+├── app/                              # Next.js App Router
+│   ├── layout.tsx                    # Root layout (fonts, metadata, ClientLayout)
+│   ├── page.tsx                      # Landing page (/)
+│   ├── globals.css                   # Tailwind layers & theme CSS variables
+│   ├── dashboard/page.tsx            # Simulator dashboard
 │   ├── chargers/
-│   │   ├── page.tsx            # Charger list & create form
-│   │   └── [id]/page.tsx       # Single charger detail view
+│   │   ├── page.tsx                  # Charger list & create form
+│   │   └── [id]/page.tsx             # Charger detail
 │   ├── evs/
-│   │   ├── page.tsx            # EV fleet list & create form
-│   │   └── [id]/page.tsx       # EV detail: SoC chart, plug, charge controls
-│   ├── sessions/page.tsx       # Session history & energy charts
-│   ├── ocpp-explorer/page.tsx  # OCPP message log & inspector
-│   └── learn/page.tsx          # OCPP education & interactive wizard
+│   │   ├── page.tsx                  # EV fleet & create form
+│   │   └── [id]/page.tsx             # EV detail (SoC, plug, charge)
+│   ├── sessions/page.tsx             # Session history & charts
+│   ├── ocpp-explorer/page.tsx        # OCPP message log & inspector
+│   └── learn/
+│       ├── layout.tsx                # Docs shell wrapper
+│       └── [[...slug]]/page.tsx      # MDX documentation pages
 │
 ├── components/
-│   ├── chargers/               # Charger-specific UI
-│   ├── evs/                    # EV-specific UI (cards, SoC chart, plug panel)
-│   ├── charts/                 # Recharts visualizations
-│   ├── ocpp/                   # OCPP protocol UI
-│   ├── sessions/               # Session tables & modals
-│   └── ui/                     # Shared primitives (badges, cards)
+│   ├── layout/ClientLayout.tsx       # App shell: sidebar, WebSocket, data hooks
+│   ├── landing/                      # Landing page (3D hero, navbar, footer)
+│   ├── evs/                          # EV simulator UI
+│   ├── chargers/                     # Charger UI
+│   ├── charts/                       # Recharts visualizations
+│   ├── ocpp/                         # OCPP protocol UI
+│   ├── sessions/                     # Session tables & modals
+│   ├── docs/                         # MDX docs shell (sidebar, search, TOC)
+│   ├── learn/                        # Embedded diagrams for docs
+│   └── ui/                           # Shared primitives
+│
+├── content/
+│   ├── site-content.json             # Site copy, nav, presets, page labels
+│   └── learn/                        # MDX documentation articles
+│       ├── getting-started/
+│       ├── ev-charging-fundamentals/
+│       ├── the-ocpp-protocol/
+│       ├── csms-system-architecture/
+│       ├── using-ev-sim/
+│       └── reference/
 │
 ├── lib/
-│   └── evPresets.ts            # Client-side EV preset fallback (mirrors backend)
+│   ├── api.ts                        # fetcher, apiPost, apiDelete
+│   ├── env.ts                        # Environment variable accessors
+│   ├── content.ts                    # site-content.json loader & asset URLs
+│   ├── docs/                         # MDX slug resolution, categories
+│   ├── chartTheme.ts                 # Recharts theme tokens
+│   └── ocppFilters.ts                # OCPP Explorer filter helpers
 │
 ├── hooks/
-│   ├── useInitialData.ts       # SWR polling + REST helpers
-│   └── useOcppWebSocket.ts     # WebSocket connection & reconnect
+│   ├── useInitialData.ts             # SWR polling + useEvPresets
+│   └── useOcppWebSocket.ts           # WebSocket connection & reconnect
 │
 ├── store/
-│   └── index.ts                # Zustand global state
+│   └── index.ts                      # Zustand global state + handleWsEvent
 │
 ├── types/
-│   └── index.ts                # TypeScript types & API mappers
+│   └── index.ts                      # TypeScript types & API mappers
 │
-├── next.config.js              # Next.js configuration
-├── tailwind.config.ts          # Design tokens & Tailwind theme
-├── tsconfig.json               # TypeScript paths (@/* alias)
-├── postcss.config.js           # PostCSS (Tailwind + Autoprefixer)
-├── package.json
-└── .gitignore
+├── public/
+│   ├── logo.png
+│   └── models/                       # GLB assets for landing 3D scene
+│
+├── next.config.js
+├── tailwind.config.ts
+├── tsconfig.json
+├── postcss.config.js
+└── package.json
 ```
 
 ---
@@ -264,130 +449,54 @@ frontend/
 
 | File | Purpose |
 |------|---------|
-| `layout.tsx` | Server root layout. Sets page metadata (title, OG tags) and wraps all pages in `ClientLayout`. |
-| `client-layout.tsx` | Client shell with sidebar navigation, live WebSocket indicator, and global hooks (`useOcppWebSocket`, `useInitialData`). |
-| `globals.css` | Global styles, CSS variables, and Tailwind `@layer` directives for the dark theme. |
-| `page.tsx` | **Dashboard** — summary metrics (chargers, EVs, sessions, energy), charger grid, recent OCPP log, power chart. |
-| `chargers/page.tsx` | **Charger Management** — create/delete chargers, connect/disconnect to CSMS via REST. |
-| `chargers/[id]/page.tsx` | **Charger Detail** — live metrics, connector panel (plugged EVs), state machine, remote controls, per-charger OCPP log. |
-| `evs/page.tsx` | **EV Fleet** — fleet summary (total/plugged/charging), create EV from preset or custom, delete idle EVs. |
-| `evs/[id]/page.tsx` | **EV Detail** — live SoC chart, battery panel, plug/unplug panel, start/stop charging controls. |
-| `sessions/page.tsx` | **Session Monitor** — energy bar chart, sortable session table (with linked EV), detail modal with meter values. |
-| `ocpp-explorer/page.tsx` | **OCPP Explorer** — filterable message log, JSON payload inspector, reference sequence diagram. |
-| `learn/page.tsx` | **Education** — OCPP concepts, charging sequence diagram, interactive BootNotification wizard. |
+| `layout.tsx` | Server root layout. Loads Inter / JetBrains Mono fonts, metadata from `content/site-content.json`, wraps pages in `ClientLayout`. |
+| `page.tsx` | **Landing page** — 3D hero scene, product copy, CTA to `/dashboard`. |
+| `dashboard/page.tsx` | **Dashboard** — fleet metrics (chargers, EVs, sessions, energy), charger grid, recent OCPP log, power chart, charging EV alert. |
+| `chargers/page.tsx` | **Charger Management** — create/delete chargers, connect/disconnect to CSMS. |
+| `chargers/[id]/page.tsx` | **Charger Detail** — connectors (with plugged EVs), state machine, remote controls, OCPP log. |
+| `evs/page.tsx` | **EV Fleet** — fleet summary, `EvCreateForm`, delete idle EVs. |
+| `evs/[id]/page.tsx` | **EV Detail** — live SoC chart, battery panel, plug/unplug, start/stop charging. |
+| `sessions/page.tsx` | **Session Monitor** — energy bar chart, sortable session table (with linked EV), detail modal. |
+| `ocpp-explorer/page.tsx` | **OCPP Explorer** — direction tabs, filterable message log, JSON inspector, traffic timeline. |
+| `learn/[[...slug]]/page.tsx` | **Documentation** — renders MDX from `content/learn/` with search, TOC, prev/next. |
 
-### Components (`components/`)
+### Key components
 
-#### Chargers
+| Area | Files | Purpose |
+|------|-------|---------|
+| Layout | `ClientLayout.tsx`, `LiveIndicator.tsx` | Collapsible sidebar nav, WebSocket + SWR hooks, sim running indicator |
+| Landing | `LandingPage.tsx`, `Hero3DVisual.tsx`, `HeroSection.tsx` | Marketing page with Three.js EV/charger/CSMS scene |
+| EVs | `EvCreateForm`, `EvCard`, `EvSocChart`, `EvPlugPanel`, `EvChargeControls`, `EvBatteryPanel` | Full EV simulator UI |
+| Docs | `DocsShell`, `DocsSidebar`, `DocsSearch`, `mdx-components` | Searchable MDX documentation hub |
+| OCPP | `OcppMessageLog`, `OcppMessageInspector`, `OcppTrafficTimeline`, `SequenceDiagram` | Protocol inspection tools |
 
-| File | Purpose |
-|------|---------|
-| `ChargerCard.tsx` | Compact card showing charger ID, status badge, power, and connection state. |
-| `ChargerGrid.tsx` | Responsive grid layout of `ChargerCard` components. |
-| `ChargerStateDisplay.tsx` | Visual state machine highlighting the charger's current OCPP status. |
-| `ChargerControls.tsx` | Action buttons: Remote Start/Stop, Reset, Set Unavailable, Unlock, Inject Fault. |
-| `ConnectorPanel.tsx` | Per-connector view showing plugged EV, status, and occupancy. |
-
-#### EVs
+### Lib & hooks
 
 | File | Purpose |
 |------|---------|
-| `EvCard.tsx` | Compact card showing EV ID, status badge, SoC, vendor/model, and plugged charger. |
-| `EvCreateForm.tsx` | Create EV form with preset picker (Tesla, BMW, etc.) or custom battery parameters. |
-| `EvStatusBadge.tsx` | Color-coded badge for EV states (`idle`, `plugged`, `charging`, `full`). |
-| `EvBatteryPanel.tsx` | Detailed battery stats: capacity, target SoC, power, voltage, current, energy delivered. |
-| `EvBatteryMonitor.tsx` | Compact battery monitor widget for dashboard embedding. |
-| `EvSocChart.tsx` | Live line chart of SoC over time (updates via `ev_update` WebSocket events). |
-| `EvPlugPanel.tsx` | Select charger + connector, plug/unplug EV. Shows occupied connectors. |
-| `EvChargeControls.tsx` | Start/Stop charging buttons (`POST /api/evs/{id}/start-charging`, `/stop-charging`). |
-
-#### Charts
-
-| File | Purpose |
-|------|---------|
-| `PowerChart.tsx` | Live line chart of charging power (kW) across active chargers. |
-| `SocGauge.tsx` | Circular gauge for State of Charge percentage. |
-| `EnergyBarChart.tsx` | Bar chart comparing energy delivered (kWh) per session. |
-
-#### OCPP
-
-| File | Purpose |
-|------|---------|
-| `OcppMessageCard.tsx` | Single OCPP message row with direction, action, and timestamp. |
-| `OcppMessageLog.tsx` | Scrollable list of OCPP messages, optionally filtered by charger. |
-| `OcppMessageInspector.tsx` | Detailed JSON payload viewer with field descriptions from `OCPP_FIELD_DESCRIPTIONS`. |
-| `SequenceDiagram.tsx` | Static reference diagram of the OCPP 2.0.1 charging handshake flow. |
-
-#### Sessions
-
-| File | Purpose |
-|------|---------|
-| `SessionTable.tsx` | Table of all sessions with status, energy, and duration. |
-| `SessionDetailModal.tsx` | Modal with full session details and meter value history chart. |
-| `MeterValueChart.tsx` | Time-series chart of power/energy/SoC from meter values. |
-
-#### UI
-
-| File | Purpose |
-|------|---------|
-| `StatusBadge.tsx` | Color-coded badge for OCPP connector statuses (Available, Charging, Faulted, etc.). |
-| `MetricCard.tsx` | Dashboard stat card with icon, label, and value. |
-| `LiveIndicator.tsx` | Sidebar indicator showing WebSocket connection health. |
-
-### Hooks (`hooks/`)
-
-| File | Purpose |
-|------|---------|
-| `useInitialData.ts` | Polls `/api/chargers`, `/api/evs` (5s), `/api/sessions`, and `/api/ocpp/messages` via SWR and syncs into Zustand. Exports `apiPost` and `apiDelete` helpers used by pages. |
-| `useOcppWebSocket.ts` | Maintains a persistent WebSocket to `/ws/updates` with auto-reconnect (3s). Dispatches events to `handleWsEvent` in the store. |
-| `useEvPresets()` | Fetches `/api/evs/presets` with client-side fallback from `lib/evPresets.ts`. |
-
-### Store (`store/`)
-
-| File | Purpose |
-|------|---------|
-| `index.ts` | Zustand store holding `chargers`, `evs`, `sessions`, `ocppMessages`, and `wsConnected`. `handleWsEvent` routes WebSocket event types (including `ev_*`) to the correct state updaters. |
-
-### Types (`types/`)
-
-| File | Purpose |
-|------|---------|
-| `index.ts` | TypeScript interfaces (`VirtualCharger`, `VirtualEv`, `EvPreset`, `Session`, `OcppMessage`, `MeterValue`). Snake_case → camelCase mappers for API responses. `API_BASE` and `WS_URL` constants. OCPP action descriptions for the inspector. |
-
-### Config
-
-| File | Purpose |
-|------|---------|
-| `next.config.js` | Enables React Strict Mode. |
-| `tailwind.config.ts` | Dark theme color palette (`background`, `accent`, `charging`, etc.) and font families. |
-| `tsconfig.json` | TypeScript config with `@/*` path alias to project root. |
-| `postcss.config.js` | PostCSS pipeline for Tailwind and Autoprefixer. |
-| `next-env.d.ts` | Auto-generated Next.js type references (do not edit). |
+| `lib/api.ts` | `fetcher`, `apiPost`, `apiDelete` — all REST calls go through here |
+| `lib/env.ts` | Required `NEXT_PUBLIC_*` environment variables |
+| `lib/content.ts` | Loads `site-content.json`; resolves asset URLs and GitHub links |
+| `hooks/useInitialData.ts` | SWR polling for chargers, EVs (5s), sessions, OCPP messages |
+| `hooks/useOcppWebSocket.ts` | Persistent WebSocket with 3s auto-reconnect |
+| `store/index.ts` | Zustand store; `handleWsEvent` routes all `ev_*` and OCPP events |
 
 ---
 
 ## Backend API Integration
 
-The frontend talks to the FastAPI backend on port **8000**.
+The frontend talks to the FastAPI backend on port **8000**. See [Virtual EV Simulator](#virtual-ev-simulator) above for EV-specific endpoints and WebSocket events.
 
-### REST endpoints used
+### Charger & session REST endpoints
 
 | Method | Path | Used by | Description |
 |--------|------|---------|-------------|
 | `GET` | `/api/chargers` | `useInitialData` | List all virtual chargers |
-| `POST` | `/api/chargers` | Chargers page, Learn wizard | Create a new charger |
+| `POST` | `/api/chargers` | Chargers page | Create a new charger |
 | `DELETE` | `/api/chargers/{id}` | Chargers page | Remove a charger |
-| `POST` | `/api/chargers/{id}/connect` | Chargers page, Learn wizard | Connect charger to CSMS (triggers BootNotification) |
+| `POST` | `/api/chargers/{id}/connect` | Chargers page | Connect charger to CSMS |
 | `POST` | `/api/chargers/{id}/disconnect` | Chargers page | Disconnect from CSMS |
 | `POST` | `/api/chargers/{id}/fault` | ChargerControls | Inject a simulated fault |
-| `GET` | `/api/evs` | `useInitialData` | List all virtual EVs |
-| `GET` | `/api/evs/presets` | `useEvPresets`, EvCreateForm | Built-in vehicle presets |
-| `POST` | `/api/evs` | Evs page, EvCreateForm | Create a new EV |
-| `DELETE` | `/api/evs/{id}` | Evs page | Remove an EV |
-| `POST` | `/api/evs/{id}/plug` | EvPlugPanel | Plug EV into charger connector |
-| `POST` | `/api/evs/{id}/unplug` | EvPlugPanel | Unplug EV from charger |
-| `POST` | `/api/evs/{id}/start-charging` | EvChargeControls | Start OCPP session (EV must be plugged) |
-| `POST` | `/api/evs/{id}/stop-charging` | EvChargeControls | Stop active charging session |
 | `GET` | `/api/sessions` | `useInitialData` | List all charging sessions |
 | `POST` | `/api/sessions/start` | ChargerControls | Remote start (RequestStartTransaction) |
 | `POST` | `/api/sessions/stop` | ChargerControls | Remote stop (RequestStopTransaction) |
@@ -418,8 +527,6 @@ The frontend talks to the FastAPI backend on port **8000**.
 ---
 
 ## Backend Architecture (reference)
-
-For context on what the frontend connects to:
 
 ```
 backend/
@@ -472,7 +579,7 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 ## Usage Flow
 
-The complete EV-SIM demo follows nine steps. Use the sidebar to navigate between pages.
+The complete EV-SIM demo follows nine steps. Open the landing page, click **Launch Simulator**, then use the sidebar.
 
 ### 1. Start infrastructure
 
@@ -480,7 +587,7 @@ Start PostgreSQL (`docker compose up -d` in `backend/`), then the backend on por
 
 ### 2. Create a charger
 
-**Chargers page** → enter ID (e.g. `CP-001`), max power (kW), connector count → Create.
+**Chargers** → enter ID (e.g. `CP-001`), max power (kW), connector count → **Add Charger**.
 
 The charger is saved to PostgreSQL immediately.
 
@@ -492,9 +599,9 @@ Watch the OCPP Explorer for live messages. The charger status becomes connected.
 
 ### 4. Create an electric vehicle
 
-**Electric Vehicles page** → pick a preset (Tesla Model 3, BMW i4, etc.) or enter custom battery parameters → Create.
+**Electric Vehicles** → pick a preset (Tesla Model 3, BMW i4, etc.) or enter custom battery parameters → set initial SoC and target SoC → **Create**.
 
-The EV starts in `idle` state with the configured SoC and target SoC.
+The EV starts in `idle` state.
 
 ### 5. Plug EV into charger
 
@@ -513,7 +620,7 @@ This sends `RequestStartTransaction` over OCPP. A session is created with the EV
 While charging, watch:
 
 - **EV detail** — SoC chart, power, voltage, current
-- **Dashboard** — fleet summary, power chart
+- **Dashboard** — fleet summary (including EV count), power chart, charging EV alert
 - **Sessions** — active session with energy and SoC
 - **OCPP Explorer** — `TransactionEvent` Started/Updated/Ended messages
 
@@ -535,21 +642,41 @@ From the **charger detail page**, inject `connector_error`, `network_drop`, or `
 
 ---
 
+## Documentation (`/learn`)
+
+The Learn section is a full MDX documentation site with six categories:
+
+| Category | Topics |
+|----------|--------|
+| Getting Started | What is EV-SIM, quick start, core concepts |
+| EV Charging Fundamentals | How charging works, SoC, connector levels |
+| The OCPP Protocol | Message types, transaction lifecycle, Boot/Heartbeat |
+| CSMS & System Architecture | CSMS role, WebSocket lifecycle, CP vs central system |
+| Using EV-SIM | Creating chargers, controlling sessions, reading OCPP logs, live charts |
+| Reference | FAQ, OCPP glossary, status codes |
+
+Articles live in `content/learn/`. Navigation order and labels are configured in `content/site-content.json` under `learn.categories`. Docs support search (`⌘K`), table of contents, and prev/next navigation.
+
+---
+
 ## Design System
 
-The UI uses a dark GitHub-inspired palette defined in `tailwind.config.ts`:
+The UI uses a MATLAB-inspired light theme with an orange sidebar, defined in `tailwind.config.ts` and `globals.css`:
 
 | Token | Color | Usage |
 |-------|-------|-------|
-| `background` | `#0D1117` | Page background |
-| `surface` | `#161B22` | Cards, sidebar |
-| `accent` | `#00D4AA` | Primary actions, connected state |
-| `charging` | `#3B82F6` | Active charging metrics |
-| `warning` | `#F59E0B` | Fault injection, alerts |
-| `error` | `#EF4444` | Stop actions, errors |
-| `muted` | `#8B949E` | Secondary text |
+| `background` | `#f0f0f0` | Page background |
+| `surface` | `#ffffff` | Cards, panels |
+| `matlab-blue` | `#0072bd` | Primary actions, charging metrics |
+| `matlab-orange` | `#d95319` | Sidebar, accent controls |
+| `matlab-yellow` | `#edb120` | Warnings, plugged-in stats |
+| `matlab-purple` | `#7e2f8e` | EV fleet metrics |
+| `matlab-green` | `#77ac30` | Connected / success states |
+| `matlab-red` | `#a2142f` | Stop actions, errors |
+| `muted` | `#616161` | Secondary text |
+| `sidebar` | `#ea580c` | App sidebar background |
 
-Fonts: **Inter** (sans-serif) for UI, **JetBrains Mono** for charger IDs and OCPP payloads.
+Fonts: **Helvetica Neue / Inter** for UI, **Consolas / JetBrains Mono** for IDs and OCPP payloads.
 
 ---
 

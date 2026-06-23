@@ -6,7 +6,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { StatCard } from "@/components/ui/StatCard";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { apiPost, apiDelete } from "@/hooks/useInitialData";
+import { apiPost, apiDelete } from "@/lib/api";
 import { mapCharger } from "@/types";
 import { Plus, Plug, Unplug, Trash2 } from "lucide-react";
 import Link from "next/link";

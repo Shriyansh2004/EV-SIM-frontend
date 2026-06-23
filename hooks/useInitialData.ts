@@ -1,18 +1,12 @@
 "use client";
 
 import useSWR from "swr";
-import { API_BASE } from "@/types";
 import { mapCharger, mapEv, mapEvPreset, mapOcppMessage, mapSession } from "@/types";
 import { useAppStore } from "@/store";
 import { useEffect } from "react";
-
-import { EV_PRESETS } from "@/lib/evPresets";
-
-const fetcher = async (url: string) => {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`Request failed: ${res.status}`);
-  return res.json();
-};
+import { API_BASE } from "@/lib/env";
+import { EV_PRESETS } from "@/lib/content";
+import { fetcher } from "@/lib/api";
 
 export function useInitialData() {
   const setChargers = useAppStore((s) => s.setChargers);
@@ -48,24 +42,6 @@ export function useInitialData() {
   useEffect(() => {
     if (messages) setOcppMessages(messages.map(mapOcppMessage));
   }, [messages, setOcppMessages]);
-}
-
-export async function apiPost<T>(path: string, body?: unknown): Promise<T> {
-  const res = await fetch(`${API_BASE}${path}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: body ? JSON.stringify(body) : undefined,
-  });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({ detail: res.statusText }));
-    throw new Error(err.detail || "Request failed");
-  }
-  return res.json();
-}
-
-export async function apiDelete(path: string): Promise<void> {
-  const res = await fetch(`${API_BASE}${path}`, { method: "DELETE" });
-  if (!res.ok) throw new Error("Delete failed");
 }
 
 export function useEvPresets() {
