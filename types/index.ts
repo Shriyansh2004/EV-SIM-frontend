@@ -207,8 +207,6 @@ export function mapEvPreset(raw: Record<string, unknown>): EvPreset {
   };
 }
 
-export { API_BASE, WS_URL, DEMO_ID_TOKEN } from "@/lib/env";
-
 export const OCPP_FIELD_DESCRIPTIONS: Record<string, string> = {
   BootNotification:
     "Sent by the charge point on startup to register with the CSMS and negotiate heartbeat interval.",

@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useEvPresets, apiPost } from "@/hooks/useInitialData";
-import { EV_PRESETS } from "@/lib/evPresets";
+import { useEvPresets } from "@/hooks/useInitialData";
+import { apiPost } from "@/lib/api";
+import { EV_PRESETS } from "@/lib/content";
 import { useAppStore } from "@/store";
 import { mapEv } from "@/types";
 import type { EvType } from "@/types";

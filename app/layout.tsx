@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Inter_Tight, JetBrains_Mono } from "next/font/google";
-import ClientLayout from "./client-layout";
+import ClientLayout from "@/components/layout/ClientLayout";
 import { content, getImageUrl } from "@/lib/content";
 import "./globals.css";
 

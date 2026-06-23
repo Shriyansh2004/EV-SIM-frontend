@@ -1,7 +1,7 @@
 "use client";
 
-import { apiPost } from "@/hooks/useInitialData";
-import { API_BASE, DEMO_ID_TOKEN } from "@/types";
+import { apiPost } from "@/lib/api";
+import { API_BASE, DEMO_ID_TOKEN } from "@/lib/env";
 
 interface ChargerControlsProps {
   chargerId: string;

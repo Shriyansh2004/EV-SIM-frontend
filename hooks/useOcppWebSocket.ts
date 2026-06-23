@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useAppStore } from "@/store";
-import { WS_URL } from "@/types";
+import { WS_URL } from "@/lib/env";
 
 export function useOcppWebSocket() {
   const handleWsEvent = useAppStore((s) => s.handleWsEvent);
