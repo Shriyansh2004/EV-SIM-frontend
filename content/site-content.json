@@ -1,0 +1,341 @@
+{
+  "_comment": "Edit this file to change site copy and assets. For images/models, set full S3 URLs in assets.*.url OR set assets.baseUrl to your bucket prefix (e.g. https://my-bucket.s3.us-east-1.amazonaws.com).",
+
+  "site": {
+    "name": "EV-SIM",
+    "tagline": "OCPP 2.0.1 · WebSocket",
+    "version": "OCPP 2.0.1",
+    "license": "MIT License",
+    "description": "Full-stack EV charging simulation with virtual chargers, real OCPP 2.0.1 protocol, and live CSMS communication."
+  },
+
+  "metadata": {
+    "title": {
+      "default": "EV-SIM — EV Charging Simulation Platform",
+      "template": "%s | EV-SIM"
+    },
+    "openGraph": {
+      "type": "website"
+    }
+  },
+
+  "assets": {
+    "baseUrl": "",
+    "images": {
+      "logo": {
+        "url": "/logo.png",
+        "alt": "EV-SIM"
+      },
+      "favicon": {
+        "url": "/logo.png"
+      }
+    },
+    "models": {
+      "evCar": {
+        "url": "/models/ev-car.glb",
+        "description": "Hero 3D scene — electric vehicle model"
+      },
+      "evCharger": {
+        "url": "/models/ev-charger.glb",
+        "description": "Hero 3D scene — charge point model"
+      },
+      "serverRack": {
+        "url": "/models/server-rack.glb",
+        "description": "Hero 3D scene — CSMS server rack model"
+      }
+    }
+  },
+
+  "external": {
+    "github": {
+      "frontend": "https://github.com/Shriyansh2004/EV-SIM-frontend",
+      "backend": "https://github.com/Shriyansh2004/EV-SIM-backend",
+      "frontendLabel": "github.com/Shriyansh2004/EV-SIM-frontend"
+    },
+    "references": [
+      {
+        "label": "citrineos-core",
+        "href": "https://github.com/citrineos/citrineos-core"
+      },
+      {
+        "label": "vcp of solidstudio",
+        "href": "https://github.com/solidstudiosh/ocpp-virtual-charge-point"
+      },
+      {
+        "label": "everestev",
+        "href": "https://github.com/EVerest/everest"
+      }
+    ]
+  },
+
+  "navigation": {
+    "sectionLabel": "Navigation",
+    "sidebar": {
+      "expandLabel": "Expand sidebar",
+      "collapseLabel": "Collapse sidebar"
+    },
+    "app": [
+      { "href": "/dashboard", "label": "Dashboard", "icon": "LayoutDashboard" },
+      { "href": "/chargers", "label": "Chargers", "icon": "Plug" },
+      { "href": "/evs", "label": "Electric Vehicles", "icon": "Car" },
+      { "href": "/sessions", "label": "Sessions", "icon": "Activity" },
+      { "href": "/ocpp-explorer", "label": "OCPP Explorer", "icon": "Radio" },
+      { "href": "/learn", "label": "Learn", "icon": "BookOpen" }
+    ],
+    "footer": {
+      "productHeading": "Product",
+      "resourcesHeading": "Resources",
+      "referenceHeading": "Reference:",
+      "connectHeading": "Connect",
+      "product": [
+        { "href": "/dashboard", "label": "Dashboard" },
+        { "href": "/chargers", "label": "Chargers" },
+        { "href": "/ocpp-explorer", "label": "OCPP Explorer" },
+        { "href": "/sessions", "label": "Sessions" }
+      ],
+      "resources": [
+        { "href": "/learn", "label": "Documentation" },
+        { "href": "{{external.github.backend}}#readme", "label": "Setup Backend", "external": true },
+        { "href": "{{external.github.frontend}}#readme", "label": "Setup Dashboard", "external": true }
+      ],
+      "connect": [
+        { "href": "{{external.github.backend}}", "label": "GitHub", "external": true }
+      ]
+    }
+  },
+
+  "landing": {
+    "hero": {
+      "eyebrow": "OCPP 2.0.1 · WebSocket",
+      "headline": "Simulate EV Charging Infrastructure,",
+      "headlineAccent": "End to End",
+      "body": "Spin up virtual EVs and charge points, plug in and run real OCPP 2.0.1 sessions over WebSocket to a live CSMS handler — and watch every protocol message as it happens.",
+      "primaryCta": {
+        "label": "Launch Simulator",
+        "href": "/dashboard"
+      },
+      "secondaryCta": {
+        "label": "View on GitHub",
+        "href": "{{external.github.frontend}}"
+      },
+      "visual": {
+        "ariaLabel": "Interactive 3D view of an electric vehicle charging at a charge point. Drag to rotate the view.",
+        "dragHintDesktop": "Drag to explore",
+        "dragHintTouch": "Drag to rotate",
+        "ocppMessages": [
+          "BootNotification →",
+          "Heartbeat →",
+          "MeterValues →"
+        ]
+      }
+    },
+    "footer": {
+      "blurb": "Full-stack EV charging simulation for protocol engineers and CSMS developers.",
+      "copyright": "© {{year}} {{site.name}}. {{site.license}}."
+    }
+  },
+
+  "learn": {
+    "rootLabel": "Learn",
+    "docsLabel": "Documentation",
+    "searchPlaceholder": "Search docs…",
+    "searchShortcut": "⌘K",
+    "closeLabel": "Close",
+    "previousLabel": "Previous",
+    "nextLabel": "Next",
+    "openNavLabel": "Open documentation navigation",
+    "searchAriaLabel": "Search documentation",
+    "defaultSlug": "getting-started/what-is-ev-sim",
+    "categories": [
+      { "id": "getting-started", "label": "Getting Started", "icon": "Rocket", "order": 1 },
+      { "id": "ev-charging-fundamentals", "label": "EV Charging Fundamentals", "icon": "Zap", "order": 2 },
+      { "id": "the-ocpp-protocol", "label": "The OCPP Protocol", "icon": "Radio", "order": 3 },
+      { "id": "csms-system-architecture", "label": "CSMS & System Architecture", "icon": "Network", "order": 4 },
+      { "id": "using-ev-sim", "label": "Using EV-SIM", "icon": "Wrench", "order": 5 },
+      { "id": "reference", "label": "Reference", "icon": "BookMarked", "order": 6 }
+    ]
+  },
+
+  "appPages": {
+    "dashboard": {
+      "title": "Dashboard",
+      "description": "Live overview of virtual chargers and OCPP traffic",
+      "metrics": {
+        "totalChargers": "Total Chargers",
+        "electricVehicles": "Electric Vehicles",
+        "activeSessions": "Active Sessions",
+        "totalEnergy": "Total Energy",
+        "connected": "Connected"
+      },
+      "chargingAlert": {
+        "prefix": "currently charging —",
+        "linkText": "monitor SoC in EV section",
+        "linkHref": "/evs"
+      },
+      "panels": {
+        "chargerGrid": {
+          "title": "Charger grid",
+          "emptySubtext": "No chargers registered",
+          "manageLink": "Manage"
+        },
+        "recentOcpp": {
+          "title": "Recent OCPP",
+          "subtitle": "Last 10 messages",
+          "explorerLink": "Explorer"
+        },
+        "powerDraw": {
+          "title": "Power draw",
+          "subtitle": "Active sessions only"
+        }
+      }
+    },
+    "chargers": {
+      "title": "Charger Management",
+      "description": "Create and manage virtual EV chargers",
+      "stats": {
+        "totalChargers": "Total Chargers",
+        "csmsConnected": "CSMS Connected",
+        "charging": "Charging"
+      },
+      "form": {
+        "sectionTitle": "Add charger",
+        "chargerIdLabel": "Charger ID",
+        "chargerIdPlaceholder": "CP-001",
+        "maxPowerLabel": "Max Power (kW)",
+        "connectorsLabel": "Connectors",
+        "submitLabel": "Add Charger"
+      },
+      "fleetSectionTitle": "Fleet",
+      "emptyState": {
+        "title": "No chargers created yet",
+        "description": "Add your first virtual charger using the form above."
+      }
+    },
+    "evs": {
+      "title": "Electric Vehicles",
+      "description": "Create and simulate EVs — plug into chargers, charge, and monitor battery SoC",
+      "stats": {
+        "totalEvs": "Total EVs",
+        "pluggedIn": "Plugged In",
+        "charging": "Charging"
+      },
+      "fleetSectionTitle": "Fleet",
+      "emptyState": {
+        "title": "No electric vehicles yet",
+        "description": "Create a virtual EV using the form above to start simulating."
+      }
+    },
+    "sessions": {
+      "title": "Session Monitor",
+      "description": "Track all charging sessions and meter value history"
+    },
+    "ocppExplorer": {
+      "title": "OCPP Protocol Explorer",
+      "description": "Inspect live OCPP 2.0.1 messages and understand the charging protocol"
+    }
+  },
+
+  "status": {
+    "liveIndicator": {
+      "running": "sim: running",
+      "stopped": "sim: stopped",
+      "runningTitle": "Simulation running",
+      "stoppedTitle": "Disconnected"
+    },
+    "ev": {
+      "idle": "Idle",
+      "plugged": "Plugged",
+      "charging": "Charging",
+      "full": "Full",
+      "fault": "Fault"
+    },
+    "ocppDirection": {
+      "all": "All",
+      "cpToCsms": "CP → CSMS",
+      "csmsToCp": "CSMS → CP"
+    }
+  },
+
+  "evPresets": [
+    {
+      "id": "tesla-model-3-lr",
+      "name": "Tesla Model 3 Long Range",
+      "vendor": "Tesla",
+      "model": "Model 3 LR",
+      "evType": "BEV",
+      "batteryCapacityKwh": 82,
+      "maxAcChargePowerKw": 11.5,
+      "maxDcChargePowerKw": 250
+    },
+    {
+      "id": "nissan-leaf-plus",
+      "name": "Nissan Leaf e+",
+      "vendor": "Nissan",
+      "model": "Leaf e+",
+      "evType": "BEV",
+      "batteryCapacityKwh": 62,
+      "maxAcChargePowerKw": 6.6,
+      "maxDcChargePowerKw": 100
+    },
+    {
+      "id": "bmw-i4",
+      "name": "BMW i4 eDrive40",
+      "vendor": "BMW",
+      "model": "i4 eDrive40",
+      "evType": "BEV",
+      "batteryCapacityKwh": 83.9,
+      "maxAcChargePowerKw": 11,
+      "maxDcChargePowerKw": 205
+    },
+    {
+      "id": "hyundai-ioniq5",
+      "name": "Hyundai IONIQ 5",
+      "vendor": "Hyundai",
+      "model": "IONIQ 5",
+      "evType": "BEV",
+      "batteryCapacityKwh": 77.4,
+      "maxAcChargePowerKw": 11,
+      "maxDcChargePowerKw": 233
+    },
+    {
+      "id": "chevy-bolt",
+      "name": "Chevrolet Bolt EV",
+      "vendor": "Chevrolet",
+      "model": "Bolt EV",
+      "evType": "BEV",
+      "batteryCapacityKwh": 65,
+      "maxAcChargePowerKw": 7.7,
+      "maxDcChargePowerKw": 55
+    },
+    {
+      "id": "vw-id4",
+      "name": "Volkswagen ID.4",
+      "vendor": "Volkswagen",
+      "model": "ID.4 Pro",
+      "evType": "BEV",
+      "batteryCapacityKwh": 82,
+      "maxAcChargePowerKw": 11,
+      "maxDcChargePowerKw": 135
+    },
+    {
+      "id": "toyota-prius-prime",
+      "name": "Toyota Prius Prime",
+      "vendor": "Toyota",
+      "model": "Prius Prime",
+      "evType": "PHEV",
+      "batteryCapacityKwh": 13.6,
+      "maxAcChargePowerKw": 3.3,
+      "maxDcChargePowerKw": 0
+    },
+    {
+      "id": "generic-bev",
+      "name": "Generic BEV",
+      "vendor": "Generic",
+      "model": "Standard BEV",
+      "evType": "BEV",
+      "batteryCapacityKwh": 75,
+      "maxAcChargePowerKw": 11,
+      "maxDcChargePowerKw": 150
+    }
+  ]
+}

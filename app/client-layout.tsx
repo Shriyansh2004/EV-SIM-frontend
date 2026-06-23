@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import {
@@ -18,16 +17,24 @@ import {
 import { useOcppWebSocket } from "@/hooks/useOcppWebSocket";
 import { useInitialData } from "@/hooks/useInitialData";
 import { LiveIndicator } from "@/components/ui/LiveIndicator";
+import { SiteImage } from "@/components/ui/SiteImage";
 import { useAppStore } from "@/store";
+import { content } from "@/lib/content";
 
-const NAV = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/chargers", label: "Chargers", icon: Plug },
-  { href: "/evs", label: "Electric Vehicles", icon: Car },
-  { href: "/sessions", label: "Sessions", icon: Activity },
-  { href: "/ocpp-explorer", label: "OCPP Explorer", icon: Radio },
-  { href: "/learn", label: "Learn", icon: BookOpen },
-];
+const NAV_ICONS = {
+  LayoutDashboard,
+  Plug,
+  Car,
+  Activity,
+  Radio,
+  BookOpen,
+} as const;
+
+const NAV = content.navigation.app.map((item) => ({
+  href: item.href,
+  label: item.label,
+  icon: NAV_ICONS[item.icon as keyof typeof NAV_ICONS],
+}));
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -70,9 +77,8 @@ function AppShell({ children }: { children: React.ReactNode }) {
               )}
             >
               <div className="w-9 h-9 shrink-0 rounded-matlab bg-white border border-border shadow-matlab-btn flex items-center justify-center transition-transform duration-200 hover:scale-[1.03]">
-                <Image
-                  src="/logo.png"
-                  alt="EV-SIM"
+                <SiteImage
+                  asset="logo"
                   width={28}
                   height={28}
                   className="w-7 h-7 object-contain"
@@ -81,8 +87,8 @@ function AppShell({ children }: { children: React.ReactNode }) {
               </div>
               {!collapsed && (
                 <div className="min-w-0 animate-fade-in">
-                  <h1 className="app-sidebar-brand">EV-SIM</h1>
-                  <p className="app-sidebar-version">OCPP 2.0.1</p>
+                  <h1 className="app-sidebar-brand">{content.site.name}</h1>
+                  <p className="app-sidebar-version">{content.site.version}</p>
                 </div>
               )}
             </div>
@@ -95,7 +101,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
             )}
           >
             {!collapsed && (
-              <p className="app-sidebar-section-label">Navigation</p>
+              <p className="app-sidebar-section-label">{content.navigation.sectionLabel}</p>
             )}
             {NAV.map(({ href, label, icon: Icon }) => {
               const active =
@@ -141,7 +147,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
         <button
           type="button"
           onClick={() => setCollapsed((c) => !c)}
-          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          aria-label={collapsed ? content.navigation.sidebar.expandLabel : content.navigation.sidebar.collapseLabel}
           className="absolute top-[20px] left-full -translate-x-1/2 z-20 flex items-center justify-center w-7 h-7 rounded-matlab bg-white border border-border text-matlab-orange shadow-matlab-btn hover:bg-surface-raised hover:shadow-card-hover active:shadow-inset transition-all duration-150"
         >
           {collapsed ? (

@@ -1,11 +1,9 @@
+import { content } from "@/lib/content";
+
 export const ACCENT_ORANGE = "#FF6B1A";
 export const BG_PRIMARY = "#FAFAF8";
 
-export const OCPP_MESSAGES = [
-  "BootNotification →",
-  "Heartbeat →",
-  "MeterValues →",
-] as const;
+export const OCPP_MESSAGES = content.landing.hero.visual.ocppMessages;
 
 export const SCENE_CAMERA = {
   position: [4.6, 3.2, 5.4] as [number, number, number],

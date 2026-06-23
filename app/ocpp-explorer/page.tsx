@@ -22,10 +22,12 @@ import { OcppActionBreakdown } from "@/components/ocpp/OcppActionBreakdown";
 import { OcppDirectionTabs } from "@/components/ocpp/OcppDirectionTabs";
 import { SequenceDiagram } from "@/components/ocpp/SequenceDiagram";
 import type { OcppMessage } from "@/types";
+import { content } from "@/lib/content";
 
 type DirectionFilter = "all" | "CP_TO_CSMS" | "CSMS_TO_CP";
 
 export default function OcppExplorerPage() {
+  const page = content.appPages.ocppExplorer;
   const messages = useAppStore((s) => s.ocppMessages);
   const wsConnected = useAppStore((s) => s.wsConnected);
   const [selected, setSelected] = useState<OcppMessage | null>(null);
@@ -162,8 +164,8 @@ export default function OcppExplorerPage() {
   return (
     <div className="flex min-h-[calc(100dvh-7.5rem)] flex-col gap-4">
       <PageHeader
-        title="OCPP Protocol Explorer"
-        description="Inspect live OCPP 2.0.1 messages and understand the charging protocol"
+        title={page.title}
+        description={page.description}
       >
         <div
           className={clsx(

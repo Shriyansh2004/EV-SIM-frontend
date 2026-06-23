@@ -7,6 +7,16 @@ import {
   Wrench,
   BookMarked,
 } from "lucide-react";
+import { content } from "@/lib/content";
+
+const CATEGORY_ICONS: Record<string, LucideIcon> = {
+  Rocket,
+  Zap,
+  Radio,
+  Network,
+  Wrench,
+  BookMarked,
+};
 
 export interface DocCategory {
   id: string;
@@ -15,24 +25,12 @@ export interface DocCategory {
   order: number;
 }
 
-export const DOC_CATEGORIES: DocCategory[] = [
-  { id: "getting-started", label: "Getting Started", icon: Rocket, order: 1 },
-  {
-    id: "ev-charging-fundamentals",
-    label: "EV Charging Fundamentals",
-    icon: Zap,
-    order: 2,
-  },
-  { id: "the-ocpp-protocol", label: "The OCPP Protocol", icon: Radio, order: 3 },
-  {
-    id: "csms-system-architecture",
-    label: "CSMS & System Architecture",
-    icon: Network,
-    order: 4,
-  },
-  { id: "using-ev-sim", label: "Using EV-SIM", icon: Wrench, order: 5 },
-  { id: "reference", label: "Reference", icon: BookMarked, order: 6 },
-];
+export const DOC_CATEGORIES: DocCategory[] = content.learn.categories.map((category) => ({
+  id: category.id,
+  label: category.label,
+  icon: CATEGORY_ICONS[category.icon] ?? BookMarked,
+  order: category.order,
+}));
 
 export function getCategoryLabel(id: string): string {
   return DOC_CATEGORIES.find((c) => c.id === id)?.label ?? id;
