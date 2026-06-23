@@ -7,6 +7,9 @@ import * as THREE from 'three'
 import React from 'react'
 import { useGLTF } from '@react-three/drei'
 import { GLTF } from 'three-stdlib'
+import { getModelUrl } from '@/lib/content'
+
+const MODEL_URL = getModelUrl('serverRack')
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -37,7 +40,7 @@ type GLTFResult = GLTF & {
 }
 
 export function Model(props: JSX.IntrinsicElements['group']) {
-  const { nodes, materials } = useGLTF('/models/server-rack.glb') as GLTFResult
+  const { nodes, materials } = useGLTF(MODEL_URL) as GLTFResult
   return (
     <group {...props} dispose={null}>
       <mesh name="console" castShadow receiveShadow geometry={nodes.console.geometry} material={materials.console_auv} />
@@ -61,4 +64,4 @@ export function Model(props: JSX.IntrinsicElements['group']) {
   )
 }
 
-useGLTF.preload('/models/server-rack.glb')
+useGLTF.preload(MODEL_URL)

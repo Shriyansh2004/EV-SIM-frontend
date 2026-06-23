@@ -8,8 +8,10 @@ import { EvCreateForm } from "@/components/evs/EvCreateForm";
 import { EvCard } from "@/components/evs/EvCard";
 import { apiDelete } from "@/hooks/useInitialData";
 import { Car, Trash2 } from "lucide-react";
+import { content } from "@/lib/content";
 
 export default function EvsPage() {
+  const page = content.appPages.evs;
   const evs = useAppStore((s) => s.evs);
   const removeEv = useAppStore((s) => s.removeEv);
 
@@ -29,25 +31,25 @@ export default function EvsPage() {
   return (
     <div className="space-y-8">
       <PageHeader
-        title="Electric Vehicles"
-        description="Create and simulate EVs — plug into chargers, charge, and monitor battery SoC"
+        title={page.title}
+        description={page.description}
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <StatCard label="Total EVs" value={evs.length} />
-        <StatCard label="Plugged In" value={pluggedCount} accent="text-matlab-yellow" />
-        <StatCard label="Charging" value={chargingCount} accent="text-matlab-blue" />
+        <StatCard label={page.stats.totalEvs} value={evs.length} />
+        <StatCard label={page.stats.pluggedIn} value={pluggedCount} accent="text-matlab-yellow" />
+        <StatCard label={page.stats.charging} value={chargingCount} accent="text-matlab-blue" />
       </div>
 
       <EvCreateForm />
 
       <section>
-        <h2 className="section-label mb-4">Fleet</h2>
+        <h2 className="section-label mb-4">{page.fleetSectionTitle}</h2>
         {evs.length === 0 ? (
           <EmptyState
             icon={Car}
-            title="No electric vehicles yet"
-            description="Create a virtual EV using the form above to start simulating."
+            title={page.emptyState.title}
+            description={page.emptyState.description}
           />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">

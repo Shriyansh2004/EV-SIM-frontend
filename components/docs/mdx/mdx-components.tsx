@@ -60,7 +60,7 @@ export const mdxComponents: MDXComponents = {
   },
   pre: ({ children }) => <>{children}</>,
   table: (props) => (
-    <div className="docs-table-wrap my-6 overflow-x-auto rounded-xl border border-lp-grey-300">
+    <div className="docs-table-wrap my-8 overflow-x-auto rounded-xl border border-lp-grey-300">
       <table className="docs-table w-full text-sm" {...props} />
     </div>
   ),

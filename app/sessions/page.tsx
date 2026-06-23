@@ -7,16 +7,18 @@ import { SessionTable } from "@/components/sessions/SessionTable";
 import { SessionDetailModal } from "@/components/sessions/SessionDetailModal";
 import { EnergyBarChart } from "@/components/charts/EnergyBarChart";
 import type { Session } from "@/types";
+import { content } from "@/lib/content";
 
 export default function SessionsPage() {
+  const page = content.appPages.sessions;
   const sessions = useAppStore((s) => s.sessions);
   const [selected, setSelected] = useState<Session | null>(null);
 
   return (
     <div className="space-y-8">
       <PageHeader
-        title="Session Monitor"
-        description="Track all charging sessions and meter value history"
+        title={page.title}
+        description={page.description}
       />
 
       <EnergyBarChart sessions={sessions} />

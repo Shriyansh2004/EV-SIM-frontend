@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { content } from "@/lib/content";
 
 export function LiveIndicator({
   connected,
@@ -9,12 +10,13 @@ export function LiveIndicator({
   compact?: boolean;
   variant?: "default" | "sidebar";
 }) {
+  const { liveIndicator } = content.status;
   const isSidebar = variant === "sidebar";
 
   return (
     <div
       className={clsx("flex items-center", compact ? "justify-center" : "gap-2.5")}
-      title={compact ? (connected ? "Simulation running" : "Disconnected") : undefined}
+      title={compact ? (connected ? liveIndicator.runningTitle : liveIndicator.stoppedTitle) : undefined}
     >
       <span className="relative flex shrink-0">
         <span
@@ -38,7 +40,7 @@ export function LiveIndicator({
             isSidebar ? "app-sidebar-status" : "text-[11px] font-mono text-muted"
           )}
         >
-          {connected ? "sim: running" : "sim: stopped"}
+          {connected ? liveIndicator.running : liveIndicator.stopped}
         </span>
       )}
     </div>

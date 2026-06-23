@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Inter_Tight, JetBrains_Mono } from "next/font/google";
 import ClientLayout from "./client-layout";
+import { content, getImageUrl } from "@/lib/content";
 import "./globals.css";
 
 const inter = Inter({
@@ -24,19 +25,17 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "EV-SIM — EV Charging Simulation Platform",
-    template: "%s | EV-SIM",
+    default: content.metadata.title.default,
+    template: content.metadata.title.template,
   },
   icons: {
-    icon: "/logo.png",
+    icon: getImageUrl("favicon"),
   },
-  description:
-    "Full-stack EV charging simulation with virtual chargers, real OCPP 2.0.1 protocol, and live CSMS communication.",
+  description: content.site.description,
   openGraph: {
-    title: "EV-SIM — EV Charging Simulation Platform",
-    description:
-      "Full-stack EV charging simulation with virtual chargers, real OCPP 2.0.1 protocol, and live CSMS communication.",
-    type: "website",
+    title: content.metadata.title.default,
+    description: content.site.description,
+    type: content.metadata.openGraph.type as "website",
   },
 };
 

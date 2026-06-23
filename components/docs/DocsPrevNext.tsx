@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { DocPage } from "@/lib/docs/types";
+import { content } from "@/lib/content";
 
 export function DocsPrevNext({
   prev,
@@ -9,6 +10,8 @@ export function DocsPrevNext({
   prev: DocPage | null;
   next: DocPage | null;
 }) {
+  const { learn } = content;
+
   if (!prev && !next) return null;
 
   return (
@@ -17,7 +20,7 @@ export function DocsPrevNext({
         <Link href={prev.href} className="docs-nav-card group">
           <span className="flex items-center gap-1 text-xs text-lp-grey-600 mb-1">
             <ChevronLeft className="w-3.5 h-3.5" />
-            Previous
+            {learn.previousLabel}
           </span>
           <span className="text-sm font-lp-display font-semibold text-lp-grey-900 group-hover:text-lp-orange transition-colors">
             {prev.frontmatter.title}
@@ -29,7 +32,7 @@ export function DocsPrevNext({
       {next ? (
         <Link href={next.href} className="docs-nav-card group sm:text-right sm:ml-auto">
           <span className="flex items-center gap-1 text-xs text-lp-grey-600 mb-1 sm:justify-end">
-            Next
+            {learn.nextLabel}
             <ChevronRight className="w-3.5 h-3.5" />
           </span>
           <span className="text-sm font-lp-display font-semibold text-lp-grey-900 group-hover:text-lp-orange transition-colors">
