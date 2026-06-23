@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import type { EvStatus } from "@/types";
+import { content } from "@/lib/content";
 
 const STATUS_COLORS: Record<EvStatus, string> = {
   idle: "bg-muted/10 text-muted border-border",
@@ -17,13 +18,7 @@ const STATUS_DOT: Record<EvStatus, string> = {
   fault: "bg-matlab-red",
 };
 
-const STATUS_LABELS: Record<EvStatus, string> = {
-  idle: "Idle",
-  plugged: "Plugged",
-  charging: "Charging",
-  full: "Full",
-  fault: "Fault",
-};
+const STATUS_LABELS: Record<EvStatus, string> = content.status.ev as Record<EvStatus, string>;
 
 export function EvStatusBadge({ status }: { status: EvStatus }) {
   return (

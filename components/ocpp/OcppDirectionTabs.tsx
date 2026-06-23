@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { content } from "@/lib/content";
 
 type DirectionFilter = "all" | "CP_TO_CSMS" | "CSMS_TO_CP";
 
@@ -9,9 +10,9 @@ interface OcppDirectionTabsProps {
 }
 
 const TABS: { value: DirectionFilter; label: string; accent?: string }[] = [
-  { value: "all", label: "All" },
-  { value: "CP_TO_CSMS", label: "CP → CSMS", accent: "text-matlab-green" },
-  { value: "CSMS_TO_CP", label: "CSMS → CP", accent: "text-[#0088b8]" },
+  { value: "all", label: content.status.ocppDirection.all },
+  { value: "CP_TO_CSMS", label: content.status.ocppDirection.cpToCsms, accent: "text-matlab-green" },
+  { value: "CSMS_TO_CP", label: content.status.ocppDirection.csmsToCp, accent: "text-[#0088b8]" },
 ];
 
 export function OcppDirectionTabs({ value, onChange, counts }: OcppDirectionTabsProps) {

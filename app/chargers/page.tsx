@@ -11,8 +11,10 @@ import { mapCharger } from "@/types";
 import { Plus, Plug, Unplug, Trash2 } from "lucide-react";
 import Link from "next/link";
 import clsx from "clsx";
+import { content } from "@/lib/content";
 
 export default function ChargersPage() {
+  const page = content.appPages.chargers;
   const chargers = useAppStore((s) => s.chargers);
   const upsertCharger = useAppStore((s) => s.upsertCharger);
   const removeCharger = useAppStore((s) => s.removeCharger);
@@ -63,32 +65,32 @@ export default function ChargersPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Charger Management"
-        description="Create and manage virtual EV chargers"
+        title={page.title}
+        description={page.description}
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <StatCard label="Total Chargers" value={chargers.length} />
-        <StatCard label="CSMS Connected" value={connectedCount} accent="text-matlab-green" />
-        <StatCard label="Charging" value={chargingCount} accent="text-matlab-blue" />
+        <StatCard label={page.stats.totalChargers} value={chargers.length} />
+        <StatCard label={page.stats.csmsConnected} value={connectedCount} accent="text-matlab-green" />
+        <StatCard label={page.stats.charging} value={chargingCount} accent="text-matlab-blue" />
       </div>
 
       <section className="panel shadow-card">
         <div className="panel-header py-2">
-          <h2 className="section-label">Add charger</h2>
+          <h2 className="section-label">{page.form.sectionTitle}</h2>
         </div>
         <form onSubmit={createCharger} className="panel-body grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
           <div>
-            <label className="scope-readout-label block mb-1">Charger ID</label>
+            <label className="scope-readout-label block mb-1">{page.form.chargerIdLabel}</label>
             <input
               value={id}
               onChange={(e) => setId(e.target.value)}
-              placeholder="CP-001"
+              placeholder={page.form.chargerIdPlaceholder}
               className="matlab-input"
             />
           </div>
           <div>
-            <label className="scope-readout-label block mb-1">Max Power (kW)</label>
+            <label className="scope-readout-label block mb-1">{page.form.maxPowerLabel}</label>
             <input
               type="number"
               value={power}
@@ -97,7 +99,7 @@ export default function ChargersPage() {
             />
           </div>
           <div>
-            <label className="scope-readout-label block mb-1">Connectors</label>
+            <label className="scope-readout-label block mb-1">{page.form.connectorsLabel}</label>
             <input
               type="number"
               min={1}
@@ -109,18 +111,18 @@ export default function ChargersPage() {
           </div>
           <button type="submit" className="matlab-btn-primary flex items-center justify-center gap-2">
             <Plus className="w-4 h-4" />
-            Add Charger
+            {page.form.submitLabel}
           </button>
         </form>
       </section>
 
       <section>
-        <h2 className="section-label mb-4">Fleet</h2>
+        <h2 className="section-label mb-4">{page.fleetSectionTitle}</h2>
         {chargers.length === 0 ? (
           <EmptyState
             icon={Plug}
-            title="No chargers created yet"
-            description="Add your first virtual charger using the form above."
+            title={page.emptyState.title}
+            description={page.emptyState.description}
           />
         ) : (
           <div className="grid grid-cols-1 gap-3">
